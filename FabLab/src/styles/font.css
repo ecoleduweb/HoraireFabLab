@@ -1,13 +1,3 @@
-/****************************************************************
-		
-	Fichier : font.css	
-	Description : Feuille de style des fonts-face du site web CSS
-	Auteur : Félix Beaulieu
-	Version (date) :  2024-01-29		
-		
-					
-****************************************************************/
-
 @font-face {
     font-family: RobotoCondensed-Regular;
     src: url(../styles/font/RobotoCondensed-Regular.ttf);
