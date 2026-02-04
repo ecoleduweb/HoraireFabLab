@@ -89,7 +89,7 @@ if missing:
 
 DATABASES = {
     "default": {
-        "ENGINE": os.getenv("DB_ENGINE", "mysql.connector.django"),
+        "ENGINE": os.getenv("mysql.connector.django"),
         "NAME": os.getenv("DB_NAME"),
         "USER": os.getenv("DB_USER"),
         "PASSWORD": os.getenv("DB_PASSWORD"),
