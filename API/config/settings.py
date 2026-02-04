@@ -82,28 +82,24 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
+required_db_vars = ["DB_NAME", "DB_USER", "DB_PASSWORD"]
+missing = [var for var in required_db_vars if not os.getenv(var)]
+if missing:
+    raise RuntimeError(f"Variables de BD manquantes en production: {', '.join(missing)}")
 
 DATABASES = {
     "default": {
-        "ENGINE": os.getenv("DB_ENGINE", "django.db.backends.mysql"),
+        "ENGINE": os.getenv("DB_ENGINE", "mysql.connector.django"),
         "NAME": os.getenv("DB_NAME"),
         "USER": os.getenv("DB_USER"),
         "PASSWORD": os.getenv("DB_PASSWORD"),
         "HOST": os.getenv("DB_HOST", "127.0.0.1"),
         "PORT": os.getenv("DB_PORT", "3306"),
         "OPTIONS": {
-            "charset": os.getenv("DB_CHARSET", "utf8mb4"),
+            "charset": os.getenv("utf8mb4"),
         }
     }
 }
-
-# Validation des variables de base de données requises
-if ENV == "production":
-    required_db_vars = ["DB_NAME", "DB_USER", "DB_PASSWORD"]
-    missing = [var for var in required_db_vars if not os.getenv(var)]
-    if missing:
-        raise RuntimeError(f"Variables de BD manquantes en production: {', '.join(missing)}")
-
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
