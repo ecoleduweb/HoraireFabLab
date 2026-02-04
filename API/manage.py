@@ -7,6 +7,12 @@ import sys
 def main():
     """Run administrative tasks."""
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
+    import pymysql
+    pymysql.install_as_MySQLdb()
+    
+    import MySQLdb
+    MySQLdb.__version__ = "2.2.1"
+    MySQLdb.version_info = (2, 2, 1, "final", 0)
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:
@@ -15,6 +21,7 @@ def main():
             "available on your PYTHONPATH environment variable? Did you "
             "forget to activate a virtual environment?"
         ) from exc
+    
     execute_from_command_line(sys.argv)
 
 

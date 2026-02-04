@@ -1,0 +1,14 @@
+Environnements
+.env
+.env.*
+!.env.example
+!.env.test
+
+Python
+pycache/
+*.pyc
+*.pyo
+
+Virtual environments
+venv/
+.venv/
