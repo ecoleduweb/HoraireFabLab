@@ -1,6 +1,6 @@
 # api/repositories/auth_repository.py
 
-class Auth_Repository:
+class AuthRepository:
     def __init__(self):
         # Hardcoded admins
         self.admins = [
@@ -8,8 +8,8 @@ class Auth_Repository:
             {"username": "admin2", "password": "pass456"},
         ]
 
-    def find_admin(self, username, password):
-        for admin in self.admins:
-            if admin["username"] == username and admin["password"] == password:
-                return admin
+    def find_user(self, username, password):
+        for user in self.admins:
+            if user["username"] == username and user["password"] == password:
+                return user
         return None

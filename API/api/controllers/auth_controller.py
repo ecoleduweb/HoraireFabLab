@@ -1,23 +1,31 @@
 # api/controllers/auth_controller.py
 
-import json
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
 from api.services.auth_service import AuthService
+from api.exceptions import ApiException
 
 service = AuthService()
 
-@csrf_exempt
+@api_view(['POST'])
+@permission_classes([AllowAny])
 def login(request):
-    if request.method != "POST":
-        return JsonResponse({"error": "POST required"}, status=405)
-
-    data = json.loads(request.body)
-    username = data.get("username")
-    password = data.get("password")
+    username = request.data.get("username")
+    password = request.data.get("password")
 
     try:
         result = service.login(username, password)
-        return JsonResponse(result)
-    except ValueError as e:
-        return JsonResponse({"error": str(e)}, status=401)
+        return Response(result, status=200)
+    
+    except ApiException as e:
+        return Response(
+            {"error": e.message},
+            status=e.status_code
+        )
+    
+    except Exception as e:
+        return Response(
+            {"error": "Erreur interne du serveur"},
+            status=500
+        )
