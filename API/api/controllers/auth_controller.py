@@ -1,31 +1,43 @@
 # api/controllers/auth_controller.py
 
-from rest_framework.decorators import api_view, permission_classes
+from django.conf import settings
+from rest_framework.decorators import api_view, permission_classes,authentication_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from api.services.auth_service import AuthService
-from api.exceptions import ApiException
 
 service = AuthService()
 
-@api_view(['POST'])
+@api_view(["POST"])
 @permission_classes([AllowAny])
+@authentication_classes([]) 
 def login(request):
     username = request.data.get("username")
     password = request.data.get("password")
 
-    try:
-        result = service.login(username, password)
-        return Response(result, status=200)
-    
-    except ApiException as e:
-        return Response(
-            {"error": e.message},
-            status=e.status_code
-        )
-    
-    except Exception as e:
-        return Response(
-            {"error": "Erreur interne du serveur"},
-            status=500
-        )
+    result = service.login(username, password)  
+    tokens = result["tokens"]
+
+    response = Response({"username": result["username"]}, status=200)
+
+    response.set_cookie(
+        key="access_token",
+        value=tokens["access"],
+        httponly=True,
+        secure=settings.JWT_COOKIE_SECURE,
+        samesite="Lax",
+        max_age=int(settings.SIMPLE_JWT["ACCESS_TOKEN_LIFETIME"].total_seconds()),
+        path="/",  # access dispo partout
+    )
+
+    response.set_cookie(
+        key="refresh_token",
+        value=tokens["refresh"],
+        httponly=True,
+        secure=settings.JWT_COOKIE_SECURE,
+        samesite="Lax",
+        max_age=int(settings.SIMPLE_JWT["REFRESH_TOKEN_LIFETIME"].total_seconds()),
+        path="/",   # à corriger une fois le path crée
+    )
+
+    return response

@@ -1,24 +1,24 @@
 # api/utils/jwt_utils.py
 
-from rest_framework_simplejwt.tokens import RefreshToken
-import jwt
-from django.conf import settings
-from api.exceptions import TokenExpiredError, InvalidTokenError
+from rest_framework_simplejwt.tokens import RefreshToken, UntypedToken
+from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
+from rest_framework.exceptions import AuthenticationFailed
 
 
 class JwtUtils:
 
     @staticmethod
-    def generate_tokens(username: str):
+    def generate_tokens(username: str, user_id: int | None = None):
         """Génère des tokens JWT sans utiliser la base de données"""
-        
+
         refresh = RefreshToken()
-        refresh['username'] = username
-        refresh['user_id'] = username
-        
-        access = refresh.access_token
-        access['username'] = username
-        
+        refresh["username"] = username
+
+        if user_id is not None:
+            refresh["user_id"] = user_id
+
+        access = refresh.access_token  # hérite des claims du refresh
+
         return {
             "access": str(access),
             "refresh": str(refresh),
@@ -26,15 +26,16 @@ class JwtUtils:
 
     @staticmethod
     def decode_token(token: str):
-        """Decode et vérifie un token JWT"""
+        """
+        Valide un token JWT via SimpleJWT et retourne le payload.
+        DRF gère automatiquement les réponses 401.
+        """
         try:
-            payload = jwt.decode(
-                token,
-                settings.SECRET_KEY,
-                algorithms=['HS256']
-            )
-            return payload
-        except jwt.ExpiredSignatureError:
-            raise TokenExpiredError()
-        except jwt.InvalidTokenError:
-            raise InvalidTokenError()
+            validated_token = UntypedToken(token)
+            return validated_token.payload
+
+        except InvalidToken:
+            raise AuthenticationFailed("Token invalide")
+
+        except TokenError:
+            raise AuthenticationFailed("Token expiré")
