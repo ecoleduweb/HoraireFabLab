@@ -13,14 +13,14 @@ class AuthService:
 
     def login(self, username: str | None, password: str | None):
         if not username or not password:
-            raise ValidationError({"detail": "Username et password sont requis"})
+            raise ValidationError({"detail": "nom d'utilisateur et mot de passe sont requis"})
 
         user = self.repo.get_user_by_username(username)
         if not user:
-            raise AuthenticationFailed("Username ou password incorrect")
+            raise AuthenticationFailed("nom d'utilisateur ou mot de passe incorrect")
 
         if not check_password(password, user.password_hash):
-            raise AuthenticationFailed("Username ou password incorrect")
+            raise AuthenticationFailed("nom d'utilisateur ou mot de passe incorrect")
 
         tokens = JwtUtils.generate_tokens(username=user.username, user_id=user.id)
 

@@ -10,7 +10,7 @@ service = AuthService()
 
 @api_view(["POST"])
 @permission_classes([AllowAny])
-@authentication_classes([])  # important: login doit ignorer les cookies invalides
+@authentication_classes([])  # Ignore l'authentification sur cette route.
 def login(request):
     username = request.data.get("username")
     password = request.data.get("password")
