@@ -10,7 +10,6 @@ section {
 h1 {
     width: 100%;
     text-align: center;
-    /* Set text color */
 }
 
 .login {
@@ -19,25 +18,18 @@ h1 {
     justify-content: center;
     align-items: center;
     border: 1px solid #ccc;
-    /* Add a light border */
     border-radius: 8px;
-    /* Add border-radius for rounded corners */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    /* Add a subtle box shadow */
     padding: 20px;
     width: 22%;
-    /*Mettre en VW FB*/
     background-color: #fff;
-    /* Set background color */
 }
 
 .input-login {
     width: 70%;
     padding: 5px;
     border: 1px solid #ccc;
-    /* Add a light border */
     border-radius: 4px;
-    /* Add border-radius for rounded corners */
 }
 
 .login-form {
@@ -55,7 +47,6 @@ h1 {
 
 label {
     margin-bottom: 8px;
-    /* Add spacing between labels and input fields */
 }
 
 .submit {
