@@ -3,7 +3,7 @@
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
-from rest_framework_simplejwt.models import TokenUser
+from types import SimpleNamespace
 
 
 class CookieJWTAuthentication(JWTAuthentication):
@@ -17,4 +17,13 @@ class CookieJWTAuthentication(JWTAuthentication):
         except (InvalidToken, TokenError):
             raise AuthenticationFailed("Token invalide ou expiré")
 
-        return TokenUser(validated_token), validated_token
+        user_id = validated_token.get("user_id")
+        if not user_id:
+            raise AuthenticationFailed("Token invalide (user_id manquant)")
+
+        # user issu du token
+        user = SimpleNamespace(
+            id=user_id,
+        )
+
+        return (user, validated_token)

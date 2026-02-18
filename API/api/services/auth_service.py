@@ -1,29 +1,30 @@
 # api/services/auth_service.py
 
+from django.contrib.auth.hashers import check_password
+from rest_framework.exceptions import ValidationError, AuthenticationFailed
+
 from api.repositories.auth_repository import AuthRepository
 from api.utils.jwt_utils import JwtUtils
-from rest_framework.exceptions import ValidationError, AuthenticationFailed
 
 
 class AuthService:
     def __init__(self):
         self.repo = AuthRepository()
 
-    def login(self, username, password):
-        # Validation
+    def login(self, username: str | None, password: str | None):
         if not username or not password:
-            raise ValidationError("Username et password sont requis")
-        
-        # Authentification
-        user = self.repo.find_user(username, password)
+            raise ValidationError({"detail": "nom d'utilisateur et mot de passe sont requis"})
 
+        user = self.repo.get_user_by_username(username)
         if not user:
-            raise AuthenticationFailed("Username ou password incorrect")
+            raise AuthenticationFailed("nom d'utilisateur ou mot de passe incorrect")
 
-        # Génération des tokens
-        tokens = JwtUtils.generate_tokens(username)
+        if not check_password(password, user.password_hash):
+            raise AuthenticationFailed("nom d'utilisateur ou mot de passe incorrect")
+
+        tokens = JwtUtils.generate_tokens(username=user.username, user_id=user.id)
 
         return {
-            "username": username,
-            "tokens": tokens
+            "username": user.username,
+            "tokens": tokens,
         }
