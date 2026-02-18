@@ -1,15 +1,7 @@
 # api/repositories/auth_repository.py
 
-class AuthRepository:
-    def __init__(self):
-        # Hardcoded admins
-        self.admins = [
-            {"username": "admin1", "password": "pass123"},
-            {"username": "admin2", "password": "pass456"},
-        ]
+from api.models import User  
 
-    def find_user(self, username, password):
-        for user in self.admins:
-            if user["username"] == username and user["password"] == password:
-                return user
-        return None
+class AuthRepository:
+    def get_user_by_username(self, username: str) -> User | None:
+        return User.objects.filter(username=username).first()

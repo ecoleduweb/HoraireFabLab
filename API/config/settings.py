@@ -43,10 +43,11 @@ ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1").split("
 # Application definition
 
 INSTALLED_APPS = [
+    'django.contrib.auth',           # Required for SimpleJWT
+    'django.contrib.contenttypes',
     'rest_framework',
     'rest_framework_simplejwt',
     'api',
-    'api.apps.ApiConfig'
 ]
 
 MIDDLEWARE = [
@@ -89,12 +90,8 @@ DATABASES = {
         "PASSWORD": os.getenv("DB_PASSWORD"),
         "HOST": os.getenv("DB_HOST", "127.0.0.1"),
         "PORT": os.getenv("DB_PORT", "3306"),
-        "OPTIONS": {
-            "charset": "utf8mb4",
         }
     }
-}
-
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
 
