@@ -24,7 +24,6 @@ class CookieJWTAuthentication(JWTAuthentication):
         # user issu du token
         user = SimpleNamespace(
             id=user_id,
-            is_authenticated=True,
         )
 
         return (user, validated_token)
