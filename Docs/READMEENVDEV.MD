@@ -19,11 +19,15 @@ Cela va installer un WSL de Ubuntu, au premier démarrage il va demander de mett
 
 ### 3- Configurer Docker Desktop
 Se rendre dans paramètre
+
 Dans general s'assurer que cette case est coché :
+
 **Use the WSL 2 based engine (Windows Home can only run the WSL 2 backend)**
 
 Ensuite, se rendre dans Ressources -> WSL integration :
+
 Activé ces 2 choses :
+
 **Enable integration with my default WSL distro**
 **Ubuntu**
 
