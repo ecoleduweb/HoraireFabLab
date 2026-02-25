@@ -29,6 +29,7 @@ Ensuite, se rendre dans Ressources -> WSL integration :
 Activé ces 2 choses :
 
 **Enable integration with my default WSL distro**
+
 **Ubuntu**
 
 Cela va reloader Docker Desktop
