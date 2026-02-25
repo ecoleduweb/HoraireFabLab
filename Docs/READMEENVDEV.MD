@@ -2,7 +2,8 @@
 
 ## But de la documentation
 Cette documentation va servir à préparer votre environnement de développement.
-Avoir un docker MariaDB
+
+Avoir un docker MariaDB.
 ## Installation
 
 
