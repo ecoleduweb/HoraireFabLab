@@ -78,7 +78,7 @@ class LoginTests(TestCase):
             data={"username": "admin1", "password": "wrong"},
             format="json",
         )
-        self.assertEqual(resp.status_code, 403)
+        self.assertEqual(resp.status_code, 401)
 
     def test_login_unknown_user_returns_401(self):
         resp = self.client.post(
@@ -86,7 +86,7 @@ class LoginTests(TestCase):
             data={"username": "nope", "password": "pass123"},
             format="json",
         )
-        self.assertEqual(resp.status_code, 403)
+        self.assertEqual(resp.status_code, 401)
 
     def test_login_ignores_invalid_access_cookie(self):
         """

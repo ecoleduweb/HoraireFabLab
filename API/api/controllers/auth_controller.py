@@ -3,6 +3,7 @@ from django.conf import settings
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
+from rest_framework.exceptions import ValidationError, AuthenticationFailed
 
 from api.services.auth_service import AuthService
 
@@ -15,9 +16,14 @@ def login(request):
     username = request.data.get("username")
     password = request.data.get("password")
 
-    result = service.login(username, password)
-    tokens = result["tokens"]
+    try:
+        result = service.login(username, password)
+    except AuthenticationFailed as e:
+        return Response({"detail": str(e)}, status=401)
+    except ValidationError as e:
+        return Response(e.detail, status=400)
 
+    tokens = result["tokens"]
     response = Response({"username": result["username"]}, status=200)
 
     response.set_cookie(
