@@ -1,5 +1,6 @@
 # api/controllers/auth_controller.py
 from django.conf import settings
+from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
@@ -18,13 +19,13 @@ def login(request):
 
     try:
         result = service.login(username, password)
-    except AuthenticationFailed as e:
-        return Response({"detail": str(e)}, status=401)
-    except ValidationError as e:
-        return Response(e.detail, status=400)
+    except AuthenticationFailed:
+        return Response({"detail": "Utilisateur ou mot de passe invalide"}, status=status.HTTP_401_UNAUTHORIZED)
+    except ValidationError:
+        return Response({"detail": "Utilisateur ou mot de passe invalide"}, status=status.HTTP_400_BAD_REQUEST)
 
     tokens = result["tokens"]
-    response = Response({"username": result["username"]}, status=200)
+    response = Response({"username": result["username"]}, status=status.HTTP_200_OK)
 
     response.set_cookie(
         key="access_token",
