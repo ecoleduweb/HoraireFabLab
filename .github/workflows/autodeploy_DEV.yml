@@ -1,0 +1,93 @@
+name: Deployer FabLab DEV
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy Full Application
+        uses: appleboy/ssh-action@v0.1.2
+        with:
+          host: ${{secrets.DEV_SSH_HOST}}
+          key: ${{secrets.DEV_SSH_KEY}}
+          username: ${{ secrets.SSH_USERNAME}}
+          debug: true
+          script: |
+            set -e # Exit immediately if a command exits with a non-zero status.
+            echo "Starting deployment process..."
+
+            # Arrêt des services
+            echo "Stopping services..."
+            sudo systemctl stop fablab-api.service || echo "API service not running"
+            sudo systemctl stop fablab-frontend.service || echo "Frontend service not running"
+
+            # Copie du fichier de logs
+            echo 'Moving logs file to logs backup folder'
+            mkdir -p /root/FablabLogs
+            DATE=$(date +'%Y-%m-%d_%H-%M')
+            #Pas encore de logs dans notre app
+            #[ -f "/root/ProjetFabLab2026/HoraireFabLab/API/logs.txt" ] && cp /root/ProjetFabLab2026/HoraireFabLab/API/logs.txt /root/FablabLogs/logs_FabLab_$DATE.txt
+
+            # Suppression et récréation du répertoire GestionnaireHoraire
+            echo "Refreshing project directory..."
+            cd /root/ProjetFabLab2026
+            rm -rf HoraireFabLab
+
+            # Clone du projet (plus propre qu'un pull)
+            echo "Cloning fresh repository..."
+            git clone https://github.com/ecoleduweb/HoraireFabLab.git
+
+            #Preparation du VENV
+            cd /${{ secrets.SSH_USERNAME}}/ProjetFabLab2026/HoraireFabLab/API/
+            python3 -m venv venv
+            source venv/bin/activate
+            pip install -r requirements.txt
+
+            # Configuration API
+            echo "Configuring API..."
+            cd /${{ secrets.SSH_USERNAME}}/ProjetFabLab2026/HoraireFabLab/API/
+            cat > .env << EOF
+            DB_USER=${{ secrets.DB_USER }}
+            DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+            DJANGO_SECRET_KEY=
+            DJANGO_DEBUG=
+            DJANGO_ALLOWED_HOSTS=
+            DJANGO_ENV=
+            DB_NAME=${{ secrets.DEV_DB_NAME}}
+            DB_USER=${{ secrets.DEV_DB_USERNAME }}
+            DB_PASSWORD=${{ secrets.DEV_DB_PASSWORD }}
+            DB_HOST=${{ secrets.DEV_DB_HOST }}
+            DB_PORT=${{ secrets.DEV_DB_PORT }}
+            JWT_COOKIE_SECURE=
+            EOF
+
+
+            echo "Running migrations..."
+            python manage.py migrate --noinput
+
+
+            # Configuration Frontend
+            echo "Configuring Frontend..."
+            cd /root/ProjetFabLab2026/HoraireFabLab/FabLab
+            cat > .env << EOF
+            PUBLIC_BASE_URL=${{ secrets.DEV_BASEURL_API}}
+            EOF
+
+            echo "Building Frontend..."
+            npm install
+            npm run build
+
+            # Démarrage des services
+            echo "Starting services..."
+            sudo systemctl start fablab-api || echo "Failed to start API service"
+            sudo systemctl start fablab-frontend || echo "Failed to start Frontend service"
+
+            # Vérification
+            echo "Checking services status..."
+            sudo systemctl status fablab-api --no-pager
+            sudo systemctl status fablab-frontend --no-pager
+
+            echo "Deployment completed successfully!"
