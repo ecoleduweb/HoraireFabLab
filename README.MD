@@ -62,11 +62,6 @@ Le projet **FabLab Horaire** est une application web conçue pour faciliter la g
 
 L’objectif principal du projet est d’offrir une solution simple, moderne et centralisée permettant :
 
-- La gestion des plages horaires disponibles  
-- La réservation d’équipements et d’ateliers par les utilisateurs  
-- L’administration des ressources du FabLab  
-- Un meilleur suivi de l’occupation et des activités  
-
 ---
 
 ## Objectifs du projet
@@ -75,7 +70,6 @@ Ce projet vise à :
 
 - Automatiser la gestion des réservations  
 - Réduire les conflits d’horaire  
-- Centraliser les données dans une base de données sécurisée  
 - Offrir une interface intuitive pour les utilisateurs et les administrateurs  
 
 ### Technologies utilisées
