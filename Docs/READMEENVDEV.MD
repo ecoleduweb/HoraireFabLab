@@ -32,8 +32,12 @@ Cela va reloader Docker Desktop
 ### 4- Configurer pour démarrer MariaDB
 
  1. Ouvrir Powershell en admin
- 2. cd C:/
- 3. mkdir docker/mariadb3308/
+ 2. ```bash
+ 	cd C:/
+	```
+ 3. ```bash
+ 	mkdir docker/mariadb3308/
+	```
  4. ```bash
 	cd .\docker\mariadb3308\ 
 	```
