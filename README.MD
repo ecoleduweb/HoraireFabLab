@@ -60,8 +60,6 @@
 
 Le projet **FabLab Horaire** est une application web conçue pour faciliter la gestion des plages horaires, des réservations et des activités d’un laboratoire de fabrication (FabLab).
 
-L’objectif principal du projet est d’offrir une solution simple, moderne et centralisée permettant :
-
 ---
 
 ## Objectifs du projet
