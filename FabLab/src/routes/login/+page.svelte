@@ -6,6 +6,7 @@
     import * as yup from "yup"
     import { extractErrors } from "../../ts/utils.ts"
     import { logIn } from "../../lib/tokenLib.ts"
+	import type { User } from "../../Models/User.ts";
 
     const schema = yup.object().shape({
         username: yup
@@ -42,7 +43,7 @@
             }
 
             try {
-                const response = await POST<Login, any>("/login", form, false)
+                const response = await POST<Login, User>("/login", form, false)
                 logIn(response.data)
             } catch (err) {
                 console.error("Login error:", err);
@@ -63,7 +64,7 @@
     <div class="login">
         <h1>Authentification</h1>
 
-        <form on:submit|preventDefault={handleSubmit} class="login-form">
+        <form onsubmit={(e) => { e.preventDefault(); handleSubmit(); }} class="login-form">
             <label for="username">Nom d'utilisateur</label>
             <input
                 type="text"

@@ -10,8 +10,8 @@
 
     const checkSession = async () => {
         try {
-            const me = await GET<{ user: User }>("/user/me", false)
-            currentUser.set(me as any)
+            const me = await GET<{ user: User }>("/user/me", true)
+            currentUser.set(me.user)
             isLoggedIn.set(true)
         } catch {
             currentUser.set(undefined)
@@ -58,7 +58,7 @@
 </script>
 
 <header>
-    <div class="logo-img">
+    <div class={$isLoggedIn ? "logo-img logo-img-authenticated" : "logo-img"}>
         <a href="/" class="image"><img src="logo.png" alt="Logo" /></a>
     </div>
     <!--MENU MOBILE --------------------------- -->
@@ -122,12 +122,6 @@
     <div class="ul-group">
         <ul class="ul-menu">
             {#if $currentUser && $isLoggedIn}
-                <style scoped>
-                    .logo-img {
-                        width: 40% !important;
-                    }
-                </style>
-
                 <div class="option">
                     <button
                         class="button logout-button"
@@ -152,7 +146,7 @@
                 </div>
                 <div class={"dropdown-content-profile-admin"}>
                     <a href="/profile">Modifier mon profil </a>
-                    <a href="/" onclick={handleLogout}>Déconnexion</a>
+                    <a href="/login" onclick={(e) => { e.preventDefault(); handleLogout(); }}>Déconnexion</a>
                 </div>
             {/if}
         </ul>

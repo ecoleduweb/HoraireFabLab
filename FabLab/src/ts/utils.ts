@@ -37,7 +37,7 @@ export const getShortURL = (url: string) => {
 };
 
 export const isObjectEmpty = (obj: any) => {
-    return Object.keys(obj).length === 0;
+    return !obj || Object.keys(obj).length === 0;
 }
 
 // TODO retirer ce bout de code lorsque les erreurs du back-end pourront être affichées au front-end
