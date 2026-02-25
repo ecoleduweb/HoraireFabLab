@@ -2,9 +2,9 @@
 
 ## But de la documentation
 Cette documentation va servir à préparer votre environnement de développement.
-
-## Prérequis
 Avoir un docker MariaDB
+## Installation
+
 
 ### 1 -Valider que la virtualisation est activé sur l'ordinateur
 ```bash
