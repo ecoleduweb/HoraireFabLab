@@ -1,10 +1,11 @@
+import type { ValidationError } from "yup";
 import type { ErrorResponse } from "../Models/ErrorResponse.ts"
 import { POST } from "./server.ts"
 import striptags from "striptags";
 
-export const extractErrors = (err: ErrorResponse | any) => {
-    return err.inner.reduce((acc: string[], err: ErrorResponse) => {
-        return { ...acc, [err.path]: err.message }
+export const extractErrors = (err: ValidationError): Record<string, string> => {
+   return err.inner.reduce((acc: Record<string, string>, validationErr) => {
+        return { ...acc, [validationErr.path ?? '']: validationErr.message }
     }, {})
 }
 
@@ -42,7 +43,7 @@ export const isObjectEmpty = (obj: any) => {
 // TODO retirer ce bout de code lorsque les erreurs du back-end pourront être affichées au front-end
 export const checkUrlAccessibility = async (url: string): Promise<boolean> => {
     try {
-        const response = await POST<any, any>('/jobOffer/verifyURL', { url });
+        const response = await POST<any, any>('/fablab/verifyURL', { url });
         return response.data.message === 'URL is accessible'
     } catch {
         return false;

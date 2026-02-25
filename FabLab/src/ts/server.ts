@@ -3,11 +3,9 @@ import { InvalidDataError } from "../CustomError/invalidDataError.ts"
 
 export async function GET<T>(url: string, redirectToLoginOn401?: boolean): Promise<T> {
     try {
-        var token = localStorage.getItem("token")
+        
         const response = await fetch(`${env.PUBLIC_BASE_URL}${url}`, {
-            headers: {
-                Authorization: `${token}`,
-            },
+            credentials: "include"
         })
 
         const data = await handleResponse<T>(response, redirectToLoginOn401)
@@ -22,18 +20,14 @@ export async function POST<T, T1>(url: string, body: T, redirectToLoginOn401?: b
     var response
 
     try {
-        var token = localStorage.getItem("token")
-        if (!token) token = ""
-
-        response = await fetch(`${env.PUBLIC_BASE_URL}${url}`, {
+        const response = await fetch(`${env.PUBLIC_BASE_URL}${url}`, {
             method: "POST",
+            credentials: "include",
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `${token}`,
             },
             body: JSON.stringify(body),
         })
-
 
         const data = await handleResponse<T1>(response, redirectToLoginOn401)
         return { data: data as T1 }
@@ -47,9 +41,9 @@ export async function DELETE(url: string): Promise<void> {
     try {
         const response = await fetch(`${env.PUBLIC_BASE_URL}${url}`, {
             method: "DELETE",
+            credentials: "include",
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `${localStorage.getItem("token")}`,
             },
         })
         await handleResponse(response)
@@ -61,21 +55,17 @@ export async function DELETE(url: string): Promise<void> {
 
 export async function PUT<T, T1>(url: string, body: T, redirectToLoginOn401?: boolean): Promise<{ data: T1 }> {
     try {
-        var token = localStorage.getItem("token")
-        if (!token) token = ""
-
-        var response = await fetch(`${env.PUBLIC_BASE_URL}${url}`, {
+        const response = await fetch(`${env.PUBLIC_BASE_URL}${url}`, {
             method: "PUT",
+            credentials: "include",
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `${localStorage.getItem("token")}`,
             },
             body: JSON.stringify(body),
         })
 
         const data = await handleResponse<T1>(response, redirectToLoginOn401)
         return { data: data as T1 }
-        //await handleResponse(response);
     } catch (error) {
         console.error("Error putting:", error)
         throw error
@@ -86,6 +76,7 @@ export async function PATCH<T>(url: string, body: T): Promise<void> {
     try {
         const response = await fetch(`${env.PUBLIC_BASE_URL}${url}`, {
             method: "PATCH",
+            credentials: "include",
             headers: {
                 "Content-Type": "application/json",
             },

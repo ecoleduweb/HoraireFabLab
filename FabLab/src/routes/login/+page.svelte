@@ -5,8 +5,7 @@
     import { POST } from "../../ts/server.ts"
     import * as yup from "yup"
     import { extractErrors } from "../../ts/utils.ts"
-    import { isLoggedIn } from "../../lib/index.ts"
-    import { disconnectUser, isTokenExpired, logIn } from "../../lib/tokenLib.ts"
+    import { logIn } from "../../lib/tokenLib.ts"
 
     const schema = yup.object().shape({
         username: yup
@@ -44,11 +43,12 @@
 
             try {
                 const response = await POST<Login, any>("/login", form, false)
-                logIn(response.data.token)
-            } catch {
+                logIn(response.data)
+            } catch (err) {
+                console.error("Login error:", err);
                 errors = {
                     username: "",
-                    password: "Courriel ou mot de passe invalide",
+                    password: "Nom d'utilisateur ou mot de passe invalide",
                     email: undefined,
                     phone: undefined
                 }
@@ -57,12 +57,6 @@
             errors = extractErrors(err)
         }
     }
-
-    $effect(() => {
-        if ($isLoggedIn && isTokenExpired()) {
-            disconnectUser()
-        }
-    })
 </script>
 
 <section>

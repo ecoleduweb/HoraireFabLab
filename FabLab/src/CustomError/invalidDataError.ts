@@ -4,5 +4,6 @@ export class InvalidDataError extends Error {
         super(message);
         this.field = field;
         this.name = "InvalidDataError";
+        Object.setPrototypeOf(this, InvalidDataError.prototype);
     }
 }

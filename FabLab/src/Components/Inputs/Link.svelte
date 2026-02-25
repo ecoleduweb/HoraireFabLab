@@ -5,7 +5,7 @@
 
 <a {href}>{text}</a>
 
-<style scoped>
+<style>
     a {
         color: black;
         padding: 12px 16px;
