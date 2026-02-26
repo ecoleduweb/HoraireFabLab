@@ -32,7 +32,7 @@ class MeTests(TestCase, BaseAPITestCase):
         self.assertIn(resp.status_code, (401, 403))
 
     def test_me_returns_username_when_logged_in(self):
-        self.login_and_set_cookies(self.login_url, "admin1", "pass123")
+        self.login_and_set_cookies()
 
         resp = self.client.get(self.me_url)
         self.assertEqual(resp.status_code, 200)
@@ -45,7 +45,7 @@ class MeTests(TestCase, BaseAPITestCase):
         self.assertIn(resp.status_code, (401, 403))
 
     def test_me_after_logout_is_unauthorized(self):
-        self.login_and_set_cookies(self.login_url, "admin1", "pass123")
+        self.login_and_set_cookies()
 
         # logout stateless = supprimer cookies
         self.client.cookies.clear()
