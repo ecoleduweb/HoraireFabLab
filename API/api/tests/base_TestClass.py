@@ -1,19 +1,57 @@
+from django.test import TestCase, override_settings
+from django.urls import reverse
+from django.contrib.auth.hashers import make_password
 from rest_framework.test import APIClient
 
-class BaseAPITestCase:
-    client: APIClient
+from api.models import User
+
+
+@override_settings(JWT_COOKIE_SECURE=False, JWT_COOKIE_SAMESITE="Lax")
+class BaseAPITestCase(TestCase):
+    default_username = "admin1"
+    default_password = "pass123"
+    default_email = "admin1@test.com"
+
+    def setUp(self):
+        super().setUp()
+        self.client = APIClient()
+
+        self.user = User.objects.create(
+            username=self.default_username,
+            password_hash=make_password(self.default_password),
+            email=self.default_email,
+        )
+
+        try:
+            self.login_url = reverse("login")
+        except Exception:
+            self.login_url = "/api/login/"
+
+        try:
+            self.me_url = reverse("me")
+        except Exception:
+            self.me_url = "/api/user/me/"
 
     def login_and_set_cookies(
         self,
-        login_url: str = "/api/login/",
-        username: str = "admin1",
-        password: str = "pass123",
-    ) -> None:
+        username: str | None = None,
+        password: str | None = None,
+    ):
+        username = username or self.default_username
+        password = password or self.default_password
+
         resp = self.client.post(
-            login_url,
+            self.login_url,
             data={"username": username, "password": password},
             format="json",
         )
-        assert resp.status_code == 200
+        self.assertEqual(resp.status_code, 200)
+        self.assertIn("access_token", resp.cookies)
+        self.assertIn("refresh_token", resp.cookies)
+
         self.client.cookies["access_token"] = resp.cookies["access_token"].value
         self.client.cookies["refresh_token"] = resp.cookies["refresh_token"].value
+        return resp
+
+    def clear_jwt_cookies(self):
+        self.client.cookies.clear()
