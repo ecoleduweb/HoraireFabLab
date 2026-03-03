@@ -9,5 +9,5 @@
 
 <section>
 	<h1>It works!</h1>
-	<button onclick={handleBtnClick}>Logout</button>
+	<button onclick={handleBtnClick}>Go back to login</button>
 </section>

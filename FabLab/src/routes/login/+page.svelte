@@ -121,5 +121,65 @@
 </section>
 
 <style scoped>
-    @import "../../styles/login.css";
+section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f5f5f5;
+}
+
+h1 {
+    width: 100%;
+    text-align: center;
+}
+
+.login {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 22%;
+    background-color: #fff;
+}
+
+.input-login {
+    width: 70%;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 20px;
+}
+
+.login-form label {
+    color: black;
+}
+
+label {
+    margin-bottom: 8px;
+}
+
+.submit {
+    margin: 10px;
+}
+
+@media screen and (max-width: 900px) and (min-width: 300px) {
+    .login 
+    {
+        width: 50%;
+    }
+}
 </style>
