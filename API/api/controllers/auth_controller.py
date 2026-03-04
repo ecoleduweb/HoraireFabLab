@@ -2,7 +2,7 @@
 from django.conf import settings
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError, AuthenticationFailed
 
@@ -50,8 +50,7 @@ def login(request):
     return response
 
 @api_view(["POST"])
-@permission_classes([AllowAny])
-@authentication_classes([]) # logout doit fonctionner même si token expiré
+@permission_classes([IsAuthenticated])
 def logout(request):
     response = Response({"detail": "Déconnecté"}, status=status.HTTP_200_OK)
     response.delete_cookie("access_token", path="/")
