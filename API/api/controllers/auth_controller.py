@@ -47,5 +47,14 @@ def login(request):
         path="/",     # Ajuste le path selon ta vraie route refresh
 
     )
+    return response
+
+@api_view(["POST"])
+@permission_classes([AllowAny])
+@authentication_classes([]) # logout doit fonctionner même si token expiré
+def logout(request):
+    response = Response({"detail": "Déconnecté"}, status=status.HTTP_200_OK)
+    response.delete_cookie("access_token", path="/")
+    response.delete_cookie("refresh_token", path="/")
 
     return response
