@@ -1,12 +1,10 @@
-
-
 <script lang="ts">
 	import { goto } from "$app/navigation";
 	import { base } from "$app/paths"
 
 
     const handleBtnClick = async () => {
-	    await goto('${base}/login);
+	    await goto('${base}/login');
 	};
     
 </script>
