@@ -11,9 +11,9 @@ jobs:
       - name: Deploy Full Application
         uses: appleboy/ssh-action@v0.1.2
         with:
-          host: ${{secrets.DEV_SSH_HOST}}
-          key: ${{secrets.DEV_SSH_KEY}}
-          username: ${{ secrets.SSH_USERNAME}}
+          host: ${{ secrets.DEV_SSH_HOST }}
+          key: ${{ secrets.DEV_SSH_KEY }}
+          username: ${{ secrets.SSH_USERNAME }}
           debug: true
           script: |
             set -e # Exit immediately if a command exits with a non-zero status.
