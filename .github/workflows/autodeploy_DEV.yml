@@ -1,7 +1,9 @@
 name: Deployer FabLab DEV
 on:
+  workflow_dispatch:
   push:
-    
+    branches:
+      - main
 jobs:
   deploy:
     runs-on: ubuntu-latest
