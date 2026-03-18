@@ -36,7 +36,7 @@ jobs:
 
             # Clone du projet (plus propre qu'un pull)
             echo "Cloning fresh repository..."
-            git clone 028_AutoDeploy https://github.com/ecoleduweb/HoraireFabLab.git
+            git clone -b 028_AutoDeploy https://github.com/ecoleduweb/HoraireFabLab.git
 
             #Preparation du VENV
             cd /${{ secrets.SSH_USERNAME}}/ProjetFabLab2026/HoraireFabLab/API/
