@@ -6,6 +6,22 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: Write SSH Key
+        run: |
+          mkdir -p /home/runner/.ssh
+          printf '%s\n' "${{ secrets.DEV_SSH_KEY }}" > /home/runner/.ssh/id_ed25519
+          chmod 600 /home/runner/.ssh/id_ed25519
+          
+      - name: Validate key format
+        run: |
+          echo "=== First line ==="
+          head -1 /home/runner/.ssh/id_ed25519
+          echo "=== Last line ==="
+          tail -1 /home/runner/.ssh/id_ed25519
+          echo "=== Line count ==="
+          wc -l /home/runner/.ssh/id_ed25519
+          echo "=== SSH keygen check ==="
+          ssh-keygen -l -f /home/runner/.ssh/id_ed25519
       - name: Deploy Full Application
         uses: appleboy/ssh-action@v0.1.2
         with:
