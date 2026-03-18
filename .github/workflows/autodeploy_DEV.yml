@@ -15,16 +15,15 @@ jobs:
 
       - name: Write SSH Key
         run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.DEV_SSH_KEY }}" > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
-          cat ~/.ssh/id_ed25519
+          mkdir -p /home/runner/.ssh
+          echo "${{ secrets.DEV_SSH_KEY }}" > /home/runner/.ssh/id_ed25519
+          chmod 600 /home/runner/.ssh/id_ed25519
 
       - name: Deploy Full Application
         uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.DEV_SSH_HOST }}
-          key_path: ~/.ssh/id_ed25519
+          key_path: /home/runner/.ssh/id_ed25519
           username: ${{ secrets.SSH_USERNAME }}
           debug: true
           script: |
