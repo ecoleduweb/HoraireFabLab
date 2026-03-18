@@ -50,18 +50,18 @@ jobs:
             echo "Configuring API..."
             cd /${{ secrets.SSH_USERNAME}}/ProjetFabLab2026/HoraireFabLab/API/
             cat > .env << EOF
-            DB_USER=${{ secrets.DB_USER }}
-            DB_PASSWORD=${{ secrets.DB_PASSWORD }}
-            DJANGO_SECRET_KEY=
-            DJANGO_DEBUG=
-            DJANGO_ALLOWED_HOSTS=
+            DB_USER=${{ secrets.DEV_DB_USERNAME }}
+            DB_PASSWORD=${{ secrets.DEV_DB_PASSWORD }}
+            DJANGO_SECRET_KEY= ${{ secrets.DJANGO_SECRET_KEY }}
+            DJANGO_DEBUG= ${{ secrets.DJANGO_DEBUG }}
+            DJANGO_ALLOWED_HOSTS= ${{ secrets.DJANGO_ALLOWED_HOSTS }}
             DJANGO_ENV=
             DB_NAME=${{ secrets.DEV_DB_NAME}}
             DB_USER=${{ secrets.DEV_DB_USERNAME }}
             DB_PASSWORD=${{ secrets.DEV_DB_PASSWORD }}
             DB_HOST=${{ secrets.DEV_DB_HOST }}
             DB_PORT=${{ secrets.DEV_DB_PORT }}
-            JWT_COOKIE_SECURE=
+            JWT_COOKIE_SECURE=${{ secrets.JWT_COOKIE_SECURE }}
             EOF
 
 
