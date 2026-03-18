@@ -6,24 +6,11 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Debug secret
-        run: |
-          echo "Key length: ${#KEY}" 
-          echo "First chars: ${KEY:0:5}"
-        env:
-          KEY: ${{ secrets.DEV_SSH_KEY }}
-
-      - name: Write SSH Key
-        run: |
-          mkdir -p /home/runner/.ssh
-          printf '%s\n' "${{ secrets.DEV_SSH_KEY }}" > /home/runner/.ssh/id_ed25519
-          chmod 600 /home/runner/.ssh/id_ed25519
-
       - name: Deploy Full Application
         uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.DEV_SSH_HOST }}
-          key_path: /home/runner/.ssh/id_ed25519
+          key: ${{secrets.DEV_SSH_KEY}}
           username: ${{ secrets.SSH_USERNAME }}
           debug: true
           script: |
