@@ -7,7 +7,7 @@
     
 </script>
 
-<section>
+<section style="background-color: white; height: 100vh;">
 	<h1>It works!</h1>
 	<button onclick={handleBtnClick}>Go back to login</button>
 </section>
