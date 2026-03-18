@@ -43,7 +43,7 @@
             }
 
             try {
-                const response = await POST<Login, User>("login", form, false)
+                const response = await POST<Login, User>("/login", form, false)
                 logIn(response.data)
             } catch (err) {
                 console.error("Login error:", err);

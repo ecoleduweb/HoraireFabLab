@@ -20,7 +20,7 @@ export async function POST<T, T1>(url: string, body: T, redirectToLoginOn401?: b
     var response
 
     try {
-        const response = await fetch(`${env.PUBLIC_BASE_URL}${url}`, {
+        const response = await fetch(`${url}`, {
             method: "POST",
             credentials: "include",
             headers: {
