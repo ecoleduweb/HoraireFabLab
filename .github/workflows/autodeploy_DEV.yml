@@ -12,6 +12,7 @@ jobs:
           host: ${{ secrets.DEV_SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{secrets.DEV_SSH_KEY}}
+          use_insecure_cipher: true
           script: |
             set -e # Exit immediately if a command exits with a non-zero status.
             echo "Starting deployment process..."
