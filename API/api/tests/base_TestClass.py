@@ -32,6 +32,11 @@ class BaseAPITestCase(TestCase):
         except Exception:
             self.me_url = "/api/user/me/"
 
+        try:
+            self.logout_url = reverse("logout")
+        except Exception:
+            self.logout_url = "/api/logout/"
+
     def login_and_set_cookies(
         self,
         username: str | None = None,
