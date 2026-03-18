@@ -77,8 +77,8 @@ jobs:
             EOF
 
             echo "Building Frontend..."
-            npm install
             npm install @sveltejs/adapter-node
+            npm install
             npm run build
 
             # Démarrage des services
