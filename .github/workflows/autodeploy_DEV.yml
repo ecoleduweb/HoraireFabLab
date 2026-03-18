@@ -11,7 +11,7 @@ jobs:
         with:
           host: ${{ secrets.DEV_SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
-          key: ${{secrets.DEV_SSH_KEY}}
+          key: ${{ secrets.TEST_SSH }}
           use_insecure_cipher: true
           script: |
             set -e # Exit immediately if a command exits with a non-zero status.
