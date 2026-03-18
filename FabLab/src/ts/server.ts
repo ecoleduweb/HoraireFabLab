@@ -19,7 +19,7 @@ export async function GET<T>(url: string, redirectToLoginOn401?: boolean): Promi
 export async function POST<T, T1>(url: string, body: T, redirectToLoginOn401?: boolean): Promise<{ data: T1 }> {
     var response
 
-    
+
     try {
         const response = await fetch(`${env.PUBLIC_BASE_URL}${url}`, {
             method: "POST",
@@ -90,6 +90,7 @@ export async function PATCH<T>(url: string, body: T): Promise<void> {
         throw error
     }
 }
+
 
 async function handleResponse<T>(response: Response, redirectToLoginOn401: boolean = true): Promise<T | undefined> {
     if (!response.ok) {
