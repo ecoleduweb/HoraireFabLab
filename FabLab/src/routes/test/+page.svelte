@@ -4,7 +4,7 @@
 
 
     const handleBtnClick = async () => {
-	    await goto('${base}/login');
+	    await goto(`${base}/test`);
 	};
     
 </script>
