@@ -2,7 +2,7 @@
 	import { goto } from "$app/navigation";
 
     const handleBtnClick = async () => {
-	    await goto(`/test`);
+	    await goto(`fablab-frontend/test`);
 	};
     
 </script>
