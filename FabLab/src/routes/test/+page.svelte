@@ -1,10 +1,8 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
-	import { base } from "$app/paths"
-
 
     const handleBtnClick = async () => {
-	    await goto(`${base}/test`);
+	    await goto(`fablab-frontend/test`);
 	};
     
 </script>
