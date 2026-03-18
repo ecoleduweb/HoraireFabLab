@@ -6,7 +6,7 @@ import { base } from "$app/paths"
 export const logIn = async (user: User) => {
   currentUser.set(user)
   isLoggedIn.set(true)
-  await goto('${base}/test')
+  await goto(`${base}/test`)
 }
 
 export const setInfoFromDecoded = (decoded: any) => {
