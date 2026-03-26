@@ -4,8 +4,8 @@ from api.controllers.user_controller import me
 
 
 urlpatterns = [
-    path("login/", login, name='login'),
-    path("logout/", logout, name="logout"),
-    path("user/me/", me, name='me'),
+    path("login", login, name='login'),
+    path("logout", logout, name="logout"),
+    path("user/me", me, name='me'),
 
 ]
