@@ -12,7 +12,7 @@ Avoir un docker MariaDB.
 # Powershell en admin
 wsl --install
 ```
-Cela va installer un WSL de Ubuntu, au premier démarrage il va demander de mettre un username et un mot de passe.
+Cela va installer un WSL de Ubuntu, au premier démarrage il va demander de mettre un nom d'utilisateur et un mot de passe.
 ### 2- Télécharger et installer Docker Desktop
  - Docker Desktop
 [Lien pour DockerDesktop](https://www.docker.com/products/docker-desktop/)
@@ -20,13 +20,13 @@ Cela va installer un WSL de Ubuntu, au premier démarrage il va demander de mett
 ### 3- Configurer Docker Desktop
 Se rendre dans paramètre
 
-Dans general s'assurer que cette case est coché :
+Dans géneral s'assurer que cette case est coché :
 
 **Use the WSL 2 based engine (Windows Home can only run the WSL 2 backend)**
 
 Ensuite, se rendre dans Ressources -> WSL integration :
 
-Activé ces 2 choses :
+Activer ces 2 choses :
 
 **Enable integration with my default WSL distro**
 

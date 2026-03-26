@@ -7,12 +7,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Deploy Full Application
-        uses: appleboy/ssh-action@v0.1.2
+        uses: appleboy/ssh-action@v1.2.5
         with:
           host: ${{ secrets.DEV_SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.DEV_SSH_KEY }}
-          use_insecure_cipher: true
           script: |
             set -e # Exit immediately if a command exits with a non-zero status.
             echo "Starting deployment process..."
@@ -29,7 +28,7 @@ jobs:
             #Pas encore de logs dans notre app
             #[ -f "/root/ProjetFabLab2026/HoraireFabLab/API/logs.txt" ] && cp /root/ProjetFabLab2026/HoraireFabLab/API/logs.txt /root/FablabLogs/logs_FabLab_$DATE.txt
 
-            # Suppression et récréation du répertoire GestionnaireHoraire
+            # Suppression et recréation du répertoire GestionnaireHoraire
             echo "Refreshing project directory..."
             cd /root/ProjetFabLab2026
             rm -rf HoraireFabLab
@@ -38,7 +37,7 @@ jobs:
             echo "Cloning fresh repository..."
             git clone -b 028_AutoDeploy https://github.com/ecoleduweb/HoraireFabLab.git
 
-            #Preparation du VENV
+            #Préparation du VENV
             cd /${{ secrets.SSH_USERNAME}}/ProjetFabLab2026/HoraireFabLab/API/
             python3 -m venv venv
             source venv/bin/activate
@@ -57,8 +56,6 @@ jobs:
             DJANGO_ALLOWED_HOSTS= ${{ secrets.DJANGO_ALLOWED_HOSTS }}
             DJANGO_ENV=
             DB_NAME=${{ secrets.DEV_DB_NAME}}
-            DB_USER=${{ secrets.DEV_DB_USERNAME }}
-            DB_PASSWORD=${{ secrets.DEV_DB_PASSWORD }}
             DB_HOST=${{ secrets.DEV_DB_HOST }}
             DB_PORT=${{ secrets.DEV_DB_PORT }}
             JWT_COOKIE_SECURE=${{ secrets.JWT_COOKIE_SECURE }}
@@ -83,12 +80,12 @@ jobs:
 
             # Démarrage des services
             echo "Starting services..."
-            sudo systemctl start fablab-api || echo "Failed to start API service"
-            sudo systemctl start fablab-frontend || echo "Failed to start Frontend service"
+            sudo systemctl start fablab-api.service || echo "Failed to start API service"
+            sudo systemctl start fablab-frontend.service || echo "Failed to start Frontend service"
 
             # Vérification
             echo "Checking services status..."
-            sudo systemctl status fablab-api --no-pager
-            sudo systemctl status fablab-frontend --no-pager
+            sudo systemctl status fablab-api.service --no-pager
+            sudo systemctl status fablab-frontend.service --no-pager
 
             echo "Deployment completed successfully!"
