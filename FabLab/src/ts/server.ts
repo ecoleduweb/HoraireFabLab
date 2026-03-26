@@ -1,5 +1,6 @@
 import { env } from "$env/dynamic/public"
 import { InvalidDataError } from "../CustomError/invalidDataError.ts"
+import { NotFoundError } from "../CustomError/NotFoundError.ts"
 
 export async function GET<T>(url: string, redirectToLoginOn401?: boolean): Promise<T> {
     try {
@@ -97,7 +98,7 @@ async function handleResponse<T>(response: Response, redirectToLoginOn401: boole
         if (response.status === 500 && redirectToLoginOn401) {
             window.location.href = "/500"
         } else if (response.status === 404) {
-            throw new Error(`Error: 404 - Not Found`)
+                throw new NotFoundError()
         } else if (response.status === 401 && redirectToLoginOn401) {
             window.location.href = "/login"
         } else if (response.status === 400) {
