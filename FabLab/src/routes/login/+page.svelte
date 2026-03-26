@@ -55,11 +55,12 @@
                 }
             }
             //Petite modification de la gestion de l'erreur
-        }   catch (err) {
-        if (err instanceof yup.ValidationError) {
-            errors = extractErrors<Login>(err)
-        }
-}
+            } catch (err) {
+            if (err instanceof yup.ValidationError) {
+                errors = extractErrors<Login>(err)
+            }
+        }  
+    } 
 </script>
 
 <section>
