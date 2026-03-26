@@ -1,7 +1,9 @@
 name: Deployer FabLab DEV
 on:
-  workflow_dispatch:
   push:
+    branches:
+      - main
+  workflow_dispatch:
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -35,7 +37,7 @@ jobs:
 
             # Clone du projet (plus propre qu'un pull)
             echo "Cloning fresh repository..."
-            git clone -b 028_AutoDeploy https://github.com/ecoleduweb/HoraireFabLab.git
+            git clone https://github.com/ecoleduweb/HoraireFabLab.git
 
             #Préparation du VENV
             cd /${{ secrets.SSH_USERNAME}}/ProjetFabLab2026/HoraireFabLab/API/
