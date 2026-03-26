@@ -101,9 +101,11 @@ async function handleResponse<T>(response: Response, redirectToLoginOn401: boole
         } else if (response.status === 401 && redirectToLoginOn401) {
             window.location.href = "/login"
         } else if (response.status === 400) {
-            const { field, message } = await response.json();
+            const data = await response.json();
+            const field = data.field
+            const message = data.message || data.detail
             if (field === undefined || message === undefined) {
-                throw new Error(`Error: ${response.status} - ${response.statusText}`)
+                throw new Error(message || `Error: ${response.status} - ${response.statusText}`)
             }
             throw new InvalidDataError(message, field);
         } else {
