@@ -1,7 +1,8 @@
 name: Deployer FabLab PROD
 on:
   push:
-  workflow_dispatch:
+    tags:
+      - '*'
 
 jobs:
   deploy:
