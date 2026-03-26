@@ -97,7 +97,7 @@ async function handleResponse<T>(response: Response, redirectToLoginOn401: boole
         if (response.status === 500 && redirectToLoginOn401) {
             window.location.href = "/500"
         } else if (response.status === 404) {
-            return undefined as T
+            throw new Error(`Error: 404 - Not Found`)
         } else if (response.status === 401 && redirectToLoginOn401) {
             window.location.href = "/login"
         } else if (response.status === 400) {

@@ -2,7 +2,7 @@
 	import { goto } from "$app/navigation";
 
     const handleBtnClick = async () => {
-	    await goto(`login`);
+	    await goto(`/login`);
 	};
     
 </script>
