@@ -13,7 +13,8 @@ on:
     paths:
       - "FabLab/**"
       - "Playwright/**"
-
+  workflow_dispatch:
+  
 jobs:
   test:
     timeout-minutes: 60
