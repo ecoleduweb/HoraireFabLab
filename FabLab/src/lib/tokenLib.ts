@@ -1,12 +1,12 @@
 import { currentUser, isLoggedIn } from "./index.ts";
 import { goto } from "$app/navigation";
+import { base } from "$app/paths";
 import type { User } from "../Models/User.ts";
-import { base } from "$app/paths"
 
 export const logIn = async (user: User) => {
-  currentUser.set(user)
-  isLoggedIn.set(true)
-  await goto(`${base}/test`)
+  currentUser.set(user);
+  isLoggedIn.set(true);
+  await goto(`${base}/admin`);
 }
 
 export const setInfoFromDecoded = (decoded: any) => {

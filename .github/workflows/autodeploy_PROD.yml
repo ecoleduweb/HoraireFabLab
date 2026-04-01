@@ -1,0 +1,93 @@
+name: Deployer FabLab PROD
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy Full Application
+        uses: appleboy/ssh-action@v1.2.5
+        with:
+          host: ${{ secrets.PROD_SSH_HOST }}
+          username: ${{ secrets.PROD_SSH_USERNAME}}
+          key: ${{ secrets.PROD_SSH_KEY }}
+          script: |
+            set -e
+            echo "Starting PROD deployment process..."
+
+            # Arrêt des services
+            echo "Stopping services..."
+            sudo systemctl stop fablab-api.service || echo "API service not running"
+            sudo systemctl stop fablab-frontend.service || echo "Frontend service not running"
+
+            # Copie du fichier de logs
+            echo 'Moving logs file to logs backup folder'
+            mkdir -p /home/fablab/FablabLogs
+            DATE=$(date +'%Y-%m-%d_%H-%M')
+            #[ -f "/home/fablab/fablab/API/logs.txt" ] && cp /home/fablab/fablab/API/logs.txt /home/fablab/FablabLogs/logs_FabLab_$DATE.txt
+
+            # Suppression et recréation du répertoire
+            echo "Refreshing project directory..."
+            cd /home/fablab
+            rm -rf fablab
+
+            # Clone du projet
+            echo "Cloning fresh repository..."
+            git clone https://github.com/ecoleduweb/HoraireFabLab.git fablab
+
+            # Préparation du VENV
+            cd /home/fablab/fablab/API
+            python3 -m venv venv
+            source venv/bin/activate
+
+            # Dépendances système pour mysqlclient
+            sudo apt-get install -y python3-dev libmysqlclient-dev build-essential pkg-config
+            pip install -r requirements.txt
+
+            # Configuration API
+            echo "Configuring API..."
+            cat > .env << EOF
+            DB_USER=${{ secrets.PROD_DB_USERNAME }}
+            DB_PASSWORD=${{ secrets.PROD_DB_PASSWORD }}
+            DJANGO_SECRET_KEY=${{ secrets.PROD_DJANGO_SECRET_KEY }}
+            DJANGO_DEBUG=False
+            DJANGO_ALLOWED_HOSTS=${{ secrets.PROD_DJANGO_ALLOWED_HOSTS }}
+            DJANGO_ENV=production
+            DB_NAME=${{ secrets.PROD_DB_NAME }}
+            DB_HOST=${{ secrets.PROD_DB_HOST }}
+            DB_PORT=${{ secrets.PROD_DB_PORT }}
+            JWT_COOKIE_SECURE=${{ secrets.JWT_COOKIE_SECURE }}
+            EOF
+
+            echo "Running migrations..."
+            python manage.py migrate --noinput
+
+            # Configuration Frontend
+            echo "Configuring Frontend..."
+            cd /home/fablab/fablab/FabLab
+            cat > .env << EOF
+            PUBLIC_BASE_URL=${{ secrets.PROD_BASEURL_API }}
+            BASE_PATH=
+            PORT=8001
+            HOST=127.0.0.1
+            EOF
+
+            echo "Building Frontend..."
+            npm install --ignore-scripts
+            npm install
+            npm run build
+
+            # Démarrage des services
+            echo "Starting services..."
+            sudo systemctl start fablab-api.service || echo "Failed to start API service"
+            sudo systemctl start fablab-frontend.service || echo "Failed to start Frontend service"
+
+            # Vérification
+            echo "Checking services status..."
+            sudo systemctl status fablab-api.service --no-pager
+            sudo systemctl status fablab-frontend.service --no-pager
+
+            echo "PROD Deployment completed successfully!"
