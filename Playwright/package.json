@@ -1,14 +1,13 @@
 {
+  "name": "fablab-playwright",
   "type": "module",
   "devDependencies": {
     "@types/node": "^25.5.0",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "@playwright/test": "^1.59.0",
+    "playwright": "^1.59.0"
   },
   "scripts": {
     "test": "playwright test"
-  },
-  "dependencies": {
-    "@playwright/test": "^1.59.0",
-    "playwright": "^1.59.0"
   }
 }

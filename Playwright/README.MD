@@ -16,7 +16,7 @@ Ajouter l'extension au module vscode : [Lien](https://marketplace.visualstudio.c
 
 ## Rouler les tests automatiquement
 
-Pour rouler les test, faire `npm run test`
+Pour rouler les tests, faire `npm run test`
 
 La commande va démarrer flask et svelte puis rouler les tests.
 
@@ -24,7 +24,7 @@ Les tests s'exécutent sur le port 5002, il ne faut pas qu'un processus s'exécu
 
 ## Debug
 
-Les tests peuvent être exécutés en debug, avec la possbilité d'insérer des points d'arrêt.
+Les tests peuvent être exécutés en debug, avec la possibilité d'insérer des points d'arrêt.
 
 ![1738772896939](image/README/1738772896939.png)
 
