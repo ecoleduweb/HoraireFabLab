@@ -3,10 +3,10 @@ import type { ErrorResponse } from "../Models/ErrorResponse.ts"
 import { POST } from "./server.ts"
 import striptags from "striptags";
 
-export const extractErrors = (err: ValidationError): Record<string, string> => {
-   return err.inner.reduce((acc: Record<string, string>, validationErr) => {
+export const extractErrors = <T>(err: ValidationError): T => {
+    return err.inner.reduce((acc: Record<string, string>, validationErr) => {
         return { ...acc, [validationErr.path ?? '']: validationErr.message }
-    }, {})
+    }, {}) as unknown as T
 }
 
 export const toFormattedDateString = (date: Date): string => {

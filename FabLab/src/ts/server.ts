@@ -1,5 +1,6 @@
 import { env } from "$env/dynamic/public"
 import { InvalidDataError } from "../CustomError/invalidDataError.ts"
+import { NotFoundError } from "../CustomError/NotFoundError.ts"
 
 export async function GET<T>(url: string, redirectToLoginOn401?: boolean): Promise<T> {
     try {
@@ -18,6 +19,7 @@ export async function GET<T>(url: string, redirectToLoginOn401?: boolean): Promi
 
 export async function POST<T, T1>(url: string, body: T, redirectToLoginOn401?: boolean): Promise<{ data: T1 }> {
     var response
+
 
     try {
         const response = await fetch(`${env.PUBLIC_BASE_URL}${url}`, {
@@ -90,20 +92,22 @@ export async function PATCH<T>(url: string, body: T): Promise<void> {
     }
 }
 
+
 async function handleResponse<T>(response: Response, redirectToLoginOn401: boolean = true): Promise<T | undefined> {
     if (!response.ok) {
         if (response.status === 500 && redirectToLoginOn401) {
             window.location.href = "/500"
         } else if (response.status === 404) {
-            return undefined as T
+                throw new NotFoundError()
         } else if (response.status === 401 && redirectToLoginOn401) {
             window.location.href = "/login"
         } else if (response.status === 400) {
-            const { field, message } = await response.json();
-            if (field === undefined || message === undefined) {
-                throw new Error(`Error: ${response.status} - ${response.statusText}`)
+            const data = await response.json();
+            if (data.field && data.message) {
+                throw new InvalidDataError(data.message, data.field);
+            } else {
+                throw new Error(data.detail || data.message || `Error: ${response.status} - ${response.statusText}`)
             }
-            throw new InvalidDataError(message, field);
         } else {
             throw new Error(`Error: ${response.status} - ${response.statusText}`)
         }
