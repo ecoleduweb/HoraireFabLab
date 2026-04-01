@@ -1,11 +1,5 @@
 <script lang="ts">
-
-  interface TimeSlot {
-    start_at:  string;
-    label:     string;
-    available: number;
-    capacity:  number;
-  }
+     import type { TimeSlot } from "../../Models/TimeSlot.ts"
 
   const eventName = "Atelier de réparation — Printemps 2025";
   const eventDate = "2025-04-12";
@@ -79,22 +73,7 @@ pleine connaissance de ces conditions.`;
       return;
     }
     // TODO : appel API Django
-    // await fetch('/api/slots/reserve/', {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify({
-    //     start_at:           selectedStartAt,
-    //     plage_id:           1,
-    //     client_fname:       form.firstName,
-    //     client_lname:       form.lastName,
-    //     client_email:       form.email,
-    //     client_phone:       form.phone,
-    //     item:               form.item,
-    //     item_description:   form.itemDescription,
-    //     liability_accepted: form.waiverAccepted,
-    //   }),
-    // });
-    console.log("Payload → Django :", { selectedStartAt, ...form });
+
     slots = slots.map(s =>
       s.start_at === selectedStartAt
         ? { ...s, available: Math.max(0, s.available - 1) }
