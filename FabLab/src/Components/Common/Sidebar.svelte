@@ -1,11 +1,12 @@
 <script lang="ts">
     import { page } from '$app/state';
     import { icons } from '../../lib/icon.ts';
+    import { base } from '$app/paths';
 
     const navItems = [
-        { label: 'Événements',     href: '/admin/events',       icon: icons.calendar },
-        { label: 'Plages horaires', href: '/admin/timeslots',   icon: icons.clock    },
-        { label: 'Réservations',   href: '/admin/reservations', icon: icons.ticket   },
+        { label: 'Événements',      href: `${base}/admin/events`,       icon: icons.calendar },
+        { label: 'Plages horaires', href: `${base}/admin/timeslots`,    icon: icons.clock    },
+        { label: 'Réservations',    href: `${base}/admin/reservations`, icon: icons.ticket   },
     ];
 
     function isActive(href: string): boolean {
@@ -15,7 +16,7 @@
 
 <aside class="sidebar">
     <div class="sidebar-logo">
-        <a href="/admin" class="logo-link">
+        <a href="{base}/admin" class="logo-link">
             <span class="logo-name">HoraireFabLab</span>
             <span class="logo-sub">Administration</span>
         </a>

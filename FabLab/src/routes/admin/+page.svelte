@@ -1,35 +1,26 @@
 <script lang="ts">
-    import Header from '../../Components/Common/Header.svelte';
-    import Sidebar from '../../Components/Common/Sidebar.svelte';
-    import { icons } from '../../lib/icon.ts';
+	import { base } from '$app/paths';
+	import { icons } from '../../lib/icon.ts';
 </script>
 
-<Header />
+<div class="page-header">
+	<h1>Administration</h1>
+	<p class="page-desc">Sélectionnez une action.</p>
+</div>
 
-<div class="admin-layout">
-    <Sidebar />
-
-    <main class="admin-content">
-        <div class="page-header">
-            <h1>Administration</h1>
-            <p class="page-desc">Sélectionnez une action.</p>
-        </div>
-
-        <div class="sections-grid">
-            <a href="/admin/events/create" class="section-card">
-                <div class="card-icon">{@html icons.calendarAdd}</div>
-                <div class="card-content">
-                    <h2>Créer un événement</h2>
-                    <p>Ajouter une nouvelle journée d'événement au FabLab.</p>
-                </div>
-                <div class="card-arrow">{@html icons.chevronRight}</div>
-            </a>
-        </div>
-    </main>
+<div class="sections-grid">
+	<a href="{base}/admin/events/create" class="section-card">
+		<div class="card-icon">{@html icons.calendarAdd}</div>
+		<div class="card-content">
+			<h2>Créer un événement</h2>
+			<p>Ajouter une nouvelle journée d'événement au FabLab.</p>
+		</div>
+		<div class="card-arrow">{@html icons.chevronRight}</div>
+	</a>
 </div>
 
 <style>
-	/* ── En-tête de page ── */
+	/* ── En-tête ── */
 	.page-header {
 		margin-bottom: 2.5rem;
 	}
@@ -48,7 +39,7 @@
 		margin: 0;
 	}
 
-	/* ── Cards de section ── */
+	/* ── Cards ── */
 	.sections-grid {
 		display: flex;
 		flex-direction: column;
@@ -120,27 +111,9 @@
 		transform: translateX(3px);
 	}
 
-	/* ── Layout avec sidebar ── */
-	.admin-layout {
-		display: flex;
-		min-height: calc(100vh - 60px);
-		background-color: #f5f5f5;
-	}
-
-	.admin-content {
-		flex: 1;
-		padding: 2.5rem;
-	}
-
-	/* ── Responsive ── */
 	@media screen and (max-width: 600px) {
-
 		.section-card {
 			padding: 1rem 1.25rem;
-		}
-
-		.admin-content {
-			padding: 1.5rem 1rem;
 		}
 	}
 </style>
