@@ -1,5 +1,5 @@
 <script lang="ts">
-     import type { TimeSlot } from "../../Models/TimeSlot.ts"
+     import type { TimeSlot } from "../Models/TimeSlot.ts"
 
   const eventName = "Atelier de réparation — Printemps 2025";
   const eventDate = "2025-04-12";
@@ -236,20 +236,7 @@ pleine connaissance de ces conditions.`;
 
 <style>
   /* ── Variables  */
-  :global(:root) {
-    --bg:       #0e1117;
-    --card:     #161b24;
-    --border:   #2a3347;
-    --white:    #ffffff;
-    --muted:    #7a8599;
-    --teal:     #00c9b1;
-    --red:      #c0392b;
-    --red-dim:  #a93226;
-    --r:        3px;
-    --fh: 'Barlow Condensed', 'Arial Narrow', Arial, sans-serif;
-    --fb: 'Barlow', Arial, sans-serif;
-    --fm: 'JetBrains Mono', monospace;
-  }
+  
 
   /* ── Reset  */
   * { box-sizing: border-box; margin: 0; padding: 0; }
