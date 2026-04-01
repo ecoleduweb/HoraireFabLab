@@ -1,15 +1,12 @@
 from api.tests.base_TestClass import BaseAPITestCase
 from api.models import Event
+from django.urls import reverse
 
 
 class CreateEventTests(BaseAPITestCase):
     def setUp(self):
         super().setUp()
-        try:
-            from django.urls import reverse
-            self.create_event_url = reverse("create_event")
-        except Exception:
-            self.create_event_url = "/api/events"
+        self.create_event_url = reverse("create_event")
 
     def test_create_event_success_returns_201(self):
         self.login_and_set_cookies()

@@ -21,7 +21,7 @@ class User(models.Model):
 
 class Event(models.Model):
     name = models.CharField(max_length=150)
-    event_date = models.DateField()
+    event_date = models.DateField(unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     class Meta:
         db_table = "events"
