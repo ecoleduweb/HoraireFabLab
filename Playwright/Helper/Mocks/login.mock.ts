@@ -1,33 +1,19 @@
-import type { MockConfig } from "../types";
-import jwt from 'jsonwebtoken';
-
-const generateToken = () => {
-    const payload = {
-        username: "test",
-        exp: Math.floor((Date.now() + 30 * 60 * 1000) / 1000), // 30 minutes from now
-    };
-
-    // Clé secrète pour les tests
-    const SECRET_KEY = 'cle-secrette-pour-les-tests';
-
-    return jwt.sign(payload, SECRET_KEY);
-};
+import type { MockConfig } from "../types.ts";
 
 export const loginMocks = {
     notFound: {
-        url: '*/**/user/login',
+        url: '/login',
         response: {
             status: 404,
             json: { message: "User not found" }
         }
     },
     success: {
-        url: '*/**/user/login',
+        method: 'POST',
+        url: '/login',
         response: {
             status: 200,
-            json: {
-                "token": generateToken()
-            }
+            json:{}
         }
     }
 } satisfies Record<string, MockConfig>;

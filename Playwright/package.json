@@ -1,8 +1,14 @@
 {
+  "type": "module",
   "devDependencies": {
+    "@types/node": "^25.5.0",
     "typescript": "^5.9.3"
   },
+  "scripts": {
+    "test": "playwright test"
+  },
   "dependencies": {
-    "jsonwebtoken": "^9.0.3"
+    "@playwright/test": "^1.59.0",
+    "playwright": "^1.59.0"
   }
 }

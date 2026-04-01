@@ -1,5 +1,5 @@
 import { Page } from '@playwright/test';
-import type { MockConfig } from './types';
+import type { MockConfig } from './types.ts';
 
 export class ApiMocker {
     private page: Page;
@@ -24,7 +24,14 @@ export class ApiMocker {
     // Method to apply all collected mock configurations
     async apply(): Promise<void> {
         for (const config of this.mockConfigs) {
-            await this.page.route(config.url, async route => {
+            await this.page.route(`http://localhost:8080${config.url}`, async route => {
+                await route.fulfill({
+                    status: config.response.status,
+                    json: config.response.json,
+                    headers: config.response.headers
+                });
+            });
+            await this.page.route(`**/*api${config.url}`, async route => {
                 await route.fulfill({
                     status: config.response.status,
                     json: config.response.json,
@@ -43,4 +50,3 @@ export class ApiMocker {
         this.mockConfigs = [];
     }
 }
-
