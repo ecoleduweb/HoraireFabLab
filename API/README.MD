@@ -7,7 +7,7 @@ L’authentification est réalisée avec **JWT (JSON Web Tokens)** stockés dans
 
 ---
 
-# Table des matières
+## Table des matières
 
 - [Présentation](#présentation)
 - [Architecture](#architecture)
@@ -22,7 +22,7 @@ L’authentification est réalisée avec **JWT (JSON Web Tokens)** stockés dans
 
 ---
 
-# Présentation
+## Présentation
 
 Cette API permet de :
 
@@ -34,7 +34,7 @@ Cette API permet de :
 
 Le projet suit une architecture claire basée sur :
 
-```
+```sh
 Controller
    ↓
 Service
@@ -50,28 +50,33 @@ Cette séparation permet :
 
 ---
 
-# Architecture
+## Architecture
 
 Le projet suit une architecture **layered**.
 
 ### Controllers
+
 Gestion des requêtes HTTP et des réponses API.
 
 ### Services
+
 Contiennent la logique métier.
 
 ### Repositories
+
 Responsables de l'accès aux données.
 
 ### Authentication
+
 Gestion des JWT via cookies sécurisés.
 
-### Tests
+### Tests unitaires
+
 Tests unitaires des endpoints critiques.
 
 ---
 
-# Technologies utilisées
+## Technologies utilisées
 
 - Python 3.13
 - Django 6
@@ -84,153 +89,139 @@ Tests unitaires des endpoints critiques.
 
 ---
 
-# Installation
+## Installation
 
-## 1. Cloner le projet
+### 1. Cloner le projet
 
 ```bash
-git clone https://github.com/ecoleduweb/HoraireFabLab.git
-cd HoraireFabLab
+   git clone https://github.com/ecoleduweb/HoraireFabLab.git
+   cd HoraireFabLab/API
 ```
 
 ---
 
-## 2. Créer un environnement virtuel
+### 2. Installer python (S'il ne l'est pas déjà)
+
+- Rechercher "python download" sur internet
+- Télécharger l'outil d'installation de python
+- Ouvrir l'outil d'installation et installer python
+
+---
+
+### 3. Créer un environnement virtuel
 
 ```bash
-python -m venv venv
+   cd HoraireFabLab/API
+   python -m venv venv
 ```
 
-### Activation
+#### Activation
 
-#### Windows
+##### Windows
 
 ```bash
-venv\Scripts\activate
+   venv\Scripts\activate
 ```
 
-#### Linux / Mac
+##### Linux / Mac
 
 ```bash
-source venv/bin/activate
+   source venv/bin/activate
 ```
 
 ---
 
-## 3. Installer les dépendances
+### 4. Installer les dépendances
 
 ```bash
-pip install -r requirements.txt
+   pip install -r requirements.txt
 ```
 
 ---
 
-## 4. Installer les packages nécessaires
+### 5. Installer les packages nécessaires
 
 ```bash
-pip install django djangorestframework django-cors-headers python-decouple
+   pip install django djangorestframework django-cors-headers python-decouple
 ```
 
 ---
 
-# Configuration
+## Configuration
 
 Créer un fichier `.env`.
 
 Exemple :
 
 ```bash
-DJANGO_ENV=development
-DJANGO_DEBUG=True
-DJANGO_SECRET_KEY=super-secret-key
+DJANGO_ENV=
+DJANGO_DEBUG=
+DJANGO_SECRET_KEY=
 
-DB_NAME=FabLab
-DB_USER=admino
-DB_PASSWORD=password
-DB_HOST=localhost
-DB_PORT=3306
+DB_NAME=
+DB_USER=
+DB_PASSWORD=
+DB_HOST=
+DB_PORT=
 
-JWT_COOKIE_SECURE=False
-JWT_COOKIE_SAMESITE=Lax
+JWT_COOKIE_SECURE=
+JWT_COOKIE_SAMESITE=
 ```
 
 ---
 
-# Base de données
+## Base de données
 
-## Lancer MariaDB avec Docker
+### Migrations
 
 ```bash
-docker run -d \
-  --name mariadb \
-  -e MYSQL_ROOT_PASSWORD=root \
-  -e MYSQL_DATABASE=FabLab \
-  -p 3306:3306 \
-  mariadb
+   python manage.py migrate
 ```
 
 ---
 
-## Créer un utilisateur
-
-```sql
-CREATE USER 'admino'@'%' IDENTIFIED BY 'password';
-GRANT ALL PRIVILEGES ON FabLab.* TO 'admino'@'%';
-FLUSH PRIVILEGES;
-```
-
----
-
-## Migrations
+### Créer un utilisateur admin
 
 ```bash
-python manage.py migrate
-```
-
----
-
-## Créer un utilisateur admin
-
-```bash
-python manage.py shell
+   python manage.py shell
 ```
 
 ```python
-from django.contrib.auth.hashers import make_password
-from api.models import User
+   from django.contrib.auth.hashers import make_password
+   from api.models import User
 
-User.objects.create(
-    username="admin1",
-    password_hash=make_password("pass123"),
-    email="admin1@test.com"
-)
+   User.objects.create(
+      username="admin1",
+      password_hash=make_password("pass123"),
+      email="admin1@test.com"
+   )
 ```
 
 ---
 
-# Lancement du projet
+## Lancement du projet
 
 ```bash
-python manage.py runserver
+   python manage.py runserver
 ```
 
 L'API sera accessible à :
 
-```
-http://localhost:8000
+```sh
+   http://localhost:8000
 ```
 
 ---
 
-# Authentification
+## Authentification
 
 Le projet utilise **JWT avec cookies HttpOnly**.
 
 Cookies générés :
 
-```
-access_token
-refresh_token
+```sh
+   access_token
+   refresh_token
 ```
 
 ### Avantages
@@ -241,12 +232,12 @@ refresh_token
 
 ---
 
-# Tests
+## Tests
 
 Lancer les tests :
 
 ```bash
-python manage.py test
+   python manage.py test
 ```
 
 Les tests couvrent :
@@ -256,12 +247,14 @@ Les tests couvrent :
 - endpoint `/me`
 - logout
 
+- Création d'un événement répare tes trucs
+
 ---
 
-# Auteur
+## Auteur
 
 Étudiant : **Cedric Tresor**
-Reviewers : **Christophe Gilbert et Hèlene Carone**
+Reviewers : **Christophe Gilbert et Hélène Caron**
 Supervision : **Antoine Chagnon Michaud**
 
 Projet pédagogique et d'application  
