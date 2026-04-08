@@ -18,10 +18,16 @@ Application WEB développée dans le cadre du cours de Projet d'application pour
 ## Installation du projet en local
 
 1. Ouvrir un terminal dans l'application
-2. Effectuer la commande suivante dans le terminal:
+2. Si le repository global du projet n'est pas déjà cloné en local, effectuer la commande suivante dans le terminal:
 
 ```sh
     git clone https://github.com/ecoleduweb/HoraireFabLab.git
+```
+
+3. Si le projet est déjà cloné, s'assurer d'avoir la dernière version à jour en effectuant la commande suivante:
+
+```sh
+    git pull
 ```
 
 ## Installation des dépendances

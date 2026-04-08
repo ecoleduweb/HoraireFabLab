@@ -1,5 +1,3 @@
-# api/repositories/auth_repository.py
-
 from api.models import User  
 
 class AuthRepository:
