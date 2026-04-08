@@ -1,7 +1,7 @@
 import { env } from "$env/dynamic/public"
 import { InvalidDataError } from "../CustomError/invalidDataError.ts"
 import { NotFoundError } from "../CustomError/NotFoundError.ts"
-import type { ReservationPayload, ReservationResponse, TimeSlot, DjangoSlotRaw, DjangoEventResponse, EventData } from "../models/Reservation.ts"
+import type { ReservationPayload, ReservationResponse, TimeSlot, DjangoSlotRaw, DjangoEventResponse, EventData } from "../modeles/Reservation.ts"
 
 
 export async function GET<T>(url: string, redirectToLoginOn401?: boolean): Promise<T> {

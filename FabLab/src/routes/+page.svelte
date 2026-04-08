@@ -6,8 +6,8 @@
   import ReservationForm from '../Components/Reservation/ReservationForm.svelte'
   import WaiverSection  from '../Components/Reservation/WaiverSection.svelte'
 
-  import type { TimeSlot, ReservationForm as FormType, EventData } from "../models/Reservation.ts"
-  import { emptyForm }                                  from "../models/Reservation.ts"
+  import type { TimeSlot, ReservationForm as FormType, EventData } from "../modeles/Reservation.tss"
+  import { emptyForm }                                  from "../modeles/Reservation.tss"
   import type { FormErrors }                            from "../Validation/reservation.validation.ts"
   import { validateReservation }                        from "../Validation/reservation.validation.ts"
   import { fetchActiveEvent, postReservation }          from "../ts/server.ts"

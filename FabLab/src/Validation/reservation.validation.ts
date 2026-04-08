@@ -1,5 +1,5 @@
 import * as yup from 'yup';
-import type { ReservationForm } from '../models/Reservation.ts';
+import type { ReservationForm } from '../modeles/Reservation.ts';
 
 export const reservationSchema = yup.object({
   firstName: yup

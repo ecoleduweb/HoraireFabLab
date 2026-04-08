@@ -1,6 +1,6 @@
 <script lang="ts">
 
-  import type { TimeSlot } from "../../models/Reservation.ts";
+  import type { TimeSlot } from "../../modeles/Reservation.tss";
 
   interface Props {
     slots:           TimeSlot[];
