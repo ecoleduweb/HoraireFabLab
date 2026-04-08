@@ -1,12 +1,12 @@
 <script lang="ts">
     import "../../styles/global.css"
     import Button from "../../Components/Inputs/Button.svelte";
-    import type { Login } from "../../modeles/Login.tss";
+    import type { Login } from "../../models/Login.ts";
     import { POST } from "../../ts/server.ts"
     import * as yup from "yup"
     import { extractErrors } from "../../ts/utils.ts"
     import { logIn } from "../../lib/tokenLib.ts"
-	import type { User } from "../../modeles/User.tss";
+	import type { User } from "../../models/User.ts";
 
     const schema = yup.object().shape({
         username: yup

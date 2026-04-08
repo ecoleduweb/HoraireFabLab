@@ -4,7 +4,7 @@
     import { isLoggedIn, currentUser } from "../../lib/index.ts"
     import { GET, POST } from "../../ts/server.ts"
     import { Hamburger } from "svelte-hamburgers"
-    import type { User } from "../../modeles/User.tss"
+    import type { User } from "../../models/User.ts"
 
     let open = $state<boolean>(false)
 
