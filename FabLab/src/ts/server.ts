@@ -1,6 +1,8 @@
 import { env } from "$env/dynamic/public"
 import { InvalidDataError } from "../CustomError/invalidDataError.ts"
 import { NotFoundError } from "../CustomError/NotFoundError.ts"
+import type { ReservationPayload, ReservationResponse, TimeSlot, DjangoSlotRaw, DjangoEventResponse, EventData } from "../models/Reservation.ts"
+
 
 export async function GET<T>(url: string, redirectToLoginOn401?: boolean): Promise<T> {
     try {
@@ -110,4 +112,57 @@ async function handleResponse<T>(response: Response, redirectToLoginOn401: boole
         }
     }
     return (await response.json()) as T
+}
+
+// Routes backend attendues :
+//   GET  /api/events/active/   DjangoEventResponse
+//   POST /api/slots/reserve/   ReservationResponse
+ 
+/** ISO datetime ex "9 h 00" */
+function toLabel(iso: string): string {
+    const d = new Date(iso)
+    const h = d.getHours()
+    const m = d.getMinutes().toString().padStart(2, "0")
+    return `${h} h ${m}`
+}
+ 
+function mapEvent(data: DjangoEventResponse): EventData {
+    return {
+        id:         data.id,
+        name:       data.name,
+        event_date: data.event_date,
+        plageId:    data.plage.id,
+        slots:      data.plage.slots.map(s => ({
+            start_at:  s.start_at,
+            label:     toLabel(s.start_at),
+            available: s.available,
+            capacity:  s.capacity,
+        })),
+    }
+}
+ 
+/**
+ * Récupère l'événement actif et ses créneaux groupés.
+ * GET /api/events/active/
+ * pas de redirection sur 401 (false).
+ */
+export async function fetchActiveEvent(): Promise<EventData> {
+    const raw = await GET<DjangoEventResponse>("/api/events/active/", false)
+    return mapEvent(raw)
+}
+ 
+/**
+ * Soumet une réservation.
+ * POST /api/slots/reserve/
+ * Le backend assigne le premier Slot libre pour ce start_at.
+ * En cas de 400 avec { field, message } InvalidDataError (handleResponse).
+ *  pas de redirection sur 401 (false).
+ */
+export async function postReservation(payload: ReservationPayload): Promise<ReservationResponse> {
+    const { data } = await POST<ReservationPayload, ReservationResponse>(
+        "/api/slots/reserve/",
+        payload,
+        false
+    )
+    return data
 }

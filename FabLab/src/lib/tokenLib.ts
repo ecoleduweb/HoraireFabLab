@@ -1,6 +1,6 @@
 import { currentUser, isLoggedIn } from "./index.ts";
 import { goto } from "$app/navigation";
-import type { User } from "../Models/User.ts";
+import type { User } from "../models/User.ts";
 import { base } from "$app/paths"
 
 export const logIn = async (user: User) => {
