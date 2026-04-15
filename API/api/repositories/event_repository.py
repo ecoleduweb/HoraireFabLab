@@ -1,6 +1,6 @@
-# api/repositories/event_repository.py
 from api.models import Event,Plage,Slot
 from django.db.models import Q
+from datetime import date
 
 class EventRepository:
     def get_event_by_id(self, event_id: int) -> Event | None:
@@ -27,4 +27,7 @@ class EventRepository:
             Q(client_email__isnull=False) & ~Q(client_email="") |
             Q(client_phone__isnull=False) & ~Q(client_phone="")
         ).exists()
+
+    def create(self, name: str, event_date: date) -> Event:
+        return Event.objects.create(name=name, event_date=event_date)
 

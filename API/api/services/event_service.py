@@ -1,15 +1,18 @@
 from datetime import datetime
 from rest_framework.exceptions import NotFound, ValidationError,APIException
-
+from api.serializers.event_serializer import EventSerializer
+from django.db import IntegrityError
 from api.repositories.event_repository import EventRepository
 
 class ConflictError(APIException):
     status_code = 409
     default_code = "conflict"
 
+
 class EventService:
     def __init__(self):
         self.repo = EventRepository()
+
 
     def update_event_date(self, event_id: int, event_date_raw: str):
         if not event_date_raw:
@@ -33,3 +36,20 @@ class EventService:
         event.event_date = new_event_date
         event.save(update_fields=["event_date"])
         return event
+
+    def create_event(self, data: dict) -> dict:
+        serializer = EventSerializer(data=data)
+        if not serializer.is_valid():
+            raise ValidationError(serializer.errors)
+
+        try:
+            event = self.repo.create(
+                name=serializer.validated_data["name"],
+                event_date=serializer.validated_data["event_date"],
+            )
+        except IntegrityError:
+            raise ValidationError({"event_date": "Un événement existe déjà pour cette date."})
+
+        return EventSerializer(event).data
+    
+
