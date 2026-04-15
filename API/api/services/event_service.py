@@ -6,6 +6,7 @@ from api.repositories.event_repository import EventRepository
 
 class ConflictError(APIException):
     status_code = 409
+    default_detail = "Conflit détecté."
     default_code = "conflict"
 
 
@@ -20,14 +21,14 @@ class EventService:
 
         try:
             new_event_date = datetime.fromisoformat(event_date_raw).date()
-        except ValueError:
-            raise ValidationError({"detail": "event_date invalide (format attendu: YYYY-MM-DD)."})
+        except ValueError as err:
+            raise ValidationError({"detail": "event_date invalide (format attendu: YYYY-MM-DD)."}) from err
 
         event = self.repo.get_event_by_id(event_id)
         if not event:
             raise NotFound("Événement introuvable.")
-
-        plage_ids = [p.id for p in self.repo.get_plages_by_event_id(event.id)]
+        
+        plage_ids = self.repo.get_plage_ids_by_event_id(event.id)
         if self.repo.has_booked_slots(plage_ids):
             raise ConflictError({
                 "detail": "Modification impossible: des inscriptions existent déjà."

@@ -1,8 +1,7 @@
 from django.urls import path
 from api.controllers.auth_controller import login,logout
 from api.controllers.user_controller import me
-from api.controllers.event_controller import update_event_date
-from api.controllers.event_controller import create_event
+from api.controllers.event_controller import create_event,update_event_date
 
 
 
@@ -11,7 +10,7 @@ urlpatterns = [
     path("logout", logout, name="logout"),
     path("user/me", me, name='me'),
     path("events/<int:event_id>/update_date/", update_event_date, name="update_event_date"),
-    path("events", create_event, name='create_event'),
+    path("events/", create_event, name='create_event'),
 
 
 ]

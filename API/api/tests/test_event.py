@@ -1,5 +1,5 @@
-from datetime import date, datetime, time
-from django.urls import reverse
+from datetime import date, datetime, time, timezone
+from django.urls import reverse, NoReverseMatch
 from api.models import Event, Plage, Slot
 from api.tests.base_TestClass import BaseAPITestCase
 
@@ -25,7 +25,7 @@ class UpdateEventDateTests(BaseAPITestCase):
             self.update_event_url = reverse(
                 "update_event_date", kwargs={"event_id": self.event.id}
             )
-        except Exception:
+        except NoReverseMatch:
             self.update_event_url = f"/api/events/{self.event.id}/update_date/"
 
     def test_update_event_date_requires_auth(self):
@@ -54,8 +54,8 @@ class UpdateEventDateTests(BaseAPITestCase):
 
         Slot.objects.create(
             plage=self.plage,
-            start_at=datetime(2026, 5, 10, 9, 0),
-            end_at=datetime(2026, 5, 10, 9, 30),
+             start_at=timezone.make_aware(datetime(2026, 5, 10, 9, 0)),
+             end_at=timezone.make_aware(datetime(2026, 5, 10, 9, 30)),
             client_fname="Jean",
             client_email="jean@example.com",
             is_canceled=False,

@@ -4,6 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError
 from api.services.event_service import EventService
+from api.serializers.event_serializer import EventSerializer
 
 
 service = EventService()
@@ -17,12 +18,7 @@ def update_event_date(request, event_id: int):
     )
 
     return Response(
-        {
-            "id": event.id,
-            "name": event.name,
-            "event_date": str(event.event_date),
-        },
-        status=status.HTTP_200_OK,
+       EventSerializer(event).data, status=status.HTTP_200_OK
     )
 
 
