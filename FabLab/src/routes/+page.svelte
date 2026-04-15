@@ -1,5 +1,4 @@
 <script lang="ts">
-
   import { onMount } from 'svelte';
 
   import SlotGrid       from '../Components/Reservation/SlotGrid.svelte'
@@ -7,13 +6,12 @@
   import WaiverSection  from '../Components/Reservation/WaiverSection.svelte'
 
   import type { TimeSlot, ReservationForm as FormType, EventData } from "../models/Reservation.ts"
-  import { emptyForm }                                  from "../models/Reservation.ts"
+  import { emptyForm }                                          from "../models/Reservation.ts"
   import type { FormErrors }                            from "../Validation/reservation.validation.ts"
   import { validateReservation }                        from "../Validation/reservation.validation.ts"
   import { fetchActiveEvent, postReservation }          from "../ts/server.ts"
   import { InvalidDataError }                           from "../CustomError/invalidDataError.ts"
-  import { NotFoundError }                              from "../CustomError/NotFoundError.ts"
-
+  import { NotFoundError }                               from "../CustomError/NotFoundError.ts"
 
   let eventData       = $state<EventData | null>(null);
   let slots           = $state<TimeSlot[]>([]);
@@ -28,7 +26,6 @@
   let submitSuccess = $state(false);
   let submitError   = $state<string | null>(null);
 
-
   function formatDate(dateStr: string): string {
     const d = new Date(dateStr + 'T00:00:00');
     return d.toLocaleDateString('fr-CA', {
@@ -37,7 +34,6 @@
   }
 
   const selectedSlot = $derived(slots.find(s => s.start_at === selectedStartAt));
-
 
   onMount(async () => {
     try {
@@ -50,16 +46,14 @@
     }
   });
 
-
   function handleSlotSelect(slot: TimeSlot) {
     selectedStartAt = slot.start_at;
   }
 
-
   async function handleSubmit() {
     submitError = null;
 
-    if (!selectedStartAt) {
+    if (!selectedSlot) {
       submitError = 'Veuillez choisir une plage horaire.';
       return;
     }
@@ -72,18 +66,14 @@
 
     submitting = true;
     try {
-      await postReservation({
-        start_at:           selectedStartAt,
-        plage_id:           eventData!.plageId,
-        client_fname:       form.firstName,
-        client_lname:       form.lastName,
-        client_email:       form.email,
-        client_phone:       form.phone,
-        item:               form.item,
-        item_description:   form.itemDescription,
-        liability_accepted: form.waiverAccepted,
-      });
+      // AJUSTEMENT : On passe les objets requis par postReservation
+      await postReservation(
+        form, 
+        selectedSlot, 
+        eventData!.plageId
+      );
 
+      // Mise à jour locale de la disponibilité
       slots = slots.map(s =>
         s.start_at === selectedStartAt
           ? { ...s, available: Math.max(0, s.available - 1) }
@@ -93,6 +83,7 @@
       submitSuccess = true;
     } catch (e: unknown) {
       if (e instanceof InvalidDataError) {
+        // Mapping des erreurs backend vers le state local
         errors = { ...errors, [e.field as keyof FormType]: e.message }
         submitError = 'Veuillez corriger les erreurs dans le formulaire.'
       } else if (e instanceof NotFoundError) {
@@ -116,7 +107,6 @@
 </svelte:head>
 
 <div class="page">
-
   <div class="topbar">
     <span class="logo">FabLab <em>Fabbulle</em></span>
   </div>
@@ -137,7 +127,6 @@
   </div>
 
   <div class="content">
-
     {#if loading}
       <div class="loading">
         <div class="spinner"></div>
@@ -162,7 +151,6 @@
       </div>
 
     {:else}
-
       <div class="section-bar"></div>
       <div class="section-head"><h2>1 — Choisissez une plage horaire</h2></div>
       <div class="section-body">
@@ -200,19 +188,19 @@
         {/if}
       </button>
       <p class="note">Aucun compte requis · Données supprimées après l'événement</p>
-
     {/if}
   </div>
 </div>
 
 <style>
+  /* Tes styles CSS originaux ici... */
   :global(:root) {
-    --bg:    #0e1117;
-    --card:  #161b24;
-    --bord:  #2a3347;
+    --bg:     #0e1117;
+    --card:   #161b24;
+    --bord:   #2a3347;
     --white: #ffffff;
     --muted: #7a8599;
-    --teal:  #00c9b1;
+    --teal:   #00c9b1;
     --fh: 'Barlow Condensed', 'Arial Narrow', Arial, sans-serif;
     --fb: 'Barlow', Arial, sans-serif;
     --fm: 'JetBrains Mono', monospace;
@@ -227,7 +215,6 @@
     color: var(--white);
   }
 
-  /* ── Topbar ── */
   .topbar {
     background: var(--card);
     border-bottom: 3px solid transparent;
@@ -240,7 +227,6 @@
   }
   .logo em { color: var(--teal); font-style: normal; }
 
-  /* ── Hero ── */
   .hero {
     background: var(--card);
     padding: 2.5rem 2.5rem 2rem;
@@ -261,10 +247,8 @@
   }
   .hero-sub { margin-top: .75rem; color: var(--muted); font-size: .9rem; line-height: 1.6; }
 
-  /* ── Contenu ── */
   .content { max-width: 860px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
 
-  /* ── Sections ── */
   .section-bar { height: 4px; background: var(--teal); }
   .section-head {
     background: var(--card); padding: .7rem 1.2rem;
@@ -279,7 +263,6 @@
     border-top: none; padding: 1.4rem; margin-bottom: 1.5rem;
   }
 
-  /* ── Loading ── */
   .loading {
     display: flex; flex-direction: column; align-items: center; gap: .75rem;
     padding: 3rem; color: var(--muted); font-family: var(--fm); font-size: .85rem;
@@ -291,7 +274,6 @@
   }
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  /* ── Alertes ── */
   .alert-error {
     padding: .85rem 1.1rem; margin-bottom: 1.25rem;
     border-radius: 3px;
@@ -317,7 +299,6 @@
   .alert-success p { color: var(--muted); line-height: 1.6; }
   .alert-success strong { color: var(--white); }
 
-  /* ── Bouton ── */
   .btn-submit {
     width: 100%; padding: .85rem;
     background: linear-gradient(135deg, #7b1a2e 0%, #c0392b 40%, #e8455a 70%, #9b2335 100%);

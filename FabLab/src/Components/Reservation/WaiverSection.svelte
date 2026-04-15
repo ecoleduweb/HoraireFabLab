@@ -8,7 +8,7 @@
   let { accepted = $bindable(), error }: Props = $props();
 
   // Texte de la décharge
-  // TODO : charger depuis GET /api/waiver-text/ 
+  // TODO éventuellement: charger depuis GET /api/waiver-text/ 
   const waiverText = `En participant à cet atelier de réparation organisé par le FabLab Fabbulle,
 je reconnais avoir été informé(e) que les bénévoles présents ne sont pas des techniciens
 professionnels certifiés. Je comprends que la réparation de mon objet n'est pas garantie
@@ -24,6 +24,7 @@ pleine connaissance de ces conditions.`;
 <label class="check-wrap">
   <input
     type="checkbox"
+    data-testid="waiver-checkbox"
     bind:checked={accepted}
     aria-required="true"
     class:invalid={!!error}

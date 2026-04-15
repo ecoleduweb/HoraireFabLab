@@ -1,5 +1,6 @@
 export interface TimeSlot {
   start_at:  string;   // ISO datetime ex : "2025-04-12T09:00:00"
+  end_at:    string;
   label:     string;   
   available: number;
   capacity:  number;
@@ -15,9 +16,10 @@ export interface ReservationForm {
   waiverAccepted:  boolean;
 }
 
-export interface ReservationPayload {
+export interface Reservation extends ReservationForm {
+  plage:              number;   
   start_at:           string;   
-  plage_id:           number;  
+  end_at:             string;   
   client_fname:       string;
   client_lname:       string;
   client_email:       string;
@@ -25,6 +27,9 @@ export interface ReservationPayload {
   item:               string;
   item_description:   string;
   liability_accepted: boolean;
+  is_canceled:        false;    
+  updated_at:         string;   
+  created_at:         string;   
 }
 
 export interface ReservationResponse {
@@ -46,6 +51,7 @@ export const emptyForm = (): ReservationForm => ({
  
 export interface DjangoSlotRaw {
   start_at:  string
+  end_at:    string
   available: number
   capacity:  number
 }
