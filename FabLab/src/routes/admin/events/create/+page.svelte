@@ -5,7 +5,7 @@
     import type { CreateEventPayload, Event } from '../../../../Models/Event.ts';
 
     let name = $state('');
-    let event_date = $state('');
+    let eventDate = $state('');
     let loading = $state(false);
     let errors = $state<Record<string, string>>({});
 
@@ -14,7 +14,7 @@
         loading = true;
 
         try {
-            await POST<CreateEventPayload, Event>('/events', { name, event_date });
+            await POST<CreateEventPayload, Event>('/events', { name, eventDate });
             await goto(`${base}/admin`);
         } catch (e: unknown) {
             if (e instanceof Error) {
@@ -56,12 +56,12 @@
             <input
                 id="event_date"
                 type="date"
-                bind:value={event_date}
-                class:input-error={errors.event_date}
+                bind:value={eventDate}
+                class:input-error={errors.eventDate}
                 disabled={loading}
             />
-            {#if errors.event_date}
-                <span class="error-msg">{errors.event_date}</span>
+            {#if errors.eventDate}
+                <span class="error-msg">{errors.eventDate}</span>
             {/if}
         </div>
 
@@ -74,7 +74,7 @@
             <button 
                 type="submit" 
                 class="btn-submit" 
-                disabled={loading || !name || !event_date}
+                disabled={loading || !name || !eventDate}
             >
                 {loading ? 'Création...' : 'Créer l\'événement'}
             </button>
@@ -86,7 +86,7 @@
     /* ── En-tête ── */
     .back-link {
         display: inline-block;
-        font-family: RobotoCondensed-Regular;
+        font-family: var(--fb);
         font-size: 13px;
         color: #888;
         text-decoration: none;
@@ -103,14 +103,14 @@
     }
 
     .page-header h1 {
-        font-family: RobotoCondensed-Black;
+        font-family: var(--fh); font-weight: 900;
         font-size: 28px;
         color: #333;
         margin: 0 0 6px;
     }
 
     .page-desc {
-        font-family: RobotoCondensed-Regular;
+        font-family: var(--fb);
         font-size: 15px;
         color: #888;
         margin: 0;
@@ -135,7 +135,7 @@
     }
 
     .form-group label {
-        font-family: RobotoCondensed-Medium;
+        font-family: var(--fb); font-weight: 500;
         font-size: 14px;
         color: #333;
     }
@@ -144,7 +144,7 @@
         padding: 9px 12px;
         border: 1px solid #ccc;
         border-radius: 8px;
-        font-family: RobotoCondensed-Regular;
+        font-family: var(--fb);
         font-size: 14px;
         color: #333;
         background-color: #fff;
@@ -166,7 +166,7 @@
     }
 
     .error-msg {
-        font-family: RobotoCondensed-Regular;
+        font-family: var(--fb);
         font-size: 12px;
         color: #e74c3c;
     }
@@ -177,7 +177,7 @@
         border: 1px solid #f5c6c6;
         border-radius: 8px;
         padding: 10px 14px;
-        font-family: RobotoCondensed-Regular;
+        font-family: var(--fb);
         font-size: 13px;
         color: #c0392b;
         margin-bottom: 1.25rem;
@@ -197,7 +197,7 @@
         padding: 9px 18px;
         border: 1px solid #ccc;
         border-radius: 8px;
-        font-family: RobotoCondensed-Medium;
+        font-family: var(--fb); font-weight: 500;
         font-size: 14px;
         color: #666;
         text-decoration: none;
@@ -213,7 +213,7 @@
         padding: 9px 20px;
         border: none;
         border-radius: 14px;
-        font-family: RobotoCondensed-Medium;
+        font-family: var(--fb); font-weight: 500;
         font-size: 16px;
         color: white;
         cursor: pointer;

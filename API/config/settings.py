@@ -123,6 +123,12 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "api.auth.cookie_jwt_auth.CookieJWTAuthentication",
     ),
+    'DEFAULT_PARSER_CLASSES': (
+        'djangorestframework_camel_case.parser.CamelCaseJSONParser',
+    ),
+        'DEFAULT_RENDERER_CLASSES': (  
+        'djangorestframework_camel_case.render.CamelCaseJSONRenderer',
+    ),
 }
 
 
