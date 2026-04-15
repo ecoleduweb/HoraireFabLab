@@ -9,7 +9,7 @@ export const eventMocks = {
             json: {
                 id: 1,
                 name: 'Journée portes ouvertes FabLab',
-                event_date: '2025-04-15'
+                eventDate: '2025-04-15'
             }
         }
     },

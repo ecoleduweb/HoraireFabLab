@@ -1,76 +1,84 @@
 
-:root {
-  --bg:       #0e1117;
-  --card:     #161b24;
-  --border:   #2a3347;
-  --white:    #ffffff;
-  --muted:    #7a8599;
-  --teal:     #00c9b1;
-  --red:      #c0392b;
-  --red-dim:  #a93226;
-  --r:        3px;
+@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@700;800;900&family=JetBrains+Mono:wght@400;600&display=swap');
 
-  --fh: 'Barlow Condensed', 'Arial Narrow', Arial, sans-serif;
-  --fb: 'Barlow', Arial, sans-serif;
-  --fm: 'JetBrains Mono', monospace;
+/* ── Fonts locales ── */
+@font-face {
+    font-family: 'RobotoCondensed';
+    src: url('./font/RobotoCondensed-Regular.ttf') format('truetype');
+    font-weight: 400;
+}
+@font-face {
+    font-family: 'RobotoCondensed';
+    src: url('./font/RobotoCondensed-Medium.ttf') format('truetype');
+    font-weight: 500;
+}
+@font-face {
+    font-family: 'RobotoCondensed';
+    src: url('./font/RobotoCondensed-Bold.ttf') format('truetype');
+    font-weight: 700;
+}
+@font-face {
+    font-family: 'RobotoCondensed';
+    src: url('./font/RobotoCondensed-Black.ttf') format('truetype');
+    font-weight: 900;
+}
+
+
+:root {
+    --bg:      #0e1117;
+    --card:    #161b24;
+    --border:  #2a3347;
+    --white:   #ffffff;
+    --muted:   #7a8599;
+    --teal:    #00c9b1;
+    --red:     #c0392b;
+    --red-dim: #a93226;
+    --r:       3px;
+
+    --fh: 'RobotoCondensed', 'Barlow Condensed', Arial, sans-serif;
+    --fb: 'Barlow', Arial, sans-serif;
+    --fm: 'JetBrains Mono', monospace;
 }
 
 *,
 *::before,
 *::after {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 body {
-  margin: 0;
-  background-color: var(--bg);
-  color: var(--white);
-  font-family: var(--fb);
-
-  /* rendu plus clean */
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    margin: 0;
+    background-color: var(--bg);
+    color: var(--white);
+    font-family: var(--fb);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
-
-/* Titres */
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--fh);
-  color: var(--white);
-  margin: 0;
+    font-family: var(--fh);
+    color: var(--white);
+    margin: 0;
 }
 
-
-p,
-label,
-input,
-button,
-a,
-span,
-li,
-ul,
-div {
-  font-family: var(--fb);
+p, label, input, button, a, span, li, ul, div {
+    font-family: var(--fb);
 }
 
-code,
-pre {
-  font-family: var(--fm);
+code, pre {
+    font-family: var(--fm);
 }
-
 
 a {
-  color: inherit;
-  text-decoration: none;
+    color: inherit;
+    text-decoration: none;
 }
-
 
 .errors-input {
-  color: var(--red);
-  font-size: 0.8rem;
+    color: var(--red);
+    font-size: 0.8rem;
 }
 
-
-.hightlight {
-  color: var(--teal);
+.highlight {
+    color: var(--teal);
 }

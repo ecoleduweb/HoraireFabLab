@@ -138,7 +138,7 @@
     width: 100%;
     text-align: center;
     color: #1a1a1a;
-    font-family: 'Segoe UI', Arial, sans-serif;
+    font-family: var(--fb);
     font-size: 1.8rem;
     font-weight: 600;
     margin-bottom: 10px;
