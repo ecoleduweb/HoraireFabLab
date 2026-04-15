@@ -135,8 +135,13 @@
     }
 
     h1 {
-        width: 100%;
-        text-align: center;
+    width: 100%;
+    text-align: center;
+    color: #1a1a1a;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 10px;
     }
 
     .login {
@@ -158,6 +163,20 @@
         border: 1px solid #ccc;
         border-radius: 4px;
         color: #1a1a1a;
+        background-color: #ffffff;          /* ← ajouté */
+        -webkit-text-fill-color: #1a1a1a;  /* ← pour autofill Chrome */
+    }
+
+    .input-login:-webkit-autofill {
+        -webkit-box-shadow: 0 0 0px 1000px #ffffff inset;  /* ← fond autofill */
+        -webkit-text-fill-color: #1a1a1a;
+    }
+
+    .errors-input {
+        color: #cc0000;        /* ← ajouté, texte erreur en rouge */
+        font-size: 0.8rem;
+        margin: 2px 0 6px 0;
+        min-height: 1rem;      /* ← évite le layout shift quand vide */
     }
 
     .login-form {
@@ -182,8 +201,7 @@
     }
 
     @media screen and (max-width: 900px) and (min-width: 300px) {
-        .login 
-        {
+        .login {
             width: 50%;
         }
     }

@@ -34,47 +34,53 @@
     <p class="page-desc">Remplissez les informations pour créer une nouvelle journée d'événement.</p>
 </div>
 
-<div class="form-card">
-    <div class="form-group">
-        <label for="name">Nom de l'événement</label>
-        <input
-            id="name"
-            type="text"
-            bind:value={name}
-            placeholder="ex: Journée portes ouvertes FabLab"
-            class:input-error={errors.name}
-            disabled={loading}
-        />
-        {#if errors.name}
-            <span class="error-msg">{errors.name}</span>
+<form onsubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
+    <div class="form-card">
+        <div class="form-group">
+            <label for="name">Nom de l'événement</label>
+            <input
+                id="name"
+                type="text"
+                bind:value={name}
+                placeholder="ex: Journée portes ouvertes FabLab"
+                class:input-error={errors.name}
+                disabled={loading}
+            />
+            {#if errors.name}
+                <span class="error-msg">{errors.name}</span>
+            {/if}
+        </div>
+
+        <div class="form-group">
+            <label for="event_date">Date</label>
+            <input
+                id="event_date"
+                type="date"
+                bind:value={event_date}
+                class:input-error={errors.event_date}
+                disabled={loading}
+            />
+            {#if errors.event_date}
+                <span class="error-msg">{errors.event_date}</span>
+            {/if}
+        </div>
+
+        {#if errors.general}
+            <div class="error-banner">{errors.general}</div>
         {/if}
-    </div>
 
-    <div class="form-group">
-        <label for="event_date">Date</label>
-        <input
-            id="event_date"
-            type="date"
-            bind:value={event_date}
-            class:input-error={errors.event_date}
-            disabled={loading}
-        />
-        {#if errors.event_date}
-            <span class="error-msg">{errors.event_date}</span>
-        {/if}
+        <div class="form-actions">
+            <a href="{base}/admin" class="btn-cancel">Annuler</a>
+            <button 
+                type="submit" 
+                class="btn-submit" 
+                disabled={loading || !name || !event_date}
+            >
+                {loading ? 'Création...' : 'Créer l\'événement'}
+            </button>
+        </div>
     </div>
-
-    {#if errors.general}
-        <div class="error-banner">{errors.general}</div>
-    {/if}
-
-    <div class="form-actions">
-        <a href="{base}/admin" class="btn-cancel">Annuler</a>
-        <button class="btn-submit" onclick={handleSubmit} disabled={loading || !name || !event_date}>
-            {loading ? 'Création...' : 'Créer l\'événement'}
-        </button>
-    </div>
-</div>
+</form>
 
 <style>
     /* ── En-tête ── */
