@@ -10,6 +10,7 @@ import { defineConfig, devices } from '@playwright/test';
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
+  timeout: 15000, 
   testDir: './Tests',
   /* Run tests in files in parallel */
   fullyParallel: true,
@@ -71,5 +72,6 @@ export default defineConfig({
     command: 'cd ../FabLab && npm run playwright',
     url: 'http://localhost:5002/login',
     reuseExistingServer: false,
+    timeout: 60000,
   }
 });
