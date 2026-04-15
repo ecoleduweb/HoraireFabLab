@@ -17,8 +17,8 @@ class SlotService:
         plage = data["plage"]
         event = plage.event
 
-        plage_start = make_aware(datetime.combine(event.event_date, plage.start_time), timezone=ZoneInfo("America/Toronto"))
-        plage_end = make_aware(datetime.combine(event.event_date, plage.end_time), timezone=ZoneInfo("America/Toronto"))
+        plage_start = make_aware(datetime.combine(event.event_date, plage.start_time))
+        plage_end = make_aware(datetime.combine(event.event_date, plage.end_time))
 
         if data["start_at"] < plage_start or data["end_at"] > plage_end:
             raise ValidationError({
