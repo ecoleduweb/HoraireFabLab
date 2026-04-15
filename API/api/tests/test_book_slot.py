@@ -1,16 +1,19 @@
 from api.tests.base_TestClass import BaseAPITestCase
 from api.models import Slot, Plage, Event
 from django.urls import reverse
+from datetime import date
+from django.utils import timezone
 
 
 class BookSlotTests(BaseAPITestCase):
     def setUp(self):
         super().setUp()
         self.book_slot_url = reverse("book_slot")
+        self.test_date = date(timezone.now().year + 1, 7, 16)
 
         self.event = Event.objects.create(
             name="La fin du monde",
-            event_date="2026-07-16",
+            event_date=self.test_date,
         )
 
         self.plage = Plage.objects.create(
@@ -26,8 +29,8 @@ class BookSlotTests(BaseAPITestCase):
 
         self.valid_data = {
             "plage": self.plage.pk,
-            "start_at": "2026-07-16 08:08:00",
-            "end_at": "2026-07-16 08:28:00",
+            "start_at": f"{self.test_date} 08:08:00",
+            "end_at": f"{self.test_date} 08:28:00",
             "client_fname": "Henry B.",
             "client_lname": "Belton",
             "client_email": "testidootest@gmail.com",
@@ -67,8 +70,8 @@ class BookSlotTests(BaseAPITestCase):
         self.assertIn("updated_at", body)
         self.assertIn("created_at", body)
         self.assertEqual(body["plage"], self.plage.pk)
-        self.assertEqual(body["start_at"], "2026-07-16T08:08:00Z")
-        self.assertEqual(body["end_at"], "2026-07-16T08:28:00Z")
+        self.assertEqual(body["start_at"], f"{self.test_date}T08:08:00Z")
+        self.assertEqual(body["end_at"], f"{self.test_date}T08:28:00Z")
         self.assertEqual(body["client_fname"], "Henry B.")
         self.assertEqual(body["client_lname"], "Belton")
         self.assertEqual(body["client_email"], "testidootest@gmail.com")
@@ -84,75 +87,26 @@ class BookSlotTests(BaseAPITestCase):
 
     # ── Validation ───────────────────────────────────────────
 
-    def test_book_slot_missing_plage_returns_400(self):
-        data = {**self.valid_data}
-        del data["plage"]
-        resp = self.client.post(self.book_slot_url, data=data, format="json")
-        self.assertEqual(resp.status_code, 400)
-        self.assertIn("plage", resp.json())
-
-    def test_book_slot_missing_start_at_returns_400(self):
-        data = {**self.valid_data}
-        del data["start_at"]
-        resp = self.client.post(self.book_slot_url, data=data, format="json")
-        self.assertEqual(resp.status_code, 400)
-        self.assertIn("start_at", resp.json())
-
-    def test_book_slot_missing_end_at_returns_400(self):
-        data = {**self.valid_data}
-        del data["end_at"]
-        resp = self.client.post(self.book_slot_url, data=data, format="json")
-        self.assertEqual(resp.status_code, 400)
-        self.assertIn("end_at", resp.json())
-
-    def test_book_slot_missing_client_fname_returns_400(self):
-        data = {**self.valid_data}
-        del data["client_fname"]
-        resp = self.client.post(self.book_slot_url, data=data, format="json")
-        self.assertEqual(resp.status_code, 400)
-        self.assertIn("client_fname", resp.json())
-
-    def test_book_slot_missing_client_lname_returns_400(self):
-        data = {**self.valid_data}
-        del data["client_lname"]
-        resp = self.client.post(self.book_slot_url, data=data, format="json")
-        self.assertEqual(resp.status_code, 400)
-        self.assertIn("client_lname", resp.json())
-
-    def test_book_slot_missing_client_email_returns_400(self):
-        data = {**self.valid_data}
-        del data["client_email"]
-        resp = self.client.post(self.book_slot_url, data=data, format="json")
-        self.assertEqual(resp.status_code, 400)
-        self.assertIn("client_email", resp.json())
-
-    def test_book_slot_missing_client_phone_returns_400(self):
-        data = {**self.valid_data}
-        del data["client_phone"]
-        resp = self.client.post(self.book_slot_url, data=data, format="json")
-        self.assertEqual(resp.status_code, 400)
-        self.assertIn("client_phone", resp.json())
-
-    def test_book_slot_missing_item_returns_400(self):
-        data = {**self.valid_data}
-        del data["item"]
-        resp = self.client.post(self.book_slot_url, data=data, format="json")
-        self.assertEqual(resp.status_code, 400)
-        self.assertIn("item", resp.json())
-
-    def test_book_slot_missing_item_description_returns_400(self):
-        data = {**self.valid_data}
-        del data["item_description"]
-        resp = self.client.post(self.book_slot_url, data=data, format="json")
-        self.assertEqual(resp.status_code, 400)
-        self.assertIn("item_description", resp.json())
-
-    def test_book_slot_missing_liability_accepted_returns_400(self):
-        data = {**self.valid_data}
-        del data["liability_accepted"]
-        resp = self.client.post(self.book_slot_url, data=data, format="json")
-        self.assertEqual(resp.status_code, 400)
-        self.assertIn("liability_accepted", resp.json())
+    def test_book_slot_missing_required_fields_return_400(self):
+        required_fields = [
+            "plage",
+            "start_at",
+            "end_at",
+            "client_fname",
+            "client_lname",
+            "client_email",
+            "client_phone",
+            "item",
+            "item_description",
+            "liability_accepted",
+        ]
+        for field in required_fields:
+            with self.subTest(field=field):
+                data = {**self.valid_data}
+                del data[field]
+                resp = self.client.post(self.book_slot_url, data=data, format="json")
+                self.assertEqual(resp.status_code, 400)
+                self.assertIn(field, resp.json())
 
     def test_book_slot_invalid_email_returns_400(self):
         data = {**self.valid_data, "client_email": "not-an-email"}
@@ -167,6 +121,20 @@ class BookSlotTests(BaseAPITestCase):
         self.assertIn("plage", resp.json())
 
     def test_book_slot_duplicate_plage_and_start_at_returns_400(self):
-        self.client.post(self.book_slot_url, data=self.valid_data, format="json")
+        first = self.client.post(self.book_slot_url, data=self.valid_data, format="json")
+        self.assertEqual(first.status_code, 201)
         resp = self.client.post(self.book_slot_url, data=self.valid_data, format="json")
+        self.assertEqual(resp.status_code, 400)
+
+    def test_book_slot_overlap_same_plage_returns_400(self):
+        first_data = {**self.valid_data, "start_at": f"{self.test_date} 09:00:00", "end_at": f"{self.test_date} 09:20:00"}
+        overlap_data = {
+            **self.valid_data,
+            "start_at": f"{self.test_date} 09:10:00",
+            "end_at": f"{self.test_date} 09:30:00",
+            "client_email": "other@test.com",
+        }
+        first = self.client.post(self.book_slot_url, data=first_data, format="json")
+        self.assertEqual(first.status_code, 201)
+        resp = self.client.post(self.book_slot_url, data=overlap_data, format="json")
         self.assertEqual(resp.status_code, 400)

@@ -1,5 +1,4 @@
 from api.models import Slot
-from datetime import date
 
 class SlotRepository:
     def get_slots(self):

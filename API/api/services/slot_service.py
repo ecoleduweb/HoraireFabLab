@@ -1,32 +1,30 @@
 from rest_framework.exceptions import ValidationError
 from api.repositories.slot_repository import SlotRepository
-from api.repositories.plage_repository import PlageRepository
 from api.serializers.slot_serializer import SlotSerializer
 from django.db import IntegrityError
 from datetime import datetime
 from django.utils.timezone import make_aware
-from django.db.models import Q
+from zoneinfo import ZoneInfo
 from api.models import Slot
 
 
 class SlotService:
     def __init__(self):
         self.slot_repo = SlotRepository()
-        self.plage_repo = PlageRepository()
 
     def book_slot(self, data: dict) -> dict:
         
         plage = data["plage"]
         event = plage.event
 
-        plage_start = make_aware(datetime.combine(event.event_date, plage.start_time))
-        plage_end = make_aware(datetime.combine(event.event_date, plage.end_time))
+        plage_start = make_aware(datetime.combine(event.event_date, plage.start_time), timezone=ZoneInfo("America/Toronto"))
+        plage_end = make_aware(datetime.combine(event.event_date, plage.end_time), timezone=ZoneInfo("America/Toronto"))
 
         if data["start_at"] < plage_start or data["end_at"] > plage_end:
             raise ValidationError({
                 "non_field_errors": (
                     "Le créneau doit être compris dans la plage "
-                    f"({plage_start} – {plage_end})."
+                    f"({plage_start} - {plage_end})."
                 )
             })
         
@@ -54,7 +52,7 @@ class SlotService:
                 item_description=data["item_description"], 
                 liability_accepted=data["liability_accepted"])
             )
-        except IntegrityError:
-            raise ValidationError({"non_field_errors": "Cette plage horaire ne peut pas être réservée."})
+        except IntegrityError as e:
+          raise ValidationError({"non_field_errors": "Cette plage horaire ne peut pas être réservée."}) from e
 
         return SlotSerializer(slot).data

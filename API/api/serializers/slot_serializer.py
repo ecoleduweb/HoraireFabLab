@@ -1,8 +1,6 @@
 from rest_framework import serializers
 from api.models import Slot, Plage
 import nh3
-from django.db import models
-
 
 def sanitize(value: str) -> str:
     return nh3.clean(value, tags=set())
@@ -28,20 +26,11 @@ class SlotSerializer(serializers.ModelSerializer):
         read_only_fields = ["id", "created_at", "updated_at", "is_canceled"]
         
 
-    def validate_client_fname(self, value):
-        return sanitize(value)
-
-    def validate_client_lname(self, value):
-        return sanitize(value)
-
-    def validate_client_email(self, value):
-        return sanitize(value)
-
-    def validate_client_phone(self, value):
-        return sanitize(value)
-
-    def validate_item(self, value):
-        return sanitize(value)
-
-    def validate_item_description(self, value):
-        return sanitize(value)
+    def to_internal_value(self, data):
+        ret = super().to_internal_value(data)
+        text_fields = ['client_fname', 'client_lname', 'client_email', 
+                    'client_phone', 'item', 'item_description']
+        for field in text_fields:
+            if field in ret and isinstance(ret[field], str):
+                ret[field] = sanitize(ret[field])
+        return ret
