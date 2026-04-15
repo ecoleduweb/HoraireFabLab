@@ -4,7 +4,7 @@
     import { base } from '$app/paths';
 
     const navItems = [
-        { label: 'Événements',      href: `${base}/admin/events`,       icon: icons.calendar },
+        { label: 'Événements',      href: `${base}/admin/events/create`,       icon: icons.calendar },
         { label: 'Plages horaires', href: `${base}/admin/timeslots`,    icon: icons.clock    },
         { label: 'Réservations',    href: `${base}/admin/reservations`, icon: icons.ticket   },
     ];
