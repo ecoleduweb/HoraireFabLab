@@ -103,14 +103,14 @@
     }
 
     .page-header h1 {
-        font-family: RobotoCondensed-Black;
+        font-family: var(--fh); font-weight: 900;
         font-size: 28px;
         color: #333;
         margin: 0 0 6px;
     }
 
     .page-desc {
-        font-family: RobotoCondensed-Regular;
+        font-family: var(--fb);
         font-size: 15px;
         color: #888;
         margin: 0;
@@ -135,7 +135,7 @@
     }
 
     .form-group label {
-        font-family: RobotoCondensed-Medium;
+        font-family: var(--fb); font-weight: 500;
         font-size: 14px;
         color: #333;
     }
@@ -144,7 +144,7 @@
         padding: 9px 12px;
         border: 1px solid #ccc;
         border-radius: 8px;
-        font-family: RobotoCondensed-Regular;
+        font-family: var(--fb);
         font-size: 14px;
         color: #333;
         background-color: #fff;
@@ -166,7 +166,7 @@
     }
 
     .error-msg {
-        font-family: RobotoCondensed-Regular;
+        font-family: var(--fb);
         font-size: 12px;
         color: #e74c3c;
     }
