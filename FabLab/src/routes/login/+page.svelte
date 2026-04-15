@@ -157,6 +157,7 @@
         padding: 5px;
         border: 1px solid #ccc;
         border-radius: 4px;
+        color: #1a1a1a;
     }
 
     .login-form {
