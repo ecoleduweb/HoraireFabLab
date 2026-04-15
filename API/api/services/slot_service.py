@@ -5,6 +5,8 @@ from api.serializers.slot_serializer import SlotSerializer
 from django.db import IntegrityError
 from datetime import datetime
 from django.utils.timezone import make_aware
+from django.db.models import Q
+from api.models import Slot
 
 
 class SlotService:
@@ -13,37 +15,44 @@ class SlotService:
         self.plage_repo = PlageRepository()
 
     def book_slot(self, data: dict) -> dict:
-        serializer = SlotSerializer(data=data)
-        if not serializer.is_valid():
-            raise ValidationError(serializer.errors)
         
-        vd = serializer.validated_data
-        plage = vd["plage"]
+        plage = data["plage"]
         event = plage.event
 
         plage_start = make_aware(datetime.combine(event.event_date, plage.start_time))
         plage_end = make_aware(datetime.combine(event.event_date, plage.end_time))
 
-        if vd["start_at"] < plage_start or vd["end_at"] > plage_end:
+        if data["start_at"] < plage_start or data["end_at"] > plage_end:
             raise ValidationError({
                 "non_field_errors": (
                     "Le créneau doit être compris dans la plage "
                     f"({plage_start} – {plage_end})."
                 )
             })
+        
+        overlapping_slots = self.slot_repo.find_overlapping(
+            plage=plage,
+            start_at=data["start_at"],
+            end_at=data["end_at"]
+        )
+
+        if overlapping_slots.exists():
+            raise ValidationError({
+                "non_field_errors": ("Ce créneau est déjà réservé.")
+            })
 
         try:
-            slot = self.slot_repo.book(
-                plage=vd["plage"], 
-                start_at=vd["start_at"],
-                end_at=vd["end_at"], 
-                client_fname=vd["client_fname"], 
-                client_lname=vd["client_lname"], 
-                client_email=vd["client_email"], 
-                client_phone=vd["client_phone"], 
-                item=vd["item"], 
-                item_description=vd["item_description"], 
-                liability_accepted=vd["liability_accepted"]
+            slot = self.slot_repo.book(Slot(
+                plage=data["plage"], 
+                start_at=data["start_at"],
+                end_at=data["end_at"], 
+                client_fname=data["client_fname"], 
+                client_lname=data["client_lname"], 
+                client_email=data["client_email"], 
+                client_phone=data["client_phone"], 
+                item=data["item"], 
+                item_description=data["item_description"], 
+                liability_accepted=data["liability_accepted"])
             )
         except IntegrityError:
             raise ValidationError({"non_field_errors": "Cette plage horaire ne peut pas être réservée."})

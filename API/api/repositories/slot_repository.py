@@ -2,5 +2,18 @@ from api.models import Slot
 from datetime import date
 
 class SlotRepository:
-    def book(self, plage: int, start_at: date, end_at: date, client_fname: str, client_lname: str, client_email: str, client_phone: str, item: str, item_description: str, liability_accepted: bool) -> Slot:
-        return Slot.objects.create(plage=plage, start_at=start_at, end_at=end_at, client_fname=client_fname, client_lname=client_lname, client_email=client_email, client_phone=client_phone, item=item, item_description=item_description, liability_accepted=liability_accepted)
+    def get_slots(self):
+        return Slot.objects.all()
+    
+    def find_overlapping(self, plage, start_at, end_at):
+        return self.get_slots().filter(
+            plage=plage,
+            is_canceled=False
+        ).filter(
+            start_at__lt=end_at,
+            end_at__gt=start_at
+        )
+
+    def book(self, slot: Slot) -> Slot:
+        slot.save()
+        return slot
