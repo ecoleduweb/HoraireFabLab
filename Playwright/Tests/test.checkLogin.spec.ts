@@ -16,8 +16,8 @@ test.describe('authentication', () => {
             loginMocks.success
         ])
         .apply();
-        await page.locator('#username').fill('admin1');
-        await page.locator('#password').fill('pass123');
+        await page.locator('#username').fill('playwright');
+        await page.locator('#password').fill('pw123');
         await page.getByText('Se connecter').click();
         await expect(page).toHaveURL('http://localhost:5002/admin');
     });
