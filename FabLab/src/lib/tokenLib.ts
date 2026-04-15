@@ -9,6 +9,12 @@ export const logIn = async (user: User) => {
   await goto(`${base}/admin`);
 }
 
+export const logOut = async () => {
+    currentUser.set(undefined);
+    isLoggedIn.set(false);
+    await goto(`${base}/login`);
+}
+
 export const setInfoFromDecoded = (decoded: any) => {
   currentUser.set(decoded)
   isLoggedIn.set(true)
