@@ -16,7 +16,7 @@ class EventRepository:
     
     def has_booked_slots(self, plage_ids: list[int]) -> bool:
         if not plage_ids:
-            return False
+            return False  
 
         return Slot.objects.filter(
             plage_id__in=plage_ids,
