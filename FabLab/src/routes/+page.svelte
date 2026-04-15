@@ -47,7 +47,7 @@
   });
 
   function handleSlotSelect(slot: TimeSlot) {
-    selectedStartAt = slot.start_at;
+    selectedStartAt = slot.startAt;
   }
 
   async function handleSubmit() {
@@ -75,7 +75,7 @@
 
       // Mise à jour locale de la disponibilité
       slots = slots.map(s =>
-        s.start_at === selectedStartAt
+        s.startAt === selectedStartAt
           ? { ...s, available: Math.max(0, s.available - 1) }
           : s
       );
@@ -119,7 +119,7 @@
         <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
           <path d="M19 3h-1V1h-2v2H8V1H6v2H5C3.9 4 3 4.9 3 6v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v10zM7 11h5v5H7z"/>
         </svg>
-        {eventData.name} · {formatDate(eventData.event_date)}
+        {eventData.name} · {formatDate(eventData.eventDate)}
       </div>
     {/if}
 
@@ -145,7 +145,7 @@
         <p>
           Merci <strong>{form.firstName} {form.lastName}</strong> !<br/>
           Plage réservée : <strong>{selectedSlot?.label}</strong>
-          le <strong>{eventData ? formatDate(eventData.event_date) : ''}</strong>.<br/>
+          le <strong>{eventData ? formatDate(eventData.eventDate) : ''}</strong>.<br/>
           Courriel de confirmation envoyé à <strong>{form.email}</strong>.
         </p>
       </div>

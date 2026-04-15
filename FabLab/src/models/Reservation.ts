@@ -1,6 +1,6 @@
 export interface TimeSlot {
-  start_at:  string;   // ISO datetime ex : "2025-04-12T09:00:00"
-  end_at:    string;
+  startAt:  string;   // ISO datetime ex : "2025-04-12T09:00:00"
+  endAt:    string;
   label:     string;   
   available: number;
   capacity:  number;
@@ -18,24 +18,24 @@ export interface ReservationForm {
 
 export interface Reservation extends ReservationForm {
   plage:              number;   
-  start_at:           string;   
-  end_at:             string;   
-  client_fname:       string;
-  client_lname:       string;
-  client_email:       string;
-  client_phone:       string;
+  startAt:           string;   
+  endAt:             string;   
+  clientFname:       string;
+  clientLname:       string;
+  clientEmail:       string;
+  clientPhone:       string;
   item:               string;
-  item_description:   string;
-  liability_accepted: boolean;
-  is_canceled:        false;    
-  updated_at:         string;   
-  created_at:         string;   
+  itemDescription:   string;
+  liabilityAccepted: boolean;
+  isCanceled:        false;    
+  updatedAt:         string;   
+  createdAt:         string;   
 }
 
 export interface ReservationResponse {
-  slot_id:    number;
-  start_at:   string;
-  client_email: string;
+  slotId:    number;
+  startAt:   string;
+  clientEmail: string;
 }
 
 export const emptyForm = (): ReservationForm => ({
@@ -50,8 +50,8 @@ export const emptyForm = (): ReservationForm => ({
 
  
 export interface DjangoSlotRaw {
-  start_at:  string
-  end_at:    string
+  startAt:  string
+  endAt:    string
   available: number
   capacity:  number
 }
@@ -59,7 +59,7 @@ export interface DjangoSlotRaw {
 export interface DjangoEventResponse {
   id:         number
   name:       string
-  event_date: string   // "YYYY-MM-DD"
+  eventDate: string   // "YYYY-MM-DD"
   plage: {
     id:    number
     slots: DjangoSlotRaw[]
@@ -69,7 +69,7 @@ export interface DjangoEventResponse {
 export interface EventData {
   id:         number
   name:       string
-  event_date: string
+  eventDate: string
   plageId:    number
   slots:      TimeSlot[]
 }
