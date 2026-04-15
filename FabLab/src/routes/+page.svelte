@@ -33,7 +33,7 @@
     });
   }
 
-  const selectedSlot = $derived(slots.find(s => s.start_at === selectedStartAt));
+  const selectedSlot = $derived(slots.find(s => s.startAt === selectedStartAt));
 
   onMount(async () => {
     try {

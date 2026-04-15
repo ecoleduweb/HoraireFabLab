@@ -4,7 +4,7 @@
     import { base } from '$app/paths';
 
     const navItems = [
-        { label: 'Événements',      href: `${base}/admin/events`,       icon: icons.calendar },
+        { label: 'Événements',      href: `${base}/admin/events/create`,       icon: icons.calendar },
         { label: 'Plages horaires', href: `${base}/admin/timeslots`,    icon: icons.clock    },
         { label: 'Réservations',    href: `${base}/admin/reservations`, icon: icons.ticket   },
     ];
@@ -55,14 +55,14 @@
     }
 
     .logo-name {
-        font-family: RobotoCondensed-Bold;
+        font-family: var(--fh); font-weight: 700;
         font-size: 16px;
         color: #fff;
         letter-spacing: -0.2px;
     }
 
     .logo-sub {
-        font-family: RobotoCondensed-Regular;
+        font-family: var(--fb);
         font-size: 11px;
         color: rgba(255, 255, 255, 0.35);
         text-transform: uppercase;
@@ -81,7 +81,7 @@
         align-items: center;
         gap: 10px;
         padding: 9px 0.75rem;
-        font-family: RobotoCondensed-Regular;
+        font-family: var(--fb);
         font-size: 14px;
         color: rgba(255, 255, 255, 0.5);
         border-radius: 8px;
@@ -97,7 +97,7 @@
     .nav-item.active {
         background-color: rgba(0, 173, 154, 0.15);
         color: #00ad9a;
-        font-family: RobotoCondensed-Medium;
+        font-family: var(--fb); font-weight: 500;
     }
 
     .nav-icon {
