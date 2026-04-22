@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError
 from api.services.event_service import EventService
 from api.serializers.event_serializer import EventSerializer
-from datetime import datetime
+from datetime import date
 
 
 service = EventService()
@@ -22,7 +22,7 @@ def update_event_date(request, event_id: int):
         raise ValidationError({"detail": "event_date est requis (YYYY-MM-DD)."})
 
     try:
-        event_date = datetime.fromisoformat(event_date_raw).date()
+        event_date = date.fromisoformat(event_date_raw)
     except ValueError:
         raise ValidationError({"detail": "event_date invalide (format attendu: YYYY-MM-DD)."})
 
