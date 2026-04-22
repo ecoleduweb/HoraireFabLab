@@ -32,7 +32,7 @@ class UpdateEventDateTests(BaseAPITestCase):
     def test_update_event_date_requires_auth(self):
         resp = self.client.put(
             self.update_event_url,
-            data={"event_date": "2026-05-20"},
+            data={"name": "Repare tes trucks", "event_date": "2026-05-20"},
             format="json",
         )
         self.assertIn(resp.status_code, (401, 403))
@@ -42,12 +42,13 @@ class UpdateEventDateTests(BaseAPITestCase):
 
         resp = self.client.put(
             self.update_event_url,
-            data={"event_date": "2026-05-20"},
+            data={"name": "Repare tes trucks v2", "event_date": "2026-05-20"},
             format="json",
         )
 
         self.assertEqual(resp.status_code, 200)
         self.event.refresh_from_db()
+        self.assertEqual(self.event.name, "Repare tes trucks v2")
         self.assertEqual(str(self.event.event_date), "2026-05-20")
 
     def test_update_event_date_fails_when_booked_slot_exists(self):
@@ -55,8 +56,8 @@ class UpdateEventDateTests(BaseAPITestCase):
 
         Slot.objects.create(
             plage=self.plage,
-             start_at=timezone.make_aware(datetime(2026, 5, 10, 9, 0)),
-             end_at=timezone.make_aware(datetime(2026, 5, 10, 9, 30)),
+            start_at=timezone.make_aware(datetime(2026, 5, 10, 9, 0)),
+            end_at=timezone.make_aware(datetime(2026, 5, 10, 9, 30)),
             client_fname="Jean",
             client_email="jean@example.com",
             is_canceled=False,
@@ -64,7 +65,7 @@ class UpdateEventDateTests(BaseAPITestCase):
 
         resp = self.client.put(
             self.update_event_url,
-            data={"event_date": "2026-05-20"},
+            data={"name": "Repare tes trucks", "event_date": "2026-05-20"},
             format="json",
         )
 
@@ -79,24 +80,36 @@ class UpdateEventDateTests(BaseAPITestCase):
 
         resp = self.client.put(
             self.update_event_url,
-            data={},
+            data={"name": "Repare tes trucks"},
             format="json",
         )
 
         self.assertEqual(resp.status_code, 400)
-        self.assertIn("detail", resp.json())
+        self.assertIn("event_date", resp.json())
+
+    def test_update_event_date_missing_name_returns_400(self):
+        self.login_and_set_cookies()
+
+        resp = self.client.put(
+            self.update_event_url,
+            data={"event_date": "2026-05-20"},
+            format="json",
+        )
+
+        self.assertEqual(resp.status_code, 400)
+        self.assertIn("name", resp.json())
 
     def test_update_event_date_invalid_event_date_returns_400(self):
         self.login_and_set_cookies()
 
         resp = self.client.put(
             self.update_event_url,
-            data={"event_date": "20-05-2026"},
+            data={"name": "Repare tes trucks", "event_date": "20-05-2026"},
             format="json",
         )
 
         self.assertEqual(resp.status_code, 400)
-        self.assertIn("detail", resp.json())
+        self.assertIn("event_date", resp.json())
 
     def test_update_event_date_not_found_returns_404(self):
         self.login_and_set_cookies()
@@ -108,7 +121,7 @@ class UpdateEventDateTests(BaseAPITestCase):
 
         resp = self.client.put(
             url,
-            data={"event_date": "2026-05-20"},
+            data={"name": "Repare tes trucks", "event_date": "2026-05-20"},
             format="json",
         )
 
@@ -119,35 +132,12 @@ class UpdateEventDateTests(BaseAPITestCase):
 
         resp = self.client.put(
             self.update_event_url,
-            data={"event_date": "2020-01-01"},
+            data={"name": "Repare tes trucks", "event_date": "2020-01-01"},
             format="json",
         )
 
         self.assertEqual(resp.status_code, 400)
         self.assertIn("detail", resp.json())
-
-    def test_update_event_name_only_with_bookings_is_allowed(self):
-        self.login_and_set_cookies()
-
-        Slot.objects.create(
-            plage=self.plage,
-            start_at=timezone.make_aware(datetime(2026, 5, 10, 9, 0)),
-            end_at=timezone.make_aware(datetime(2026, 5, 10, 9, 30)),
-            client_fname="Jean",
-            client_email="jean@example.com",
-            is_canceled=False,
-        )
-
-        resp = self.client.put(
-            self.update_event_url,
-            data={"name": "Repare tes machines"},
-            format="json",
-        )
-
-        self.assertEqual(resp.status_code, 200)
-        self.event.refresh_from_db()
-        self.assertEqual(self.event.name, "Repare tes machines")
-        self.assertEqual(str(self.event.event_date), "2026-05-10")
 
     def test_update_event_date_duplicate_returns_400(self):
         self.login_and_set_cookies()
@@ -159,7 +149,7 @@ class UpdateEventDateTests(BaseAPITestCase):
 
         resp = self.client.put(
             self.update_event_url,
-            data={"event_date": "2026-05-20"},
+            data={"name": "Repare tes trucks", "event_date": "2026-05-20"},
             format="json",
         )
 

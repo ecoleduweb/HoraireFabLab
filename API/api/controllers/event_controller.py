@@ -5,32 +5,19 @@ from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError
 from api.services.event_service import EventService
 from api.serializers.event_serializer import EventSerializer
-from datetime import date
 
 
 service = EventService()
 
 @api_view(["PUT"])
 @permission_classes([IsAuthenticated])
-def update_event_date(request, event_id: int):
-
-    event_date_raw = request.data.get("event_date")
-    name = request.data.get("name")
-    event_date = None
-
-    if event_date_raw is None and name is None:
-        raise ValidationError({"detail": "Au moins un champ à modifier est requis (name ou event_date)."})
-
-    if event_date_raw is not None:
-        try:
-            event_date = date.fromisoformat(event_date_raw)
-        except ValueError:
-            raise ValidationError({"detail": "event_date invalide (format attendu: YYYY-MM-DD)."})
+def update_event(request, event_id: int):
+    serializer = EventSerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
 
     event = service.update_event(
         event_id=event_id,
-        name=name,
-        event_date=event_date,
+        event_data=serializer.validated_data,
     )
 
     return Response(
@@ -47,4 +34,5 @@ def create_event(request):
         return Response(event, status=status.HTTP_201_CREATED)
     except ValidationError as e:
         return Response(e.detail, status=status.HTTP_400_BAD_REQUEST)
+
 
