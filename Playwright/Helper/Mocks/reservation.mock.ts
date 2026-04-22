@@ -7,8 +7,8 @@ export const MOCK_EVENT = {
   plage: {
     id: 1,
     slots: [
-      { start_at: "2026-07-16T08:00:00", endAt: "2026-07-16T08:15:00", available: 2, capacity: 3 },
-      { start_at: "2026-07-16T08:30:00", endAt: "2026-07-16T08:45:00", available: 0, capacity: 3 }
+      { startAt: "2026-07-16T08:00:00", endAt: "2026-07-16T08:15:00", available: 2, capacity: 3 },
+      { startAt: "2026-07-16T08:30:00", endAt: "2026-07-16T08:45:00", available: 0, capacity: 3 }
     ]
   }
 };
