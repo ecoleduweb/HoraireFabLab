@@ -1,30 +1,42 @@
 <script lang="ts">
     import { base } from '$app/paths';
     import { goto } from '$app/navigation';
-    import { POST } from '../../../../ts/server.ts';
-    import type { CreateEventPayload, Event } from '../../../../Models/Event.ts';
+    import { createForm } from 'felte';
+    import { EventService } from '../../../../services/EventService.ts';
 
-    let name = $state('');
-    let eventDate = $state('');
     let loading = $state(false);
-    let errors = $state<Record<string, string>>({});
 
-    async function handleSubmit() {
-        errors = {};
-        loading = true;
-
-        try {
-            await POST<CreateEventPayload, Event>('/events', { name, eventDate });
-            await goto(`${base}/admin`);
-        } catch (e: unknown) {
-            if (e instanceof Error) {
-                errors.general = e.message;
-            }
-        } finally {
-            loading = false;
-        }
+    interface EventFormValues {
+        name: string;
+        eventDate: string;
     }
+    const { form, errors, isValid } = createForm<EventFormValues>({
+        validate(values: EventFormValues) {
+            const errors: Record<string, string> = {};
+            if (!values.name?.trim()) {
+                errors.name = 'Le nom est requis.';
+            }
+            if (!values.eventDate) {
+                errors.eventDate = 'La date est requise.';
+            }
+            return errors;
+        },
+        async onSubmit(values: EventFormValues) {
+            loading = true;
+            try {
+                await EventService.createEvent(values.name, values.eventDate);
+                await goto(`${base}/admin`);
+            } catch (e: unknown) {
+                if (e instanceof Error) {
+                    alert(e.message);
+                }
+            } finally {
+                loading = false;
+            }
+        }
+    });
 </script>
+
 
 <div class="page-header">
     <a href="{base}/admin" class="back-link">
@@ -34,20 +46,20 @@
     <p class="page-desc">Remplissez les informations pour créer une nouvelle journée d'événement.</p>
 </div>
 
-<form onsubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
+<form use:form>
     <div class="form-card">
         <div class="form-group">
             <label for="name">Nom de l'événement</label>
             <input
                 id="name"
                 type="text"
-                bind:value={name}
+                name="name"
                 placeholder="ex: Journée portes ouvertes FabLab"
-                class:input-error={errors.name}
+                class:input-error={$errors.name}
                 disabled={loading}
             />
-            {#if errors.name}
-                <span class="error-msg">{errors.name}</span>
+            {#if $errors.name}
+                <span class="error-msg">{$errors.name}</span>
             {/if}
         </div>
 
@@ -56,25 +68,21 @@
             <input
                 id="event_date"
                 type="date"
-                bind:value={eventDate}
-                class:input-error={errors.eventDate}
+                name="eventDate"
+                class:input-error={$errors.eventDate}
                 disabled={loading}
             />
-            {#if errors.eventDate}
-                <span class="error-msg">{errors.eventDate}</span>
+            {#if $errors.eventDate}
+                <span class="error-msg">{$errors.eventDate}</span>
             {/if}
         </div>
-
-        {#if errors.general}
-            <div class="error-banner">{errors.general}</div>
-        {/if}
 
         <div class="form-actions">
             <a href="{base}/admin" class="btn-cancel">Annuler</a>
             <button 
                 type="submit" 
                 class="btn-submit" 
-                disabled={loading || !name || !eventDate}
+                disabled={loading || !$isValid}
             >
                 {loading ? 'Création...' : 'Créer l\'événement'}
             </button>
