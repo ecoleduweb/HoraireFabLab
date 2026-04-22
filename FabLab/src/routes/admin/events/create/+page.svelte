@@ -1,40 +1,26 @@
 <script lang="ts">
     import { base } from '$app/paths';
     import { goto } from '$app/navigation';
-    import { createForm } from 'felte';
+    import { validateEventForm } from '../../../../Validation/Event.ts';
     import { EventService } from '../../../../services/EventService.ts';
 
     let loading = $state(false);
 
-    interface EventFormValues {
-        name: string;
-        eventDate: string;
-    }
-    const { form, errors, isValid } = createForm<EventFormValues>({
-        validate(values: EventFormValues) {
-            const errors: Record<string, string> = {};
-            if (!values.name?.trim()) {
-                errors.name = 'Le nom est requis.';
+    const handleSubmit = async (values: { name: string; eventDate: string }) => {
+        loading = true;
+        try {
+            await EventService.createEvent(values.name, values.eventDate);
+            await goto(`${base}/admin`);
+        } catch (e: unknown) {
+            if (e instanceof Error) {
+                alert(e.message);
             }
-            if (!values.eventDate) {
-                errors.eventDate = 'La date est requise.';
-            }
-            return errors;
-        },
-        async onSubmit(values: EventFormValues) {
-            loading = true;
-            try {
-                await EventService.createEvent(values.name, values.eventDate);
-                await goto(`${base}/admin`);
-            } catch (e: unknown) {
-                if (e instanceof Error) {
-                    alert(e.message);
-                }
-            } finally {
-                loading = false;
-            }
+        } finally {
+            loading = false;
         }
-    });
+    };
+
+    const { form, errors, isValid } = validateEventForm(handleSubmit);
 </script>
 
 
