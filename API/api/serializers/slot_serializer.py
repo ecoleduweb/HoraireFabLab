@@ -14,22 +14,22 @@ class SlotSerializer(serializers.ModelSerializer):
     )
 
     #mapping pour que les données avec les champs en camelCase de la requête marchent avec le snake_case interne de l'API
-    startAt = serializers.DateTimeField(source="start_at", required=True)
-    endAt = serializers.DateTimeField(source="end_at", required=True)
+    # startAt = serializers.DateTimeField(source="start_at", required=True)
+    # endAt = serializers.DateTimeField(source="end_at", required=True)
 
-    clientFname = serializers.CharField(source="client_fname", required=True)
-    clientLname = serializers.CharField(source="client_lname", required=True)
-    clientEmail = serializers.EmailField(source="client_email", required=True)
-    clientPhone = serializers.CharField(source="client_phone", required=True)
+    # clientFname = serializers.CharField(source="client_fname", required=True)
+    # clientLname = serializers.CharField(source="client_lname", required=True)
+    # clientEmail = serializers.EmailField(source="client_email", required=True)
+    # clientPhone = serializers.CharField(source="client_phone", required=True)
 
-    item = serializers.CharField(required=True)
-    itemDescription = serializers.CharField(source="item_description", required=True)
+    # item = serializers.CharField(required=True)
+    # itemDescription = serializers.CharField(source="item_description", required=True)
 
-    liabilityAccepted = serializers.BooleanField(source="liability_accepted", required=True)
+    # liabilityAccepted = serializers.BooleanField(source="liability_accepted", required=True)
 
-    isCanceled = serializers.BooleanField(source="is_canceled", read_only=True)
-    createdAt = serializers.DateTimeField(source="created_at", read_only=True)
-    updatedAt = serializers.DateTimeField(source="updated_at", read_only=True)
+    # isCanceled = serializers.BooleanField(source="is_canceled", read_only=True)
+    # createdAt = serializers.DateTimeField(source="created_at", read_only=True)
+    # updatedAt = serializers.DateTimeField(source="updated_at", read_only=True)
 
     class Meta:
         model = Slot
