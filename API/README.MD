@@ -142,7 +142,7 @@ Tests unitaires des endpoints critiques.
 ### 5. Installer les packages nécessaires
 
 ```bash
-   pip install django djangorestframework django-cors-headers python-decouple
+   pip install django djangorestframework django-cors-headers python-decouple nh3
 ```
 
 ---

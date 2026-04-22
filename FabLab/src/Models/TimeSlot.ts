@@ -1,5 +1,5 @@
  export interface TimeSlot {
-    start_at:  string;
+    startAt:  string;
     label:     string;
     available: number;
     capacity:  number;

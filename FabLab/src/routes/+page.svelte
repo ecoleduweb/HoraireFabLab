@@ -6,26 +6,26 @@
 
   // TODO : remplacer par fetch('/api/events/active/') quand le backend Django est prêt
   let slots = $state<TimeSlot[]>([
-    { start_at: "2025-04-12T09:00:00", label: "9 h 00",  available: 2, capacity: 3 },
-    { start_at: "2025-04-12T09:15:00", label: "9 h 15",  available: 3, capacity: 3 },
-    { start_at: "2025-04-12T09:30:00", label: "9 h 30",  available: 0, capacity: 3 },
-    { start_at: "2025-04-12T09:45:00", label: "9 h 45",  available: 1, capacity: 3 },
-    { start_at: "2025-04-12T10:00:00", label: "10 h 00", available: 3, capacity: 3 },
-    { start_at: "2025-04-12T10:15:00", label: "10 h 15", available: 2, capacity: 3 },
-    { start_at: "2025-04-12T10:30:00", label: "10 h 30", available: 0, capacity: 3 },
-    { start_at: "2025-04-12T10:45:00", label: "10 h 45", available: 3, capacity: 3 },
-    { start_at: "2025-04-12T11:00:00", label: "11 h 00", available: 1, capacity: 3 },
-    { start_at: "2025-04-12T11:15:00", label: "11 h 15", available: 2, capacity: 3 },
-    { start_at: "2025-04-12T11:30:00", label: "11 h 30", available: 3, capacity: 3 },
-    { start_at: "2025-04-12T11:45:00", label: "11 h 45", available: 0, capacity: 3 },
-    { start_at: "2025-04-12T13:00:00", label: "13 h 00", available: 2, capacity: 3 },
-    { start_at: "2025-04-12T13:15:00", label: "13 h 15", available: 3, capacity: 3 },
-    { start_at: "2025-04-12T13:30:00", label: "13 h 30", available: 1, capacity: 3 },
-    { start_at: "2025-04-12T13:45:00", label: "13 h 45", available: 3, capacity: 3 },
-    { start_at: "2025-04-12T14:00:00", label: "14 h 00", available: 0, capacity: 3 },
-    { start_at: "2025-04-12T14:15:00", label: "14 h 15", available: 2, capacity: 3 },
-    { start_at: "2025-04-12T14:30:00", label: "14 h 30", available: 3, capacity: 3 },
-    { start_at: "2025-04-12T14:45:00", label: "14 h 45", available: 1, capacity: 3 },
+    { startAt: "2025-04-12T09:00:00", label: "9 h 00",  available: 2, capacity: 3 },
+    { startAt: "2025-04-12T09:15:00", label: "9 h 15",  available: 3, capacity: 3 },
+    { startAt: "2025-04-12T09:30:00", label: "9 h 30",  available: 0, capacity: 3 },
+    { startAt: "2025-04-12T09:45:00", label: "9 h 45",  available: 1, capacity: 3 },
+    { startAt: "2025-04-12T10:00:00", label: "10 h 00", available: 3, capacity: 3 },
+    { startAt: "2025-04-12T10:15:00", label: "10 h 15", available: 2, capacity: 3 },
+    { startAt: "2025-04-12T10:30:00", label: "10 h 30", available: 0, capacity: 3 },
+    { startAt: "2025-04-12T10:45:00", label: "10 h 45", available: 3, capacity: 3 },
+    { startAt: "2025-04-12T11:00:00", label: "11 h 00", available: 1, capacity: 3 },
+    { startAt: "2025-04-12T11:15:00", label: "11 h 15", available: 2, capacity: 3 },
+    { startAt: "2025-04-12T11:30:00", label: "11 h 30", available: 3, capacity: 3 },
+    { startAt: "2025-04-12T11:45:00", label: "11 h 45", available: 0, capacity: 3 },
+    { startAt: "2025-04-12T13:00:00", label: "13 h 00", available: 2, capacity: 3 },
+    { startAt: "2025-04-12T13:15:00", label: "13 h 15", available: 3, capacity: 3 },
+    { startAt: "2025-04-12T13:30:00", label: "13 h 30", available: 1, capacity: 3 },
+    { startAt: "2025-04-12T13:45:00", label: "13 h 45", available: 0, capacity: 3 },
+    { startAt: "2025-04-12T14:00:00", label: "14 h 00", available: 0, capacity: 3 },
+    { startAt: "2025-04-12T14:15:00", label: "14 h 15", available: 2, capacity: 3 },
+    { startAt: "2025-04-12T14:30:00", label: "14 h 30", available: 3, capacity: 3 },
+    { startAt: "2025-04-12T14:45:00", label: "14 h 45", available: 1, capacity: 3 },
   ]);
 
   let selectedStartAt = $state<string>("");
@@ -55,11 +55,11 @@ pleine connaissance de ces conditions.`;
     return d.toLocaleDateString("fr-CA", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
   }
 
-  const selectedSlot = $derived(slots.find(s => s.start_at === selectedStartAt));
+  const selectedSlot = $derived(slots.find(s => s.startAt === selectedStartAt));
 
   function selectSlot(slot: TimeSlot) {
     if (slot.available === 0) return;
-    selectedStartAt = slot.start_at;
+    selectedStartAt = slot.startAt;
   }
 
   function handleSubmit() {
@@ -75,7 +75,7 @@ pleine connaissance de ces conditions.`;
     // TODO : appel API Django
 
     slots = slots.map(s =>
-      s.start_at === selectedStartAt
+      s.startAt === selectedStartAt
         ? { ...s, available: Math.max(0, s.available - 1) }
         : s
     );
@@ -134,13 +134,13 @@ pleine connaissance de ces conditions.`;
         {/if}
 
         <div class="slots-grid" role="group" aria-label="Créneaux disponibles">
-          {#each slots as slot (slot.start_at)}
+          {#each slots as slot (slot.startAt)}
             <button
               class="slot-btn"
-              class:selected={selectedStartAt === slot.start_at}
+              class:selected={selectedStartAt === slot.startAt}
               disabled={slot.available === 0}
               onclick={() => selectSlot(slot)}
-              aria-pressed={selectedStartAt === slot.start_at}
+              aria-pressed={selectedStartAt === slot.startAt}
             >
               <span class="slot-time">{slot.label}</span>
             
