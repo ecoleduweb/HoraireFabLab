@@ -4,7 +4,6 @@ from api.serializers.slot_serializer import SlotSerializer
 from django.db import IntegrityError
 from datetime import datetime
 from django.utils.timezone import make_aware
-from zoneinfo import ZoneInfo
 from api.models import Slot
 
 
@@ -12,47 +11,37 @@ class SlotService:
     def __init__(self):
         self.slot_repo = SlotRepository()
 
-    def book_slot(self, data: dict) -> dict:
-        
-        plage = data["plage"]
+    def book_slot(self, slot: Slot) -> dict:
+        plage = slot.plage
         event = plage.event
 
+        # make_aware rend le datetime conscient de son fuseau horaire, ce qui permet de comparer les datetime
+        # sur une base commune en s'assurant qu'elles sont dans le même fuseau horaire
         plage_start = make_aware(datetime.combine(event.event_date, plage.start_time))
         plage_end = make_aware(datetime.combine(event.event_date, plage.end_time))
 
-        if data["start_at"] < plage_start or data["end_at"] > plage_end:
+        if slot.start_at < plage_start or slot.end_at > plage_end:
             raise ValidationError({
                 "non_field_errors": (
                     "Le créneau doit être compris dans la plage "
                     f"({plage_start} - {plage_end})."
                 )
             })
-        
+
         overlapping_slots = self.slot_repo.find_overlapping(
             plage=plage,
-            start_at=data["start_at"],
-            end_at=data["end_at"]
+            start_at=slot.start_at,
+            end_at=slot.end_at
         )
 
         if overlapping_slots.exists():
             raise ValidationError({
-                "non_field_errors": ("Ce créneau est déjà réservé.")
+                "non_field_errors": "Ce créneau est déjà réservé."
             })
 
         try:
-            slot = self.slot_repo.book(Slot(
-                plage=data["plage"], 
-                start_at=data["start_at"],
-                end_at=data["end_at"], 
-                client_fname=data["client_fname"], 
-                client_lname=data["client_lname"], 
-                client_email=data["client_email"], 
-                client_phone=data["client_phone"], 
-                item=data["item"], 
-                item_description=data["item_description"], 
-                liability_accepted=data["liability_accepted"])
-            )
+            booked_slot = self.slot_repo.book(slot)
         except IntegrityError as e:
-          raise ValidationError({"non_field_errors": "Cette plage horaire ne peut pas être réservée."}) from e
+            raise ValidationError({"non_field_errors": "Cette plage horaire ne peut pas être réservée."}) from e
 
-        return SlotSerializer(slot).data
+        return SlotSerializer(booked_slot).data
