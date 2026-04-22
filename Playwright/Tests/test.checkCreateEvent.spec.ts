@@ -44,8 +44,12 @@ test.describe('events', () => {
 
         await page.locator('#name').fill('Événement test');
         await page.locator('#event_date').fill('2025-04-15');
+
+        const dialogPromise = page.waitForEvent('dialog');
         await page.getByText("Créer l'événement").click();
 
-        await expect(page.locator('.error-banner')).toBeVisible();
+        const dialog = await dialogPromise;
+        expect(dialog.message()).toBeTruthy();
+        await dialog.dismiss();
     });
 });
