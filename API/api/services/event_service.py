@@ -8,18 +8,13 @@ class EventService:
     def __init__(self):
         self.repo = EventRepository()
 
-    def create_event(self, data: dict) -> dict:
-        serializer = EventSerializer(data=data)
-        if not serializer.is_valid():
-            raise ValidationError(serializer.errors)
-
+    def create_event(self, validated_data: dict) -> dict:
         try:
             event = self.repo.create(
-                name=serializer.validated_data["name"],
-                event_date=serializer.validated_data["event_date"],
+                name=validated_data["name"],
+                event_date=validated_data["event_date"],
             )
         except IntegrityError:
             raise ValidationError({"event_date": "Un événement existe déjà pour cette date."})
 
         return EventSerializer(event).data
-    
