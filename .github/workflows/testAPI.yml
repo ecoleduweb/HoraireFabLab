@@ -23,40 +23,13 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Create env file
-        working-directory: API
-        run: |
-          cat > .env << 'EOF'
-          DB_USER=${{ secrets.DEV_DB_USERNAME }}
-          DB_PASSWORD=${{ secrets.DEV_DB_PASSWORD }}
-          DB_HOST=${{ secrets.DEV_DB_HOST }}
-          DB_PORT=${{ secrets.DEV_DB_PORT }}
-          DB_NAME=${{ secrets.DEV_DB_NAME }}
-          DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }}
-          DJANGO_DEBUG=${{ secrets.DJANGO_DEBUG }}
-          DJANGO_ALLOWED_HOSTS=${{ secrets.DJANGO_ALLOWED_HOSTS }}
-          JWT_COOKIE_SECURE=${{ secrets.JWT_COOKIE_SECURE }}
-          EOF
-
-      - name: Verify database connection
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y mariadb-client
-          mariadb --no-defaults -u${{ secrets.DEV_DB_USERNAME }} -p"$DB_PASSWORD" -h${{ secrets.DEV_DB_HOST }} -P${{ secrets.DEV_DB_PORT }} ${{ secrets.DEV_DB_NAME }} -e "SELECT 'Connection test successful';"
       - name: Run tests
         working-directory: API
+        env:
+          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+          DJANGO_DEBUG: "False"
+          DJANGO_ALLOWED_HOSTS: "localhost"
+          JWT_COOKIE_SECURE: "False"
+          DB_ENGINE: "sqlite"
         run: |
-          echo "::group::Exécution des tests Django"
           python manage.py test --verbosity=2
-          TEST_EXIT_CODE=$?
-          echo "::endgroup::"
-
-          echo ""
-          echo "=== Résumé des Tests ==="
-          if [ $TEST_EXIT_CODE -eq 0 ]; then
-            echo "✅ Tous les tests ont réussi! 🎉"
-          else
-            echo "❌ Certains tests ont échoué. Consultez les détails ci-dessus."
-          fi
-
-          exit $TEST_EXIT_CODE
