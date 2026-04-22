@@ -11,17 +11,17 @@ export interface MockConfig {
 }
 
 export interface Reservation {
-  plage:              number;   
-  start_at:           string;   
-  end_at:             string;   
-  client_fname:       string;
-  client_lname:       string;
-  client_email:       string;
-  client_phone:       string;
-  item:               string;
-  item_description:   string;
-  liability_accepted: boolean;
-  is_canceled:        false;    
-  updated_at:         string;   
-  created_at:         string;   
+  plage: number;
+  startAt: string;
+  endAt: string;
+  clientFname: string;
+  clientLname: string;
+  clientEmail: string;
+  clientPhone: string;
+  item: string;
+  itemDescription: string;
+  liabilityAccepted: boolean;
+  isCanceled: false;
+  updatedAt: string;
+  createdAt: string;
 }

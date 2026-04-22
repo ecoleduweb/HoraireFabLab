@@ -5,8 +5,6 @@ import { NotFoundError } from "../CustomError/NotFoundError.ts"
 import type { ReservationForm } from "../models/Reservation.ts"
 import type { Reservation, ReservationResponse, TimeSlot, DjangoSlotRaw, DjangoEventResponse, EventData } from "../models/Reservation.ts"
 
-// ── Helpers HTTP génériques ───────────────────────────────────
-
 export async function GET<T>(url: string, redirectToLoginOn401?: boolean): Promise<T> {
     try {
         const response = await fetch(`${env.PUBLIC_BASE_URL}${url}`, {
@@ -127,12 +125,12 @@ function mapEvent(data: DjangoEventResponse): EventData {
     return {
         id:         data.id,
         name:       data.name,
-        event_date: data.event_date,
+        event_date: data.eventDate,
         plageId:    data.plage.id,
         slots:      data.plage.slots.map(s => ({
-            start_at:  s.start_at,
-            end_at:    s.end_at,
-            label:     toLabel(s.start_at),
+            start_at:  s.startAt,
+            end_at:    s.endAt,
+            label:     toLabel(s.startAt),
             available: s.available,
             capacity:  s.capacity,
         })),
@@ -167,24 +165,24 @@ export async function postReservation(
     }
 
     const now      = new Date()
-    const startDate = new Date(slot.start_at)
-    const endDate   = new Date(slot.end_at)
+    const startDate = new Date(slot.startAt)
+    const endDate   = new Date(slot.endAt)
     const nowStr   = toDateTimeStr(now)
 
     const reservation : Reservation = {
         plage:              plageId,
-        start_at:           toDateTimeStr(startDate),
-        end_at:             toDateTimeStr(endDate),
-        client_fname:       form.firstName,
-        client_lname:       form.lastName,
-        client_email:       form.email,
-        client_phone:       form.phone,
+        startAt:           toDateTimeStr(startDate),
+        endAt   :             toDateTimeStr(endDate),
+        clientFname:       form.firstName,
+        clientLname:       form.lastName,
+        clientEmail:       form.email,
+        clientPhone:       form.phone,
         item:               form.item,
-        item_description:   form.itemDescription,
-        liability_accepted: form.waiverAccepted,
-        is_canceled:        false,
-        updated_at:         nowStr,
-        created_at:         nowStr,
+        itemDescription:   form.itemDescription,
+        liabilityAccepted: form.waiverAccepted,
+        isCanceled:        false,
+        updatedAt:         nowStr,
+        createdAt:         nowStr,
     }
 
     const { data } = await POST<Reservation, ReservationResponse>(

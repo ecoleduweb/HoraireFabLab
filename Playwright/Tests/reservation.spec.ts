@@ -21,7 +21,7 @@ test.describe('Gestion des Réservations', () => {
     await page.route('**/api/book_slot', async (route) => {
       await route.fulfill({ 
         status: 200, 
-        json: { slot_id: 99, start_at: "...", client_email: "marie@example.com" } 
+        json: { slot_id: 99, startAt: "...", clientEmail: "marie@example.com" } 
       });
     });
 
@@ -49,8 +49,8 @@ test.describe('Gestion des Réservations', () => {
 
   // 6. Vérification
   const payload = request.postDataJSON();
-  expect(payload.client_fname).toBe('Marie');
-  expect(payload.item_description).toBe('Le bouton de mise en marche est cassé');
+  expect(payload.clientFname).toBe('Marie');
+  expect(payload.itemDescription).toBe('Le bouton de mise en marche est cassé');
   
   await expect(page.getByText(/confirmée/i)).toBeVisible();
   });
