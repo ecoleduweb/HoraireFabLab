@@ -32,10 +32,10 @@ class EventService:
                 "detail": "Modification impossible: des inscriptions existent déjà."
             })
 
-        if name:
+        if name is not None:
             event.name = name
 
-        if event_date:
+        if event_date is not None:
             event.event_date = event_date
 
         return self.repo.update_event(event)
