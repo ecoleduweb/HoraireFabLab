@@ -1,6 +1,6 @@
 <script lang="ts">
 
-  import type { TimeSlot } from "../../models/Reservation.ts";
+  import type { TimeSlot } from "../../models/TimeSlot.ts";
 
   interface Props {
     slots:           TimeSlot[];
@@ -12,7 +12,7 @@
 </script>
 
 {#if selectedStartAt}
-  {@const sel = slots.find(s => s.start_at === selectedStartAt)}
+  {@const sel = slots.find(s => s.startAt === selectedStartAt)}
   {#if sel}
     <div class="recap" role="status">
        Sélectionné : <strong>{sel.label}</strong>
@@ -22,13 +22,13 @@
 {/if}
 
 <div class="grid" role="group" aria-label="Créneaux disponibles">
-  {#each slots as slot (slot.start_at)}
+  {#each slots as slot (slot.startAt)}
     <button
       class="slot"
-      class:selected={selectedStartAt === slot.start_at}
+      class:selected={selectedStartAt === slot.startAt}
       disabled={slot.available === 0}
       onclick={() => onSelect(slot)}
-      aria-pressed={selectedStartAt === slot.start_at}
+      aria-pressed={selectedStartAt === slot.startAt}
       aria-label="{slot.label} — {slot.available === 0 ? 'Complet' : slot.available + ' place(s)'}"
     >
       <span class="time">{slot.label}</span>

@@ -5,13 +5,14 @@
   import ReservationForm from '../Components/Reservation/ReservationForm.svelte'
   import WaiverSection  from '../Components/Reservation/WaiverSection.svelte'
 
-  import type { TimeSlot, ReservationForm as FormType, EventData } from "../models/Reservation.ts"
-  import { emptyForm }                                          from "../models/Reservation.ts"
-  import type { FormErrors }                            from "../Validation/reservation.validation.ts"
-  import { validateReservation }                        from "../Validation/reservation.validation.ts"
+  import type {  ReservationForm as FormType, EventData } from "../models/Reservation.ts"
+  import type { TimeSlot }                                from "../models/TimeSlot.ts"
+  import { emptyForm }                                    from "../models/Reservation.ts"
+  import type { FormErrors }                            from "../validatione/reservation.validation.ts"
+  import { validateReservation }                        from "../validatione/reservation.validation.ts"
   import { fetchActiveEvent, postReservation }          from "../ts/server.ts"
   import { InvalidDataError }                           from "../CustomError/invalidDataError.ts"
-  import { NotFoundError }                               from "../CustomError/NotFoundError.ts"
+  import { NotFoundError }                              from "../CustomError/NotFoundError.ts"
 
   let eventData       = $state<EventData | null>(null);
   let slots           = $state<TimeSlot[]>([]);
@@ -39,7 +40,8 @@
     try {
       eventData = await fetchActiveEvent();
       slots     = eventData.slots;
-    } catch {
+    } catch (err) {
+       console.error('Échec du chargement de l\'événement:', err);
       fetchError = "Impossible de charger l'événement. Veuillez réessayer.";
     } finally {
       loading = false;

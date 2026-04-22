@@ -1,7 +1,7 @@
 <script lang="ts">
  
   import type { ReservationForm } from "../../models/Reservation.ts";
-  import { validateField , type FormErrors} from "../../Validation/reservation.validation.ts";
+  import { validateField , type FormErrors} from "../../validatione/reservation.validation.ts";
 
   interface Props {
     form:   ReservationForm;
