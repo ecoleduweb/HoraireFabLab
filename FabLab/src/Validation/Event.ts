@@ -9,7 +9,8 @@ export const eventSchema = yup.object().shape({
         .max(100, 'Le nom ne doit pas dépasser 100 caractères.'),
     eventDate: yup
         .string()
-        .required('La date est requise.'),
+        .required('La date est requise.')
+        .matches(/^\d{4}-\d{2}-\d{2}$/, 'Le format de la date doit être AAAA-MM-JJ.'),
 });
 
 export const validateEventForm = (handleSubmit: (values: EventFormValues) => void) => {
