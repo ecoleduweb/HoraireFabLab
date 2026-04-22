@@ -26,14 +26,14 @@
 	}
 
 	.page-header h1 {
-		font-family: RobotoCondensed-Black;
+		font-family: var(--fh); font-weight: 900;
 		font-size: 28px;
 		color: #333;
 		margin: 0 0 6px;
 	}
 
 	.page-desc {
-		font-family: RobotoCondensed-Regular;
+		font-family: var(--fb);
 		font-size: 15px;
 		color: #888;
 		margin: 0;
@@ -87,14 +87,14 @@
 	}
 
 	.card-content h2 {
-		font-family: RobotoCondensed-Bold;
+		font-family: var(--fh); font-weight: 700;
 		font-size: 17px;
 		color: #222;
 		margin: 0 0 4px;
 	}
 
 	.card-content p {
-		font-family: RobotoCondensed-Regular;
+		font-family: var(--fb);
 		font-size: 14px;
 		color: #888;
 		margin: 0;
