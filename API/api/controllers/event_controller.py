@@ -15,16 +15,17 @@ service = EventService()
 def update_event_date(request, event_id: int):
 
     event_date_raw = request.data.get("event_date")
-    name = request.data.get("name")  # Optionnel, peut être utilisé pour mettre à jour le nom en même temps
+    name = request.data.get("name")
     event_date = None
 
-    if not event_date_raw:
-        raise ValidationError({"detail": "event_date est requis (YYYY-MM-DD)."})
+    if event_date_raw is None and name is None:
+        raise ValidationError({"detail": "Au moins un champ à modifier est requis (name ou event_date)."})
 
-    try:
-        event_date = date.fromisoformat(event_date_raw)
-    except ValueError:
-        raise ValidationError({"detail": "event_date invalide (format attendu: YYYY-MM-DD)."})
+    if event_date_raw is not None:
+        try:
+            event_date = date.fromisoformat(event_date_raw)
+        except ValueError:
+            raise ValidationError({"detail": "event_date invalide (format attendu: YYYY-MM-DD)."})
 
     event = service.update_event(
         event_id=event_id,

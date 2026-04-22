@@ -29,6 +29,6 @@ class EventRepository:
     def create(self, name: str, event_date: date) -> Event:
         return Event.objects.create(name=name, event_date=event_date)
 
-    def update_event(self, event: Event) -> Event:
-        event.save(update_fields=["name", "event_date"])
+    def update_event(self, event: Event, update_fields: list[str]) -> Event:
+        event.save(update_fields=update_fields)
         return event
