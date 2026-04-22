@@ -26,11 +26,10 @@ class BookSlotTests(BaseAPITestCase):
             break_end_time="13:00:00",
             is_active=True,
         )
-
         self.valid_data = {
             "plage": self.plage.pk,
-            "startAt": f"{self.test_date} 08:08:00",
-            "endAt": f"{self.test_date} 08:28:00",
+            "startAt": f"{self.test_date}T08:08:00Z",
+            "endAt": f"{self.test_date}T08:28:00Z",
             "clientFname": "Henry B.",
             "clientLname": "Belton",
             "clientEmail": "testidootest@gmail.com",

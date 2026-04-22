@@ -14,19 +14,7 @@ def book_slot(request):
     try:
         serializer = SlotSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        validated = serializer.validated_data
-        slot = Slot(
-            plage=validated["plage"],
-            start_at=validated["start_at"],
-            end_at=validated["end_at"],
-            client_fname=validated.get("client_fname"),
-            client_lname=validated.get("client_lname"),
-            client_email=validated.get("client_email"),
-            client_phone=validated.get("client_phone"),
-            item=validated.get("item"),
-            item_description=validated.get("item_description"),
-            liability_accepted=validated.get("liability_accepted", False),
-        )
+        slot = Slot(**serializer.validated_data)
         service = SlotService()
         slot = service.book_slot(slot)
         return Response(slot, status=status.HTTP_201_CREATED)

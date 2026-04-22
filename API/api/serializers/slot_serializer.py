@@ -14,42 +14,42 @@ class SlotSerializer(serializers.ModelSerializer):
     )
 
     #mapping pour que les données avec les champs en camelCase de la requête marchent avec le snake_case interne de l'API
-    # startAt = serializers.DateTimeField(source="start_at", required=True)
-    # endAt = serializers.DateTimeField(source="end_at", required=True)
+    start_at = serializers.DateTimeField(required=True)
+    end_at = serializers.DateTimeField(required=True)
 
-    # clientFname = serializers.CharField(source="client_fname", required=True)
-    # clientLname = serializers.CharField(source="client_lname", required=True)
-    # clientEmail = serializers.EmailField(source="client_email", required=True)
-    # clientPhone = serializers.CharField(source="client_phone", required=True)
+    client_fname = serializers.CharField(required=True)
+    client_lname = serializers.CharField(required=True)
+    client_email = serializers.EmailField(required=True)
+    client_phone = serializers.CharField(required=True)
 
-    # item = serializers.CharField(required=True)
-    # itemDescription = serializers.CharField(source="item_description", required=True)
+    item = serializers.CharField(required=True)
+    item_description = serializers.CharField(required=True)
 
-    # liabilityAccepted = serializers.BooleanField(source="liability_accepted", required=True)
+    liability_accepted = serializers.BooleanField(required=True)
 
-    # isCanceled = serializers.BooleanField(source="is_canceled", read_only=True)
-    # createdAt = serializers.DateTimeField(source="created_at", read_only=True)
-    # updatedAt = serializers.DateTimeField(source="updated_at", read_only=True)
+    is_canceled = serializers.BooleanField(read_only=True)
+    created_at = serializers.DateTimeField(read_only=True)
+    updated_at = serializers.DateTimeField(read_only=True)
 
     class Meta:
         model = Slot
         fields = [
             "id",
             "plage",
-            "startAt",
-            "endAt",
-            "clientFname",
-            "clientLname",
-            "clientEmail",
-            "clientPhone",
+            "start_at",
+            "end_at",
+            "client_fname",
+            "client_lname",
+            "client_email",
+            "client_phone",
             "item",
-            "itemDescription",
-            "liabilityAccepted",
-            "isCanceled",
-            "updatedAt",
-            "createdAt",
+            "item_description",
+            "liability_accepted",
+            "is_canceled",
+            "updated_at",
+            "created_at",
         ]
-        read_only_fields = ["id", "createdAt", "updatedAt", "isCanceled"]
+        read_only_fields = ["id", "created_at", "updated_at", "is_canceled"]
 
     def to_internal_value(self, data):
         ret = super().to_internal_value(data)
