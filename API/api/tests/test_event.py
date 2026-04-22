@@ -1,7 +1,8 @@
-from datetime import date, datetime, time, timezone
+from datetime import date, datetime, time
 from django.urls import reverse, NoReverseMatch
 from api.models import Event, Plage, Slot
 from api.tests.base_TestClass import BaseAPITestCase
+from django.utils import timezone
 
 
 class UpdateEventDateTests(BaseAPITestCase):
