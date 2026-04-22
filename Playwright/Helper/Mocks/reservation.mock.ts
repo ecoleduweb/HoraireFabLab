@@ -15,8 +15,8 @@ export const MOCK_EVENT = {
 
 export const EXPECTED_PAYLOAD: Omit<Reservation, "updatedAt" | "createdAt"> = {
   plage: 1,
-  startAt: "2026-07-16 08:00:00",
-  endAt: "2026-07-16 08:15:00",
+  startAt: "2026-07-16T08:00:00",
+  endAt: "2026-07-16T08:15:00",
   clientFname: "Marie",
   clientLname: "Tremblay",
   clientEmail: "marie@example.com",

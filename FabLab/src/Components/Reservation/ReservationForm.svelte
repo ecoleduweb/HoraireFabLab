@@ -1,105 +1,86 @@
 <script lang="ts">
- 
-  import type { ReservationForm } from "../../models/Reservation.ts";
-  import { validateField , type FormErrors} from "../../validation/reservation.validation.ts";
+  import type { FormErrors } from '../../validation/reservation.validation.ts';
 
   interface Props {
-    form:   ReservationForm;
     errors: FormErrors;
   }
 
-  let { form = $bindable(), errors = $bindable() }: Props = $props();
-
-  async function onBlur(field: keyof ReservationForm) {
-    const msg = await validateField(field, form[field]);
-    errors = { ...errors, [field]: msg };
-  }
+  let { errors }: Props = $props();
 </script>
 
 <div class="grid">
 
   <div class="field">
-    <label for="firstName">
-      Prénom <span class="req">*</span>
-    </label>
+    <label for="firstName">Prénom <span class="req">*</span></label>
     <input
-      id="firstName" type="text"
-      bind:value={form.firstName}
-      onblur={() => onBlur('firstName')}
+      id="firstName"
+      name="clientFname"
+      type="text"
       placeholder="Marie"
       autocomplete="given-name"
-      class:invalid={!!errors.firstName}
+      class:invalid={!!errors.clientFname}
     />
-    {#if errors.firstName}<span class="err">{errors.firstName}</span>{/if}
+    {#if errors.clientFname}<span class="err">{errors.clientFname}</span>{/if}
   </div>
 
   <div class="field">
-    <label for="lastName">
-      Nom <span class="req">*</span>
-    </label>
+    <label for="lastName">Nom <span class="req">*</span></label>
     <input
-      id="lastName" type="text"
-      bind:value={form.lastName}
-      onblur={() => onBlur('lastName')}
+      id="lastName"
+      name="clientLname"
+      type="text"
       placeholder="Tremblay"
       autocomplete="family-name"
-      class:invalid={!!errors.lastName}
+      class:invalid={!!errors.clientLname}
     />
-    {#if errors.lastName}<span class="err">{errors.lastName}</span>{/if}
+    {#if errors.clientLname}<span class="err">{errors.clientLname}</span>{/if}
   </div>
 
   <div class="field">
-    <label for="email">
-      Courriel <span class="req">*</span>
-    </label>
+    <label for="email">Courriel <span class="req">*</span></label>
     <input
-      id="email" type="email"
-      bind:value={form.email}
-      onblur={() => onBlur('email')}
-      placeholder="marie@exemple.com"
+      id="email"
+      name="clientEmail"
+      type="email"
+      placeholder="[email protected]"
       autocomplete="email"
-      class:invalid={!!errors.email}
+      class:invalid={!!errors.clientEmail}
     />
-    {#if errors.email}<span class="err">{errors.email}</span>{/if}
+    {#if errors.clientEmail}<span class="err">{errors.clientEmail}</span>{/if}
   </div>
 
   <div class="field">
     <label for="phone">Téléphone</label>
     <input
-      id="phone" type="tel"
-      bind:value={form.phone}
-      onblur={() => onBlur('phone')}
+      id="phone"
+      name="clientPhone"
+      type="tel"
       placeholder="514 555-0000"
       autocomplete="tel"
-      class:invalid={!!errors.phone}
+      class:invalid={!!errors.clientPhone}
     />
-    {#if errors.phone}<span class="err">{errors.phone}</span>{/if}
+    {#if errors.clientPhone}<span class="err">{errors.clientPhone}</span>{/if}
   </div>
 
   <div class="field full">
-    <label for="item">
-      Nom de l'objet <span class="req">*</span>
-    </label>
+    <label for="item">Nom de l'objet <span class="req">*</span></label>
     <input
-      id="item" type="text"
-      bind:value={form.item}
-      onblur={() => onBlur('item')}
-      placeholder="ex : Grille-pain Cuisinart CPT-122"
+      id="item"
+      name="item"
+      type="text"
+      placeholder="ex : Grille-pain"
       class:invalid={!!errors.item}
     />
     {#if errors.item}<span class="err">{errors.item}</span>{/if}
   </div>
 
   <div class="field full">
-    <label for="itemDescription">
-      Description du bris <span class="req">*</span>
-    </label>
+    <label for="itemDescription">Description du bris <span class="req">*</span></label>
     <textarea
       id="itemDescription"
-      bind:value={form.itemDescription}
-      onblur={() => onBlur('itemDescription')}
+      name="itemDescription"
       rows="4"
-      placeholder="ex : Ne chauffe plus, bouton coincé, câble effiloché…"
+      placeholder="Décris le problème…"
       class:invalid={!!errors.itemDescription}
     ></textarea>
     {#if errors.itemDescription}<span class="err">{errors.itemDescription}</span>{/if}
@@ -141,6 +122,6 @@
 
   .err {
     font-family: 'JetBrains Mono', monospace;
-    font-size: .68rem; color: #e8455a; margin-top: 1px;
+    font-size: .68rem; color: #e8455a;
   }
-</style>
+  </style>

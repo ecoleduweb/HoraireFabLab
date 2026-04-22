@@ -14,8 +14,7 @@ test.describe('Gestion des Réservations', () => {
     ]).apply();
 
     await page.goto('/');
-    await expect(page.getByText('8 h 00')).toBeVisible();
-  });
+    await expect(page.getByText(/8\s?h\s?00/)).toBeVisible();  });
 
   test('doit soumettre une réservation valide', async ({ page }) => {
     await page.route('**/api/book_slot', async (route) => {
@@ -25,7 +24,7 @@ test.describe('Gestion des Réservations', () => {
       });
     });
 
-    const slotBtn = page.getByRole('button', { name: '8 h 00' });
+    const slotBtn = page.getByRole('button', { name: /8\s?h\s?00/ });
     await slotBtn.click();    
   
     await page.locator('#firstName').fill('Marie');

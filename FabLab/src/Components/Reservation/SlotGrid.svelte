@@ -1,21 +1,21 @@
 <script lang="ts">
-
-  import type { TimeSlot } from "../../models/TimeSlot.ts";
+  import type { TimeSlot }    from '../../models/TimeSlot.ts'
+  import { displayTime }      from '../../ts/displayUtils.ts'
 
   interface Props {
-    slots:           TimeSlot[];
-    selectedStartAt: string;
-    onSelect:        (slot: TimeSlot) => void;
+    slots:           TimeSlot[]
+    selectedStartAt: string
+    onSelect:        (slot: TimeSlot) => void
   }
 
-  let { slots, selectedStartAt, onSelect }: Props = $props();
+  let { slots, selectedStartAt, onSelect }: Props = $props()
 </script>
 
 {#if selectedStartAt}
   {@const sel = slots.find(s => s.startAt === selectedStartAt)}
   {#if sel}
     <div class="recap" role="status">
-       Sélectionné : <strong>{sel.label}</strong>
+      ✓ Sélectionné : <strong>{sel.label}</strong>
       &nbsp;·&nbsp;{sel.available} place{sel.available > 1 ? 's' : ''} restante{sel.available > 1 ? 's' : ''}
     </div>
   {/if}
@@ -31,7 +31,7 @@
       aria-pressed={selectedStartAt === slot.startAt}
       aria-label="{slot.label} — {slot.available === 0 ? 'Complet' : slot.available + ' place(s)'}"
     >
-      <span class="time">{slot.label}</span>
+      <span class="time">{displayTime(slot.startAt)}</span>
       <span class="avail">
         {#if slot.available === 0}Complet{:else}{slot.available}/{slot.capacity}{/if}
       </span>
