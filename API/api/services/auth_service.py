@@ -1,5 +1,3 @@
-# api/services/auth_service.py
-
 from django.contrib.auth.hashers import check_password
 from rest_framework.exceptions import ValidationError, AuthenticationFailed
 
