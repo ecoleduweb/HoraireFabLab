@@ -12,7 +12,7 @@ L'objectif est de ne pas rendre la tâche plus difficile.
 
 ### C'est quoi ?
 
-[Docker Desktop](https://www.docker.com/products/docker-desktop/) est l'interface officielle de Dockerpour Windows et macOS. Il installe Docker Engine, Docker Compose, et une interface graphique simple.
+[Docker Desktop](https://www.docker.com/products/docker-desktop/) est l'interface officielle de Docker pour Windows et macOS. Il installe Docker Engine, Docker Compose, et une interface graphique simple.
 
 ### Ce que le dev fait au quotidien
 

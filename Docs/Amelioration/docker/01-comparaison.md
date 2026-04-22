@@ -8,13 +8,13 @@ Le workflow de déploiement actuel fonctionne en production, mais chaque étape 
 
 ## Analyse point par point
 
-### 1."Ça marche sur mon poste" —  Environnements toutes pareil.
+### 1."Ça marche sur mon poste" —  Environnements tous pareils.
 
 **Problème actuel**
 
 Chaque développeur installe Python, Node.js et mariadb directement sur sa machine. Le script prod fais la "même" chose.
 
-Les versions peuvent différés, même si on les "contrôles".
+Les versions peuvent différés, même si on les "contrôle".
 
 **Solution Docker**
 
@@ -28,7 +28,7 @@ Tout le monde fait tourner exactement le même environnement.
 
 ---
 
-### 2. Arrivé d'un nouveau développeur
+### 2. Arrivée d'un nouveau développeur
 
 **Problème actuel**
 
@@ -143,4 +143,4 @@ Les secrets GitHub Actions sont passés comme variables d'environnement au conta
 
 | Risque | Script SSH | Docker |
 |--------|-----------|--------|
-| Déploiement partiel (npm crash) | Marche pu | Rollback automatique |
+| Déploiement partiel (npm crash) | Brise de bord en bord | Rollback automatique |
