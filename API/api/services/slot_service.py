@@ -52,8 +52,10 @@ class SlotService:
     
     def get_available_slots(self, event_id) -> list[Slot]:
         current_event = self.event_repo.get_event_by_id(event_id)
-        current_plages = self.plage_repo.get_plages_for_event(event_id)
-        existing_slots = self.slot_repo.get_slots()
+        if current_event is None:
+            raise ValidationError({"event_id": "Événement introuvable."})
+        current_plages = self.plage_repo.get_active_plages_for_event(event_id)
+        existing_slots = self.slot_repo.get_slots().filter(is_canceled=False)
         possible_slots = []
 
 
@@ -74,7 +76,17 @@ class SlotService:
                 possible_slots.append(Slot(plage=plage, start_at=plage_start, end_at=slot_end))
                 plage_start = slot_end
 
-        existing_keys = {(slot.plage_id, slot.start_at) for slot in existing_slots}
-        available_slots = [slot for slot in possible_slots if (slot.plage_id, slot.start_at) not in existing_keys]
+        existing_by_plage = {}
+        for s in existing_slots:
+            existing_by_plage.setdefault(s.plage_id, []).append((s.start_at, s.end_at))
+
+        available_slots = []
+        for candidate in possible_slots:
+            overlaps = any(
+                candidate.start_at < end_at and candidate.end_at > start_at
+                for start_at, end_at in existing_by_plage.get(candidate.plage_id, [])
+            )
+            if not overlaps:
+                available_slots.append(candidate)
             
         return available_slots

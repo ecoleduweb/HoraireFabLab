@@ -86,8 +86,8 @@ class GetAvailableSlotsTests(BaseAPITestCase):
         actual = self.extract(resp)
 
         for _, start, end in actual:
-            self.assertFalse("08:20:00" <= start < "08:40:00")
-            self.assertFalse("08:20:00" < end <= "08:40:00")
+            self.assertFalse(self.make_dt("08:20:00") <= start < self.make_dt("08:40:00"))
+            self.assertFalse(self.make_dt("08:20:00") < end <= self.make_dt("08:40:00"))
 
     # 3. Multiple plages, no break
     def test_multiple_plages_no_break(self):
@@ -122,7 +122,7 @@ class GetAvailableSlotsTests(BaseAPITestCase):
         # ensure no slot violates p1 break
         for plage_id, start, end in actual:
             if plage_id == p1.id:
-                self.assertFalse("08:20:00" <= start < "08:40:00")
+                self.assertFalse(self.make_dt("08:20:00") <= start < self.make_dt("08:40:00"))
 
     # 5. Existing slot is excluded
     def test_existing_slot_is_excluded(self):
@@ -156,5 +156,11 @@ class GetAvailableSlotsTests(BaseAPITestCase):
         actual = self.extract(resp)
 
         # ensure no overlap leaks through
+        blocked_start = self.make_dt("08:10:00")
+        blocked_end = self.make_dt("08:20:00")
         for _, start, end in actual:
-            self.assertNotEqual((start, end), (self.make_dt("08:10:00"), self.make_dt("08:20:00")))
+            self.assertFalse(start < blocked_end and end > blocked_start)
+
+    def test_invalid_event_id_returns_client_error(self):
+        resp = self.client.get(self.url(999999))
+        self.assertIn(resp.status_code, {400, 404})
