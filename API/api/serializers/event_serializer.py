@@ -1,10 +1,6 @@
 from rest_framework import serializers
 from api.models import Event
-import nh3
-
-
-def sanitize(value: str) -> str:
-    return nh3.clean(value, tags=set())
+from api.utils.sanitize import sanitize
 
 
 class EventSerializer(serializers.ModelSerializer):

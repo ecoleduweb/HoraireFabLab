@@ -11,10 +11,7 @@ class EventService:
 
     def create_event(self, event: Event) -> dict:
         try:
-            event = self.repo.create(
-                name=event.name,
-                event_date=event.event_date,
-            )
+            event = self.repo.create(event)
         except IntegrityError:
             raise ValidationError({"event_date": "Un événement existe déjà pour cette date."})
 
