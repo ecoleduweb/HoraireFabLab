@@ -1,5 +1,5 @@
 import type { ValidationError } from "yup";
-import type { ErrorResponse } from "../Models/ErrorResponse.ts"
+import type { ErrorResponse } from "../modelse/ErrorResponse.ts"
 import { POST } from "./server.ts"
 import striptags from "striptags";
 
