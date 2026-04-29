@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError
 from api.serializers.event_serializer import EventSerializer
 from api.services.event_service import EventService
+from api.models import Event
 
 service = EventService()
 
@@ -14,7 +15,9 @@ def create_event(request):
     try:
         serializer = EventSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        event = service.create_event(serializer.validated_data)
+        event = Event(**serializer.validated_data)
+        service = EventService()
+        event = service.create_event(event)
         return Response(event, status=status.HTTP_201_CREATED)
     except ValidationError as e:
         return Response(e.detail, status=status.HTTP_400_BAD_REQUEST)
