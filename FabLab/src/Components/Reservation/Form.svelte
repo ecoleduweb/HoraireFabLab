@@ -1,6 +1,6 @@
 <script lang="ts">
 
-  import type { FormErrors }  from '../../validation/reservation.validation.ts';
+  import type { FormErrors }  from '../../Validation/reservation.validation.ts';
   import type { TimeSlot }    from '../../models/TimeSlot.ts';
   import SlotGrid             from './SlotGrid.svelte';
 

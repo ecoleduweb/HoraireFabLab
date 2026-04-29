@@ -9,7 +9,7 @@
   import type { RepairEvent }     from '../models/RepairEvent.ts';
   import type { ReservationForm } from '../models/Reservation.ts';
 
-  import { reservationTemplate, validateReservationForm } from '../validation/reservation.validation.ts';
+  import { reservationTemplate, validateReservationForm } from '../Validation/reservation.validation.ts';
   import { fetchActiveEvent, postReservation }            from '../services/ReservationService.ts';
   import { displayDate, displayTime }                     from '../ts/displayUtils.ts';
   import { InvalidDataError }                             from '../CustomError/invalidDataError.ts';
