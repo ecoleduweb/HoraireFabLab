@@ -3,7 +3,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.exceptions import ConflictError, ValidationError
+from rest_framework.exceptions import ValidationError
 from api.services.event_service import EventService
 from api.serializers.event_serializer import EventSerializer
 
@@ -25,8 +25,7 @@ def update_event(request, event_id):
         return Response(result, status=status.HTTP_200_OK)
     except ValidationError as e:
         return Response(e.detail, status=status.HTTP_400_BAD_REQUEST)
-    except ConflictError as e:
-        return Response(e.detail, status=status.HTTP_409_CONFLICT)
+
 
    
 
