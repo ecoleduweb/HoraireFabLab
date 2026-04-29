@@ -1,9 +1,9 @@
 <script lang="ts">
   import { onMount } from 'svelte';
 
-  import SlotGrid      from '../componentse/reservation/SlotGrid.svelte';
-  import WaiverSection from '../componentse/reservation/WaiverSection.svelte';
-  import Form          from '../componentse/reservation/Form.svelte';
+  import SlotGrid      from '../components/reservation/SlotGrid.svelte';
+  import WaiverSection from '../components/reservation/WaiverSection.svelte';
+  import Form          from '../components/reservation/Form.svelte';
 
   import type { TimeSlot }        from '../models/TimeSlot.ts';
   import type { RepairEvent }     from '../modelse/RepairEvent.ts';
