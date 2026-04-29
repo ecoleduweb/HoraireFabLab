@@ -120,7 +120,12 @@
         <div class="section-bar"></div>
         <div class="section-head"><h2>2 — Vos informations et l'objet à réparer</h2></div>
         <div class="section-body">
-          <Form errors={$errors} />
+          <Form
+            errors={$errors}
+            {slots}
+            {selectedStartAt}
+            onSelectSlot={handleSlotSelect}
+          />
         </div>
 
         <div class="section-bar"></div>
