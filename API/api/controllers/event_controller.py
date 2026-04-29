@@ -16,7 +16,6 @@ def create_event(request):
         serializer = EventSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         event = Event(**serializer.validated_data)
-        service = EventService()
         event = service.create_event(event)
         return Response(event, status=status.HTTP_201_CREATED)
     except ValidationError as e:
