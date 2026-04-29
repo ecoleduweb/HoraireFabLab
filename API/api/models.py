@@ -75,6 +75,7 @@ class Slot(models.Model):
             models.UniqueConstraint(
                 fields=["plage", "start_at"],
                 name="uq_slot_plage_startat",
+                violation_error_message="Ce créneau est déjà réservé."
             )
         ]
         indexes = [
