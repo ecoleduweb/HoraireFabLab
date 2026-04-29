@@ -32,7 +32,7 @@ class UpdateEventDateTests(BaseAPITestCase):
     def test_update_event_date_requires_auth(self):
         resp = self.client.put(
             self.update_event_url,
-            data={"name": "Repare tes trucks", "event_date": "2026-05-20"},
+            data={"name": "Repare tes trucks", "eventDate": "2026-05-20"},
             format="json",
         )
         self.assertIn(resp.status_code, (401, 403))
@@ -42,7 +42,7 @@ class UpdateEventDateTests(BaseAPITestCase):
 
         resp = self.client.put(
             self.update_event_url,
-            data={"name": "Repare tes trucks v2", "event_date": "2026-05-20"},
+            data={"name": "Repare tes trucks v2", "eventDate": "2026-05-20"},
             format="json",
         )
 
@@ -65,7 +65,7 @@ class UpdateEventDateTests(BaseAPITestCase):
 
         resp = self.client.put(
             self.update_event_url,
-            data={"name": "Repare tes trucks", "event_date": "2026-05-20"},
+            data={"name": "Repare tes trucks", "eventDate": "2026-05-20"},
             format="json",
         )
 
@@ -85,14 +85,14 @@ class UpdateEventDateTests(BaseAPITestCase):
         )
 
         self.assertEqual(resp.status_code, 400)
-        self.assertIn("event_date", resp.json())
+        self.assertIn("eventDate", resp.json())
 
     def test_update_event_date_missing_name_returns_400(self):
         self.login_and_set_cookies()
 
         resp = self.client.put(
             self.update_event_url,
-            data={"event_date": "2026-05-20"},
+            data={"eventDate": "2026-05-20"},
             format="json",
         )
 
@@ -104,12 +104,12 @@ class UpdateEventDateTests(BaseAPITestCase):
 
         resp = self.client.put(
             self.update_event_url,
-            data={"name": "Repare tes trucks", "event_date": "20-05-2026"},
+            data={"name": "Repare tes trucks", "eventDate": "20-05-2026"},
             format="json",
         )
 
         self.assertEqual(resp.status_code, 400)
-        self.assertIn("event_date", resp.json())
+        self.assertIn("eventDate", resp.json())
 
     def test_update_event_date_not_found_returns_404(self):
         self.login_and_set_cookies()
@@ -121,7 +121,7 @@ class UpdateEventDateTests(BaseAPITestCase):
 
         resp = self.client.put(
             url,
-            data={"name": "Repare tes trucks", "event_date": "2026-05-20"},
+            data={"name": "Repare tes trucks", "eventDate": "2026-05-20"},
             format="json",
         )
 
@@ -132,7 +132,7 @@ class UpdateEventDateTests(BaseAPITestCase):
 
         resp = self.client.put(
             self.update_event_url,
-            data={"name": "Repare tes trucks", "event_date": "2020-01-01"},
+            data={"name": "Repare tes trucks", "eventDate": "2020-01-01"},
             format="json",
         )
 
@@ -149,12 +149,12 @@ class UpdateEventDateTests(BaseAPITestCase):
 
         resp = self.client.put(
             self.update_event_url,
-            data={"name": "Repare tes trucks", "event_date": "2026-05-20"},
+            data={"name": "Repare tes trucks", "eventDate": "2026-05-20"},
             format="json",
         )
 
         self.assertEqual(resp.status_code, 400)
-        self.assertIn("event_date", resp.json())
+        self.assertIn("eventDate", resp.json())
 
 
 class CreateEventTests(BaseAPITestCase):
