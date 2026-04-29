@@ -3,7 +3,7 @@ import { base } from '$app/paths';
 import { get } from 'svelte/store';
 import { isLoggedIn, currentUser } from '../../lib/index.ts';
 import { GET } from '../../ts/server.ts';
-import type { User } from '../../models/User.ts';
+import type { User } from '../../modelse/User.ts';
 
 export const load = async () => {
     if (browser) {
