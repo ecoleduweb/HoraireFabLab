@@ -2,7 +2,7 @@ import { POST } from '../ts/server.ts';
 import type { CreateEventPayload, Event } from '../models/Event.ts';
 
 export const EventService = {
-    async createEvent(name: string, eventDate: string): Promise<void> {
-        await POST<CreateEventPayload, Event>('/events', { name, eventDate });
-    }
+	async createEvent(name: string, eventDate: string): Promise<void> {
+		await POST<CreateEventPayload, Event>('/events', { name, eventDate });
+	}
 };
