@@ -1,68 +1,48 @@
 <script lang="ts">
   import { onMount } from 'svelte';
 
-  import SlotGrid        from '../Components/Reservation/SlotGrid.svelte';
-  import ReservationForm from '../Components/Reservation/ReservationForm.svelte';
-  import WaiverSection   from '../Components/Reservation/WaiverSection.svelte';
+  import SlotGrid      from '../Components/Reservation/SlotGrid.svelte';
+  import WaiverSection from '../Components/Reservation/WaiverSection.svelte';
+  import Form          from '../Components/Reservation/Form.svelte';
 
-  import type { TimeSlot }                     from '../models/TimeSlot.ts';
-  import type { ReservationForm as FormType }  from '../models/ReservationForm.ts';
-  import type { EventData }                    from '../models/DjangoEvent.ts';
-  import { emptyForm }                         from '../models/ReservationForm.ts';
-  import { validateReservationForm }           from '../validation/reservation.validation.ts';
-  import { fetchActiveEvent, postReservation } from '../services/ReservationService.ts';
-  import { displayDate }                       from '../ts/displayUtils.ts';
-  import { InvalidDataError }                  from '../CustomError/invalidDataError.ts';
-  import { NotFoundError }                     from '../CustomError/NotFoundError.ts';
+  import type { TimeSlot }        from '../models/TimeSlot.ts';
+  import type { RepairEvent }     from '../models/RepairEvent.ts';
+  import type { ReservationForm } from '../models/Reservation.ts';
 
-  let eventData       = $state<EventData | null>(null);
-  let slots           = $state<TimeSlot[]>([]);
+  import { reservationTemplate, validateReservationForm } from '../validation/reservation.validation.ts';
+  import { fetchActiveEvent, postReservation }            from '../services/ReservationService.ts';
+  import { displayDate, displayTime }                     from '../ts/displayUtils.ts';
+  import { InvalidDataError }                             from '../CustomError/invalidDataError.ts';
+  import { NotFoundError }                                from '../CustomError/NotFoundError.ts';
+
+  let eventData       = $state<RepairEvent>();
   let selectedStartAt = $state<string>('');
+  let submitSuccess   = $state(false);
+  let submitError     = $state<string | null>(null);
+  let submittedValues = $state<ReservationForm | null>(null);
 
-  let loading       = $state(true);
-  let fetchError    = $state<string | null>(null);
-  let submitting    = $state(false);
-  let submitSuccess = $state(false);
-  let submitError   = $state<string | null>(null);
-
-  let submittedValues = $state<FormType | null>(null);
-
-
+  const slots        = $derived(eventData?.slots ?? []);
   const selectedSlot = $derived(slots.find(s => s.startAt === selectedStartAt));
 
   onMount(async () => {
-    try {
-      eventData = await fetchActiveEvent();
-      slots     = eventData.slots;
-    } catch {
-      fetchError = "Impossible de charger l'événement. Veuillez réessayer.";
-    } finally {
-      loading = false;
-    }
+    eventData = await fetchActiveEvent();
   });
 
   function handleSlotSelect(slot: TimeSlot) {
     selectedStartAt = slot.startAt;
+    setFields('slot', slot, true);
   }
 
-  async function handleSubmit(values: FormType) {
+  async function handleSubmit(values: ReservationForm) {
     submitError = null;
 
-    if (!selectedStartAt) {
+    if (!selectedSlot) {
       submitError = 'Veuillez choisir une plage horaire.';
       return;
     }
 
-    submitting = true;
     try {
-      await postReservation(values, selectedSlot!, eventData!.plageId);
-
-      slots = slots.map(s =>
-        s.startAt === selectedStartAt
-          ? { ...s, available: Math.max(0, s.available - 1) }
-          : s
-      );
-
+      await postReservation(values, selectedSlot);
       submittedValues = values;
       submitSuccess   = true;
     } catch (e: unknown) {
@@ -71,14 +51,15 @@
       } else if (e instanceof NotFoundError) {
         submitError = "Ce créneau n'existe plus. Veuillez en choisir un autre.";
       } else {
-        submitError = e instanceof Error ? e.message : 'Une erreur est survenue. Veuillez réessayer.';
+        submitError = e instanceof Error
+          ? e.message
+          : 'Une erreur est survenue. Veuillez réessayer.';
       }
-    } finally {
-      submitting = false;
     }
   }
 
-  const { form: felteForm, errors } = validateReservationForm(handleSubmit, emptyForm())
+
+  const { form: felteForm, errors, setFields } = validateReservationForm( handleSubmit,reservationTemplate.generate())
 </script>
 
 <svelte:head>
@@ -90,12 +71,10 @@
 
 <div class="page">
 
-  <!-- Topbar -->
   <div class="topbar">
     <span class="logo">FabLab <em>Fabbulle</em></span>
   </div>
 
-  <!-- Hero -->
   <div class="hero">
     <h1 class="hero-title">Atelier de <em>réparation</em><br/>FabLab Fabbulle</h1>
 
@@ -112,24 +91,13 @@
   </div>
 
   <div class="content">
-    {#if loading}
-      <div class="loading">
-        <div class="spinner"></div>
-        Chargement de l'événement…
-      </div>
 
-    {:else if fetchError}
-      <div class="alert-error" role="alert">
-        {fetchError}
-        <button onclick={() => location.reload()}>Réessayer</button>
-      </div>
-
-    {:else if submitSuccess && submittedValues}
+    {#if submitSuccess && submittedValues}
       <div class="alert-success" role="status">
         <h2>Réservation confirmée !</h2>
         <p>
           Merci <strong>{submittedValues.clientFname} {submittedValues.clientLname}</strong> !<br/>
-          Plage réservée : <strong>{selectedSlot?.label}</strong>
+          Plage réservée : <strong>{displayTime(submittedValues.slot!.startAt)}</strong>
           le <strong>{eventData ? displayDate(eventData.eventDate) : ''}</strong>.<br/>
           Courriel de confirmation envoyé à <strong>{submittedValues.clientEmail}</strong>.
         </p>
@@ -137,7 +105,7 @@
 
     {:else}
 
-      <form use:felteForm onsubmit={(e) => e.preventDefault()}>
+      <form use:felteForm>
 
         <div class="section-bar"></div>
         <div class="section-head"><h2>1 — Choisissez une plage horaire</h2></div>
@@ -152,7 +120,7 @@
         <div class="section-bar"></div>
         <div class="section-head"><h2>2 — Vos informations et l'objet à réparer</h2></div>
         <div class="section-body">
-          <ReservationForm errors={$errors} />
+          <Form errors={$errors} />
         </div>
 
         <div class="section-bar"></div>
@@ -165,13 +133,8 @@
           <div class="alert-error" role="alert">{submitError}</div>
         {/if}
 
-        <!-- Bouton -->
-        <button type="submit" class="btn-submit" disabled={submitting} aria-busy={submitting}>
-          {#if submitting}
-            <div class="spinner-sm"></div> Envoi en cours…
-          {:else}
-            Confirmer la réservation
-          {/if}
+        <button type="submit" class="btn-submit">
+          Confirmer la réservation
         </button>
         <p class="note">Aucun compte requis · Données supprimées après l'événement</p>
 
@@ -235,10 +198,8 @@
   }
   .hero-sub { margin-top: .75rem; color: var(--muted); font-size: .9rem; line-height: 1.6; }
 
-  /* ── Contenu ── */
   .content { max-width: 860px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
 
-  /* ── Sections ── */
   .section-bar { height: 4px; background: var(--teal); }
   .section-head {
     background: var(--card); padding: .7rem 1.2rem;
@@ -253,30 +214,11 @@
     border-top: none; padding: 1.4rem; margin-bottom: 1.5rem;
   }
 
-  /* ── Loading ── */
-  .loading {
-    display: flex; flex-direction: column; align-items: center; gap: .75rem;
-    padding: 3rem; color: var(--muted); font-family: var(--fm); font-size: .85rem;
-  }
-  .spinner {
-    width: 28px; height: 28px;
-    border: 3px solid var(--bord); border-top-color: var(--teal);
-    border-radius: 50%; animation: spin .8s linear infinite;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  /* ── Alertes ── */
   .alert-error {
     padding: .85rem 1.1rem; margin-bottom: 1.25rem;
     border-radius: 3px;
     background: rgba(192,57,43,.12); border-left: 4px solid #c0392b;
-    color: #e57373; font-size: .9rem; display: flex;
-    align-items: center; justify-content: space-between; gap: 1rem;
-  }
-  .alert-error button {
-    padding: .3rem .8rem; background: #c0392b; color: #fff;
-    border: none; border-radius: 3px; cursor: pointer; font-size: .8rem;
-    flex-shrink: 0;
+    color: #e57373; font-size: .9rem;
   }
   .alert-success {
     background: rgba(0,201,177,.08); border: 1px solid var(--teal);
@@ -291,7 +233,6 @@
   .alert-success p { color: var(--muted); line-height: 1.6; }
   .alert-success strong { color: var(--white); }
 
-  /* ── Bouton ── */
   .btn-submit {
     width: 100%; padding: .85rem;
     background: linear-gradient(135deg, #7b1a2e 0%, #c0392b 40%, #e8455a 70%, #9b2335 100%);
@@ -299,15 +240,9 @@
     font-family: var(--fh); font-size: 1rem; font-weight: 700;
     letter-spacing: .1em; text-transform: uppercase;
     cursor: pointer; transition: filter .15s, transform .1s;
-    display: flex; align-items: center; justify-content: center; gap: .5rem;
+    display: flex; align-items: center; justify-content: center;
   }
-  .btn-submit:hover:not(:disabled) { filter: brightness(1.12); transform: translateY(-1px); }
-  .btn-submit:disabled { opacity: .6; cursor: not-allowed; }
-  .spinner-sm {
-    width: 16px; height: 16px;
-    border: 2px solid rgba(255,255,255,.3); border-top-color: #fff;
-    border-radius: 50%; animation: spin .8s linear infinite;
-  }
+  .btn-submit:hover { filter: brightness(1.12); transform: translateY(-1px); }
 
   .note {
     text-align: center; margin-top: .6rem;

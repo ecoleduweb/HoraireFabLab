@@ -2,7 +2,7 @@
     import { base } from '$app/paths';
     import { goto } from '$app/navigation';
     import { POST } from '../../../../ts/server.ts';
-    import type { CreateEventPayload, Event } from '../../../../Models/Event.ts';
+	import type { EventForm, RepairEvent } from '../../../../models/RepairEvent.ts';
 
     let name = $state('');
     let eventDate = $state('');
@@ -14,7 +14,7 @@
         loading = true;
 
         try {
-            await POST<CreateEventPayload, Event>('/events', { name, eventDate });
+            await POST<EventForm, RepairEvent>('/events', { name, eventDate });
             await goto(`${base}/admin`);
         } catch (e: unknown) {
             if (e instanceof Error) {

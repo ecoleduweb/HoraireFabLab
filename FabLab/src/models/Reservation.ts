@@ -1,17 +1,21 @@
-export interface Reservation {
-  plage:              number;   
+import type { TimeSlot } from "./TimeSlot.ts";
+
+export interface Reservation extends ReservationForm {
   startAt:           string;   
   endAt:             string;   
-  clientFname:       string;
-  clientLname:       string;
-  clientEmail:       string;
-  clientPhone:       string;
-  item:               string;
-  itemDescription:   string;
-  waiverAccepted: boolean;
   isCanceled:        false;    
   updatedAt:         string;   
-  createdAt:         string;   
+  createdAt:         string;
 }
 
+export interface ReservationForm {
+    clientFname:       string;
+    clientLname:       string;
+    clientEmail:       string;
+    clientPhone:       string;
+    item:               string;
+    itemDescription:   string;
+    waiverAccepted: boolean;
+    slot?: TimeSlot;
+}
 

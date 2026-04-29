@@ -1,13 +1,33 @@
 <script lang="ts">
-  import type { FormErrors } from '../../validation/reservation.validation.ts';
+
+  import type { FormErrors }  from '../../validation/reservation.validation.ts';
+  import type { TimeSlot }    from '../../models/TimeSlot.ts';
+  import SlotGrid             from './SlotGrid.svelte';
 
   interface Props {
-    errors: FormErrors;
+    errors:          FormErrors;
+    slots:           TimeSlot[];
+    selectedStartAt: string;
+    onSelectSlot:    (slot: TimeSlot) => void;
   }
 
-  let { errors }: Props = $props();
+  let { errors, slots, selectedStartAt, onSelectSlot }: Props = $props();
 </script>
 
+<!-- ── Créneaux horaires ── -->
+<div class="field full section-slots">
+  <label class="section-label">Plage horaire <span class="req">*</span></label>
+  <SlotGrid
+    {slots}
+    {selectedStartAt}
+    onSelect={onSelectSlot}
+  />
+  {#if errors.slot}
+    <span class="err">{errors.slot}</span>
+  {/if}
+</div>
+
+<!-- ── Informations visiteur ── -->
 <div class="grid">
 
   <div class="field">
@@ -42,7 +62,7 @@
       id="email"
       name="clientEmail"
       type="email"
-      placeholder="[email protected]"
+      placeholder="marie@exemple.com"
       autocomplete="email"
       class:invalid={!!errors.clientEmail}
     />
@@ -89,6 +109,18 @@
 </div>
 
 <style>
+  .section-slots {
+    margin-bottom: 1.5rem;
+  }
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .68rem; font-weight: 600;
+    letter-spacing: .1em; text-transform: uppercase;
+    color: #ffffff;
+    display: block;
+    margin-bottom: .5rem;
+  }
+
   .grid { display: grid; grid-template-columns: 1fr 1fr; gap: .9rem; }
   @media (max-width: 520px) { .grid { grid-template-columns: 1fr; } }
   .full { grid-column: 1 / -1; }
@@ -124,4 +156,4 @@
     font-family: 'JetBrains Mono', monospace;
     font-size: .68rem; color: #e8455a;
   }
-  </style>
+</style>

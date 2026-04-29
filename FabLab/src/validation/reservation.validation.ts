@@ -1,6 +1,6 @@
 import { createForm } from 'felte'
 import * as yup from 'yup'
-import type { ReservationForm } from '../models/ReservationForm.ts'
+import type { ReservationForm } from '../models/Reservation.ts'
 
 
 const schema = yup.object().shape({
@@ -74,3 +74,16 @@ export const validateReservationForm = (
         onSubmit: handleSubmit,
     })
 }
+
+export const reservationTemplate = {
+    generate: (): ReservationForm => ({
+clientFname:       "",
+    clientLname:        "",
+    clientEmail:           "",
+    clientPhone:           "",
+    item:            "",
+    itemDescription: "",
+    waiverAccepted:  false,
+    slot: undefined,
+    })
+};

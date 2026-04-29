@@ -17,8 +17,11 @@ pleine connaissance de ces conditions.`
 
 <div class="waiver-text" tabindex="0">{waiverText}</div>
 
-<label class="check-wrap">
+<label class="check-wrap" 
+  for="waiverAccepted"
+>
   <input
+    id="waiverAccepted"
     data-testid="waiver-checkbox"
     bind:checked={accepted}
     type="checkbox"
