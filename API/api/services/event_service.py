@@ -1,5 +1,5 @@
 from datetime import date
-from rest_framework.exceptions import NotFound, ValidationError, ConflictError
+from rest_framework.exceptions import  ValidationError
 from api.serializers.event_serializer import EventSerializer
 from django.db import IntegrityError
 from api.repositories.event_repository import EventRepository
@@ -30,7 +30,7 @@ class EventService:
             })
 
         if self.repo.has_booked_slots_for_event(event.id):
-            raise ConflictError({
+            raise ValidationError({
                 "detail": "Modification impossible: des inscriptions existent déjà."
             })
 

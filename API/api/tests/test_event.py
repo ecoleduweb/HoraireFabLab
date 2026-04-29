@@ -69,7 +69,7 @@ class UpdateEventDateTests(BaseAPITestCase):
             format="json",
         )
 
-        self.assertEqual(resp.status_code, 409)
+        self.assertEqual(resp.status_code, 400)
         self.assertIn("detail", resp.json())
 
         self.event.refresh_from_db()
