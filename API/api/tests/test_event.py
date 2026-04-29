@@ -1,6 +1,7 @@
 from api.tests.base_TestClass import BaseAPITestCase
 from api.models import Event
 from django.urls import reverse
+from datetime import date, timedelta
 
 
 class CreateEventTests(BaseAPITestCase):
@@ -105,3 +106,20 @@ class CreateEventTests(BaseAPITestCase):
         )
         self.assertEqual(resp.status_code, 400)
         self.assertIn("eventDate", resp.json())
+
+    def test_get_upcoming_events_excludes_past_includes_today_and_future(self):
+        self.login_and_set_cookies()
+        today = date.today()
+
+        self.client.post(self.create_event_url, data={"name": "Passé", "eventDate": (today - timedelta(days=1)).isoformat()}, format="json")
+        self.client.post(self.create_event_url, data={"name": "Aujourd'hui", "eventDate": today.isoformat()}, format="json")
+        self.client.post(self.create_event_url, data={"name": "Futur", "eventDate": (today + timedelta(days=1)).isoformat()}, format="json")
+
+        resp = self.client.get(reverse("get_upcoming_events"))
+        self.assertEqual(resp.status_code, 200)
+
+        body = resp.json()
+        dates = [e["eventDate"] for e in body]
+        self.assertNotIn((today - timedelta(days=1)).isoformat(), dates)
+        self.assertIn(today.isoformat(), dates)
+        self.assertIn((today + timedelta(days=1)).isoformat(), dates)

@@ -1,3 +1,5 @@
+from asyncio import events
+
 from rest_framework.exceptions import ValidationError
 from api.repositories.event_repository import EventRepository
 from api.serializers.event_serializer import EventSerializer
@@ -16,3 +18,7 @@ class EventService:
             raise ValidationError({"event_date": "Un événement existe déjà pour cette date."})
 
         return EventSerializer(event).data
+    
+    def get_upcoming_events(self) -> list:
+        events = self.repo.get_upcoming_events()
+        return EventSerializer(events, many=True).data

@@ -20,3 +20,12 @@ def create_event(request):
         return Response(event, status=status.HTTP_201_CREATED)
     except ValidationError as e:
         return Response(e.detail, status=status.HTTP_400_BAD_REQUEST)
+    
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_upcoming_events(request):
+    try:
+        events = service.get_upcoming_events()
+        return Response(events, status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
