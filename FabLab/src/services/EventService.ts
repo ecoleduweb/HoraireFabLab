@@ -1,8 +1,8 @@
 import { POST } from '../ts/server.ts';
-import type { CreateEventPayload, Event } from '../Models/Event.ts';
+import type { EventForm, RepairEvent } from '../models/RepairEvent.ts';
 
 export const EventService = {
     async createEvent(name: string, eventDate: string): Promise<void> {
-        await POST<CreateEventPayload, Event>('/events', { name, eventDate });
+        await POST<EventForm, RepairEvent>('/events', { name, eventDate });
     }
 };
