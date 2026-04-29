@@ -16,7 +16,6 @@ test.describe("authentication", () => {
 
   test("LoginSuccessful", async ({ page }) => {
     const apiMocker = new ApiMocker(page);
-    await apiMocker.addMocks([loginMocks.success]).apply();
     await page.locator("#username").fill("playwright");
     await page.locator("#password").fill("pw123");
     await page.getByText("Se connecter").click();
