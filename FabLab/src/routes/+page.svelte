@@ -1,15 +1,15 @@
 <script lang="ts">
   import { onMount } from 'svelte';
 
-  import SlotGrid      from '../Components/Reservation/SlotGrid.svelte';
-  import WaiverSection from '../Components/Reservation/WaiverSection.svelte';
-  import Form          from '../Components/Reservation/Form.svelte';
+  import SlotGrid      from '../componentse/reservation/SlotGrid.svelte';
+  import WaiverSection from '../componentse/reservation/WaiverSection.svelte';
+  import Form          from '../componentse/reservation/Form.svelte';
 
   import type { TimeSlot }        from '../models/TimeSlot.ts';
-  import type { RepairEvent }     from '../models/RepairEvent.ts';
-  import type { ReservationForm } from '../models/Reservation.ts';
+  import type { RepairEvent }     from '../modelse/RepairEvent.ts';
+  import type { ReservationForm } from '../modelse/Reservation.ts';
 
-  import { reservationTemplate, validateReservationForm } from '../Validation/reservation.validation.ts';
+  import { reservationTemplate, validateReservationForm } from '../validatione/reservation.validation.ts';
   import { fetchActiveEvent, postReservation }            from '../services/ReservationService.ts';
   import { displayDate, displayTime }                     from '../ts/displayUtils.ts';
   import { InvalidDataError }                             from '../CustomError/invalidDataError.ts';
