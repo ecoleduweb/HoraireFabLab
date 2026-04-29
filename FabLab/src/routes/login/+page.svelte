@@ -8,6 +8,7 @@
 	import { logIn } from '../../lib/tokenLib.ts';
 	import type { User } from '../../models/User.ts';
     
+	// Devrait aller dans le dossier validation pour valider le schema  avec felt....
 	const schema = yup.object().shape({
 		username: yup.string().required("Entrer un nom d'utilisateur"),
 		password: yup.string().required('Le mot de passe est requis'),
