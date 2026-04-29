@@ -14,6 +14,9 @@ class EventService:
     def get_event_by_id(self, event_id: int) -> Event | None:
      return self.repo.get_event_by_id(event_id)
 
+    def get_all_events(self)-> list:
+        events= self.repo.get_all_events()
+        return EventSerializer(events, many=True).data
     def create_event(self, event: Event) -> dict:
         try:
             event = self.repo.create(event)
@@ -41,5 +44,7 @@ class EventService:
                 "event_date": "Un évènement existe déjà pour cette date."
             }) from err
         return EventSerializer(event).data
+    
+
     
         
