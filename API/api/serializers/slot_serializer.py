@@ -1,10 +1,6 @@
 from rest_framework import serializers
 from api.models import Slot, Plage
-import nh3
-
-
-def sanitize(value: str) -> str:
-    return nh3.clean(value, tags=set())
+from api.utils.sanitize import sanitize
 
 
 class SlotSerializer(serializers.ModelSerializer):

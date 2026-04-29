@@ -68,19 +68,29 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
-required_db_vars = ["DB_NAME", "DB_USER", "DB_PASSWORD"]
-missing = [var for var in required_db_vars if not os.getenv(var)]
-if missing:
-    raise RuntimeError(f"Variables de BD manquantes en production: {', '.join(missing)}")
+DB_ENGINE = os.getenv("DB_ENGINE", "mysql")
 
-DATABASES = {
-    "default": {
-        'ENGINE': 'django.db.backends.mysql',
-        "NAME": os.getenv("DB_NAME"),
-        "USER": os.getenv("DB_USER"),
-        "PASSWORD": os.getenv("DB_PASSWORD"),
-        "HOST": os.getenv("DB_HOST", "127.0.0.1"),
-        "PORT": os.getenv("DB_PORT", "3306"),
+if DB_ENGINE == "sqlite":
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db_test.sqlite3",
+        }
+    }
+else:
+    required_db_vars = ["DB_NAME", "DB_USER", "DB_PASSWORD"]
+    missing = [var for var in required_db_vars if not os.getenv(var)]
+    if missing:
+        raise RuntimeError(f"Variables de BD manquantes: {', '.join(missing)}")
+
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.mysql",
+            "NAME": os.getenv("DB_NAME"),
+            "USER": os.getenv("DB_USER"),
+            "PASSWORD": os.getenv("DB_PASSWORD"),
+            "HOST": os.getenv("DB_HOST", "127.0.0.1"),
+            "PORT": os.getenv("DB_PORT", "3306"),
         }
     }
 # Password validation
