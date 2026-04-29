@@ -33,10 +33,10 @@ class EventService:
 
         try:
             return self.repo.update_event(event)
-        except IntegrityError:
+        except IntegrityError as err:
             raise ValidationError({
                 "event_date": "Un événement existe déjà pour cette date."
-            })
+            }) from err
 
     def create_event(self, data: dict) -> dict:
         serializer = EventSerializer(data=data)
@@ -48,8 +48,8 @@ class EventService:
                 name=serializer.validated_data["name"],
                 event_date=serializer.validated_data["event_date"],
             )
-        except IntegrityError:
-            raise ValidationError({"event_date": "Un événement existe déjà pour cette date."})
+        except IntegrityError as err:
+            raise ValidationError({"event_date": "Un événement existe déjà pour cette date."}) from err
 
         return EventSerializer(event).data
 
