@@ -1,5 +1,5 @@
 <script lang="ts">
-     import type { TimeSlot } from "../Models/TimeSlot.ts"
+     import type { TimeSlot } from "../models/TimeSlot.ts"
 
   const eventName = "Atelier de réparation — Printemps 2025";
   const eventDate = "2025-04-12";

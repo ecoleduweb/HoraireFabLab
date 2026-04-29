@@ -11,10 +11,12 @@ urlpatterns = [
     path("login", login, name='login'),
     path("logout", logout, name="logout"),
     path("user/me", me, name='me'),
-    path("events/<int:event_id>/update_date/", update_event, name="update_event_date"),
-    path("events/", create_event, name='create_event'),
+    
+    path("events", create_event, name='create_event'),
+    path("events/<int:event_id>/update_date", update_event, name="update_event_date"),
 
 
-    path("availableSlots/<int:event_id>/", get_available_slots, name="get_available_slots"),
+
+    path("availableSlots/<int:event_id>", get_available_slots, name="get_available_slots"),
     path("book_slot", book_slot, name='book_slot'),
 ]
