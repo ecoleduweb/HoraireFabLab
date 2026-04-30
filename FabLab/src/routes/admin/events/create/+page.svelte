@@ -1,7 +1,7 @@
 <script lang="ts">
     import { base } from '$app/paths';
     import { goto } from '$app/navigation';
-    import { validateEventForm } from '../../../../Validation/Event.ts';
+    import { validateEventForm } from '../../../../validation/Event.ts';
     import { EventService } from '../../../../services/EventService.ts';
 
     let loading = $state(false);
