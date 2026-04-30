@@ -36,9 +36,6 @@ Pour installer les différentes dépendances requises pour le projet, exécuter 
 
 ```sh
     npm i
-    npm install yup
-    npm install striptags
-    npm install svelte-hamburgers
 ```
 
 ## Configuration de l'environnement

@@ -1,5 +1,8 @@
+from asyncio import events
+
+from rest_framework.exceptions import ValidationError
+from api.repositories.event_repository import EventRepository
 from datetime import date
-from rest_framework.exceptions import  ValidationError
 from api.serializers.event_serializer import EventSerializer
 from django.db import IntegrityError
 from api.repositories.event_repository import EventRepository
@@ -25,6 +28,10 @@ class EventService:
 
         return EventSerializer(event).data
     
+    def get_upcoming_events(self) -> list:
+        events = self.repo.get_upcoming_events()
+        return EventSerializer(events, many=True).data
+      
     def update_event(self,event: Event)-> dict:
 
         if event.event_date< date.today():

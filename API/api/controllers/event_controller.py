@@ -43,6 +43,7 @@ def create_event(request):
     
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
+
 def get_events(request):
     try:
         events = service.get_all_events()
@@ -50,3 +51,10 @@ def get_events(request):
     except Exception as e:
         return Response({"detail": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
+
+def get_upcoming_events(request):
+    try:
+        events = service.get_upcoming_events()
+        return Response(events, status=status.HTTP_200_OK)
+    except Exception :
+        return Response("Erreur lors de la récupération des événements à venir", status=status.HTTP_500_INTERNAL_SERVER_ERROR)

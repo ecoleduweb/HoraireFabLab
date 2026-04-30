@@ -1,0 +1,18 @@
+services:
+ mariadb:
+   image: mariadb:11
+   container_name: mariadb
+   command: --port=3308
+   environment:
+     MARIADB_ROOT_PASSWORD: RootPass123!
+     MARIADB_DATABASE: FabLab
+     MARIADB_USER: fablab_user
+     MARIADB_PASSWORD: FabLab123!
+   ports:
+     - "3308:3308"
+   volumes:
+     - mariadb_data:/var/lib/mysql
+   restart: unless-stopped
+
+volumes:
+ mariadb_data:
