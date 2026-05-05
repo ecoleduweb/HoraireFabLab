@@ -6,14 +6,15 @@
   import Form          from '../components/reservation/Form.svelte';
 
   import type { TimeSlot }        from '../models/TimeSlot.ts';
-  import type { RepairEvent }     from '../modelse/RepairEvent.ts';
-  import type { ReservationForm } from '../modelse/Reservation.ts';
+  import type { RepairEvent }     from '../models/RepairEvent.ts';
+  import type { ReservationForm } from '../models/Reservation.ts';
 
-  import { reservationTemplate, validateReservationForm } from '../validatione/reservation.validation.ts';
-  import { fetchActiveEvent, postReservation }            from '../services/ReservationService.ts';
+  import { reservationTemplate, validateReservationForm } from '../validation/reservation.validation.ts';
+  import { postReservation }            from '../services/ReservationService.ts';
+  import { fetchActiveEvent }                 from '../services/EventService.ts';
   import { displayDate, displayTime }                     from '../ts/displayUtils.ts';
-  import { InvalidDataError }                             from '../CustomError/invalidDataError.ts';
-  import { NotFoundError }                                from '../CustomError/NotFoundError.ts';
+  import { InvalidDataError }                             from '../customError/invalidDataError.ts';
+  import { NotFoundError }                                from '../customError/NotFoundError.ts';
 
   let eventData       = $state<RepairEvent>();
   let selectedStartAt = $state<string>('');

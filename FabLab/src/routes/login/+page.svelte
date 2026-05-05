@@ -1,6 +1,6 @@
 <script lang="ts">
     import "../../styles/global.css"
-    import Button from "../../Components/Inputs/Button.svelte";
+    import Button from "../../components/inputs/Button.svelte";
     import type { Login } from "../../models/Login.ts";
     import { POST } from "../../ts/server.ts"
     import * as yup from "yup"

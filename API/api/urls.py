@@ -12,6 +12,6 @@ urlpatterns = [
     path("user/me", me, name='me'),
     path("events", create_event, name='create_event'),
 
-    path("availableSlots/<int:event_id>/", get_available_slots, name="get_available_slots"),
+    path("availableSlots/<int:event_id>", get_available_slots, name="get_available_slots"),
     path("book_slot", book_slot, name='book_slot'),
 ]

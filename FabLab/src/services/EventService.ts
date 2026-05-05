@@ -1,4 +1,4 @@
-import { POST } from '../ts/server.ts';
+import { GET, POST } from '../ts/server.ts';
 import type {EventForm, RepairEvent} from '../models/RepairEvent.ts';
 
 
@@ -7,3 +7,8 @@ export const EventService = {
         await POST<EventForm, RepairEvent>('/events', { name, eventDate });
     }
 };
+
+export async function fetchActiveEvent(): Promise<RepairEvent> {
+    const event = await GET<RepairEvent>("/events/active", false)
+    return event
+}

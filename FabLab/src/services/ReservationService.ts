@@ -3,11 +3,9 @@ import type { Reservation, ReservationForm }     from "../models/Reservation.ts"
 import type { TimeSlot }        from "../models/TimeSlot.ts"
 import type { RepairEvent } from "../models/RepairEvent.ts"
 
-
-export async function fetchActiveEvent(): Promise<RepairEvent> {
-    const event = await GET<RepairEvent>("/api/events/active/", false)
-    return event
-}
+ async function fetchAvailableSlots(eventId: number) {
+     return await GET(`/api/events/availableSlots/${eventId}/`)
+ }
 
 export async function postReservation(
     reservation:    ReservationForm,
