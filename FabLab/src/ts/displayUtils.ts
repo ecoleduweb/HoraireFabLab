@@ -1,8 +1,7 @@
-
 export function displayTime(iso: string): string {
     const d = new Date(iso)
-    const h = d.getHours()
-    const m = d.getMinutes().toString().padStart(2, "0")
+    const h = d.getUTCHours()
+    const m = d.getUTCMinutes().toString().padStart(2, "0")
     return `${h} h ${m}`
 }
 

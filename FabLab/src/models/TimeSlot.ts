@@ -1,5 +1,5 @@
  export interface TimeSlot {
+    plageId:  number;
     startAt:  string;
     endAt:    string;
-    capacity:  number;
   }

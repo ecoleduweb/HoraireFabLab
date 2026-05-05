@@ -8,7 +8,9 @@ export const EventService = {
     }
 };
 
+
+// Retourne le premier événement actif.
 export async function fetchActiveEvent(): Promise<RepairEvent> {
-    const event = await GET<RepairEvent>("/events/active", false)
-    return event
+    const events = await GET<RepairEvent[]>("/events/active", false)
+    return events[0]
 }

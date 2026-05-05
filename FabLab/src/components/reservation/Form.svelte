@@ -16,7 +16,7 @@
 
 <!-- ── Créneaux horaires ── -->
 <div class="field full section-slots">
-  <label class="section-label">Plage horaire <span class="req">*</span></label>
+  <label class="section-label">Choisissez une plage horaire <span class="req">*</span></label>
   <SlotGrid
     {slots}
     {selectedStartAt}
@@ -28,8 +28,8 @@
 </div>
 
 <!-- ── Informations visiteur ── -->
+ 
 <div class="grid">
-
   <div class="field">
     <label for="firstName">Prénom <span class="req">*</span></label>
     <input

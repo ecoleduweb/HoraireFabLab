@@ -1,32 +1,32 @@
 <script lang="ts">
   import { onMount } from 'svelte';
 
-  import SlotGrid      from '../components/reservation/SlotGrid.svelte';
-  import WaiverSection from '../components/reservation/WaiverSection.svelte';
-  import Form          from '../components/reservation/Form.svelte';
+  import WaiverSection from '../Components/Reservation/WaiverSection.svelte';
+  import Form          from '../Components/Reservation/Form.svelte';
 
   import type { TimeSlot }        from '../models/TimeSlot.ts';
   import type { RepairEvent }     from '../models/RepairEvent.ts';
   import type { ReservationForm } from '../models/Reservation.ts';
 
   import { reservationTemplate, validateReservationForm } from '../validation/reservation.validation.ts';
-  import { postReservation }            from '../services/ReservationService.ts';
-  import { fetchActiveEvent }                 from '../services/EventService.ts';
+  import { fetchAvailableSlots, postReservation }         from '../services/ReservationService.ts';
+  import { fetchActiveEvent }                             from '../services/EventService.ts';
   import { displayDate, displayTime }                     from '../ts/displayUtils.ts';
-  import { InvalidDataError }                             from '../customError/invalidDataError.ts';
-  import { NotFoundError }                                from '../customError/NotFoundError.ts';
+  import { InvalidDataError }                             from '../CustomError/invalidDataError.ts';
+  import { NotFoundError }                                from '../CustomError/NotFoundError.ts';
 
   let eventData       = $state<RepairEvent>();
+  let slots           = $state<TimeSlot[]>([]);
   let selectedStartAt = $state<string>('');
   let submitSuccess   = $state(false);
   let submitError     = $state<string | null>(null);
   let submittedValues = $state<ReservationForm | null>(null);
 
-  const slots        = $derived(eventData?.slots ?? []);
   const selectedSlot = $derived(slots.find(s => s.startAt === selectedStartAt));
 
   onMount(async () => {
     eventData = await fetchActiveEvent();
+    slots = await fetchAvailableSlots(eventData.id);
   });
 
   function handleSlotSelect(slot: TimeSlot) {
@@ -59,8 +59,10 @@
     }
   }
 
-
-  const { form: felteForm, errors, setFields } = validateReservationForm( handleSubmit,reservationTemplate.generate())
+  const { form: felteForm, errors, setFields } = validateReservationForm(
+    handleSubmit,
+    reservationTemplate.generate()
+  )
 </script>
 
 <svelte:head>
@@ -107,30 +109,19 @@
     {:else}
 
       <form use:felteForm>
-
         <div class="section-bar"></div>
-        <div class="section-head"><h2>1 — Choisissez une plage horaire</h2></div>
+        <div class="section-head"><h2>1 - Vos informations et l'objet à réparer</h2></div>
         <div class="section-body">
-          <SlotGrid
-            {slots}
-            {selectedStartAt}
-            onSelect={handleSlotSelect}
-          />
-        </div>
-
-        <div class="section-bar"></div>
-        <div class="section-head"><h2>2 — Vos informations et l'objet à réparer</h2></div>
-        <div class="section-body">
-          <Form
+        <Form
             errors={$errors}
             {slots}
             {selectedStartAt}
             onSelectSlot={handleSlotSelect}
-          />
+          />        
         </div>
 
         <div class="section-bar"></div>
-        <div class="section-head"><h2>3 — Décharge de responsabilité</h2></div>
+        <div class="section-head"><h2>2 — Décharge de responsabilité</h2></div>
         <div class="section-body">
           <WaiverSection error={$errors.waiverAccepted} />
         </div>
