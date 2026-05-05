@@ -1,6 +1,6 @@
-import { env } from "$env/dynamic/public"
-import { InvalidDataError } from "../customError/invalidDataError.ts"
-import { NotFoundError } from "../customError/NotFoundError.ts"
+import { env } from '$env/dynamic/public';
+import { InvalidDataError } from '../customError/invalidDataError.ts';
+import { NotFoundError } from '../customError/NotFoundError.ts';
 
 
 export async function GET<T>(url: string, redirectToLoginOn401?: boolean): Promise<T> {
