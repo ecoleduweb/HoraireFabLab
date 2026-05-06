@@ -32,7 +32,7 @@ test.describe('Gestion des Réservations', () => {
 
     const apiMocker = new ApiMocker(page);
     await apiMocker.addMocks([
-      { url: "/api/events/active/", method: "GET", response: { status: 200, json: MOCK_EVENT } },
+      { url: "/api/events/active", method: "GET", response: { status: 200, json: MOCK_EVENT } },
       { url: "/api/me",             method: "GET", response: { status: 200, json: {} } },
     ]).apply();
 

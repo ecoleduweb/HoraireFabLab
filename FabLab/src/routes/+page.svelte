@@ -6,6 +6,7 @@
   import { fetchActiveEvent } from '../services/EventService.ts';
   import { fetchAvailableSlots } from '../services/ReservationService.ts';
   import { displayDate }      from '../ts/displayUtils.ts';
+  import { base } from "$app/paths"
 
   let eventData = $state<RepairEvent>();
   let slots     = $state<TimeSlot[]>([]);
@@ -25,8 +26,10 @@
 
 <div class="page">
 
-  <div class="topbar">
-    <span class="logo">FabLab <em>Fabbulle</em></span>
+  <div class="logo-img">
+        <a href="{base}/" class="image">
+            <img src="{base}/logofabule.svg" alt="Logo" />
+        </a>
   </div>
 
   <div class="hero">
@@ -84,6 +87,16 @@
     letter-spacing: .08em; text-transform: uppercase; color: var(--white);
   }
   .logo em { color: var(--teal); font-style: normal; }
+
+  .logo-img {
+    display: flex;
+    align-items: center;
+  }
+
+  .image img {
+    height: 70px;
+    width: auto;
+  }
 
   .hero {
     background: var(--card);
