@@ -17,6 +17,7 @@ export async function postReservation(
             ...reservation,
             startAt: slot.startAt,
             endAt:   slot.endAt,
+            plage: slot.plageId
         },
     )
     return data
