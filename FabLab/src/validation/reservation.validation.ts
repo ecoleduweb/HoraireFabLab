@@ -16,20 +16,22 @@ const schema = yup.object().shape({
         .required('Le nom est requis.')
         .min(2, 'Le nom doit comporter au moins 2 caractères.'),
 
-    clientEmail: yup
+   clientEmail: yup
         .string()
         .trim()
         .required('Le courriel est requis.')
-        .email('Veuillez entrer une adresse courriel valide.'),
+        .matches(
+            /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+            'Veuillez entrer une adresse courriel valide.'
+        ),
 
-    // Téléphone optionnel — format canadien si fourni
     clientPhone: yup
         .string()
         .trim()
         .optional()
         .matches(
-            /^(\+?1[\s.-]?)?(\(?\d{3}\)?[\s.-]?)?\d{3}[\s.-]?\d{4}$/,
-            'Numéro de téléphone invalide.'
+            /^(1)?\d{10}$/,
+            'Le numéro doit contenir uniquement des chiffres (10 chiffres ou 11 avec le 1).'
         ),
 
     item: yup
@@ -42,7 +44,8 @@ const schema = yup.object().shape({
         .string()
         .trim()
         .required('La description du bris est requise.')
-        .min(10, 'Veuillez décrire le bris (min. 10 caractères).'),
+        .min(10, 'Veuillez décrire le bris (min. 10 caractères).')
+        .max(500, 'La description ne peut pas dépasser 500 caractères.'),
 
     liabilityAccepted: yup
         .boolean()
