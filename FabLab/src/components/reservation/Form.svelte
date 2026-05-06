@@ -148,7 +148,14 @@
     </div>
 
     <div class="section-bar"></div>
-    <div class="section-head"><h2>3 — L'objet à réparer</h2></div>
+    <div class="section-head"><h2>3 — L'objet à réparer</h2>
+      <ul class="hero-sub">Voici les types d'objets que nous acceptons : 
+      <li>- Électrique et électronique divers </li>
+      <li>- Informatique (ordinateurs lents, problèmes logiciels)</li>
+      <li>- Vêtements</li>
+      <li>- Pièces de plastiques cassées</li>
+      <li>- Couteaux à aiguiser</li>
+      <br>Nous refusons : Cellulaires et tablettes , fours micro-ondes, grille-pains, gros électro-ménagers, moteurs à essence.</ul></div>
     <div class="section-body">
       <div class="grid">
 
@@ -288,4 +295,6 @@
     font-family: 'JetBrains Mono', monospace;
     font-size: .68rem; color: #7a8599; letter-spacing: .05em;
   }
+
+  .hero-sub { font-family: 'Barlow Condensed', 'Arial Narrow', Arial, sans-serif; margin-top: .75rem; color: var(--white); font-size: .9rem; line-height: 1.6; }
 </style>
