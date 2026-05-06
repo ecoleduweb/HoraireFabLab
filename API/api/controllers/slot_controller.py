@@ -14,12 +14,13 @@ from api.services.slot_service import SlotService
 @permission_classes([])
 def book_slot(request):
     try:
-        serializer = SlotSerializer(data=request.data)
+        serializer = SlotSerializer(data=request.data) 
         serializer.is_valid(raise_exception=True)
         slot = Slot(**serializer.validated_data)
         service = SlotService()
         slot = service.book_slot(slot)
         return Response(slot, status=status.HTTP_201_CREATED)
+    
     except ValidationError as e:
         return Response(e.detail, status=status.HTTP_400_BAD_REQUEST)
 

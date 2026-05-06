@@ -1,12 +1,12 @@
 <script lang="ts">
-	import '../../styles/global.css';
-	import Button from '../../components/inputs/Button.svelte';
-	import type { Login } from '../../models/Login.ts';
-	import { POST } from '../../ts/server.ts';
-	import * as yup from 'yup';
-	import { extractErrors } from '../../ts/utils.ts';
-	import { logIn } from '../../lib/tokenLib.ts';
-	import type { User } from '../../models/User.ts';
+    import "../../styles/global.css"
+    import Button from "../../components/inputs/Button.svelte";
+    import type { Login } from "../../models/Login.ts";
+    import { POST } from "../../ts/server.ts"
+    import * as yup from "yup"
+    import { extractErrors } from "../../ts/utils.ts"
+    import { logIn } from "../../lib/tokenLib.ts"
+	import type { User } from "../../models/User.ts";
 
 	// Devrait aller dans le dossier validation pour valider le schema  avec felt....
 	const schema = yup.object().shape({

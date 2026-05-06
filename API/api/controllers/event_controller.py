@@ -42,7 +42,6 @@ def create_event(request):
         return Response(e.detail, status=status.HTTP_400_BAD_REQUEST)
     
 @api_view(["GET"])
-@permission_classes([IsAuthenticated])
 def get_upcoming_events(request):
     try:
         events = service.get_upcoming_events()
