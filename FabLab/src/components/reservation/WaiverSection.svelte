@@ -7,7 +7,7 @@ let { error }: Props = $props()
 let accepted = $state(false)
 
 
-  const waiverText = `En participant à cet atelier de réparation organisé par le FabLab Fabbulle,
+  const liabilityText = `En participant à cet atelier de réparation organisé par le FabLab Fabbulle,
 je reconnais avoir été informé(e) que les bénévoles présents ne sont pas des techniciens
 professionnels certifiés. Je comprends que la réparation de mon objet n'est pas garantie
 et que le FabLab Fabbulle ne pourra être tenu responsable de tout dommage supplémentaire
@@ -15,17 +15,17 @@ survenant pendant ou après l'atelier. Je participe à cet événement volontair
 pleine connaissance de ces conditions.`
 </script>
 
-<div class="waiver-text" tabindex="0">{waiverText}</div>
+<div class="waiver-text" tabindex="0">{liabilityText}</div>
 
 <label class="check-wrap" 
-  for="waiverAccepted"
+  for="liabilityAccepted"
 >
   <input
-    id="waiverAccepted"
-    data-testid="waiver-checkbox"
+    id="liabilityAccepted"
+    data-testid="liability-checkbox"
     bind:checked={accepted}
     type="checkbox"
-    name="waiverAccepted"
+    name="liabilityAccepted"
     aria-required="true"
     class:invalid={!!error}
   />

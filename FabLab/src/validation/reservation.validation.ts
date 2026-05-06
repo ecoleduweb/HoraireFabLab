@@ -44,7 +44,7 @@ const schema = yup.object().shape({
         .required('La description du bris est requise.')
         .min(10, 'Veuillez décrire le bris (min. 10 caractères).'),
 
-    waiverAccepted: yup
+    liabilityAccepted: yup
         .boolean()
         .oneOf([true], 'Vous devez accepter la décharge de responsabilité.'),
 })
@@ -77,13 +77,13 @@ export const validateReservationForm = (
 
 export const reservationTemplate = {
     generate: (): ReservationForm => ({
-clientFname:       "",
-    clientLname:        "",
-    clientEmail:           "",
-    clientPhone:           "",
-    item:            "",
-    itemDescription: "",
-    waiverAccepted:  false,
-    slot: undefined,
+        clientFname:       "",
+        clientLname:        "",
+        clientEmail:           "",
+        clientPhone:           "",
+        item:            "",
+        itemDescription: "",
+        liabilityAccepted:  false,
+        slot: undefined,
     })
 };

@@ -11,23 +11,13 @@ export async function postReservation(
     slot:        TimeSlot,
 ): Promise<Reservation> {
  
-    // Le serializer Django attend du snake_case 
-    const payload = {
-        plage:              slot.plageId,
-        start_at:           slot.startAt,
-        end_at:             slot.endAt,
-        client_fname:       reservation.clientFname,
-        client_lname:       reservation.clientLname,
-        client_email:       reservation.clientEmail,
-        client_phone:       reservation.clientPhone,
-        item:               reservation.item,
-        item_description:   reservation.itemDescription,
-        liability_accepted: reservation.waiverAccepted,
-    }
- 
-    const { data } = await POST<typeof payload, Reservation>(
+  const { data } = await POST<any, Reservation>(
         "/book_slot",
-        payload,
+        {
+            ...reservation,
+            startAt: slot.startAt,
+            endAt:   slot.endAt,
+        },
     )
     return data
 }

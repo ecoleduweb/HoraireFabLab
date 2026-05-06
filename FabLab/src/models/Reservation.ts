@@ -15,7 +15,7 @@ export interface ReservationForm {
     clientPhone:       string;
     item:               string;
     itemDescription:   string;
-    waiverAccepted: boolean;
+    liabilityAccepted: boolean;
     slot?: TimeSlot;
 }
 
