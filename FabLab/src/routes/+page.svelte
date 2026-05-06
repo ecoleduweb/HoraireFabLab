@@ -44,7 +44,9 @@
       </div>
     {/if}
 
+    <p class="hero-sub">Le nom de l'activité est « Répare TES trucs » puisque vous mettrez la main à la pâte!  Un  «Répare TES trucs», c’est un moment de partage de connaissances pour apprendre, ensemble, à réparer différents objets d’utilité courante. Les bénévoles présent.e.s sur place sont expérimentés mais n'offrent pas de garantie que vos items seront fonctionnels par la suite: leur engagement vous permettra toutefois de mieux comprendre le fonctionnement de vos articles et, qui sait, de repartir avec de nouveaux savoir-faire en plus d’un objet réparé!</p>
     <p class="hero-sub">Réservez votre place. Aucun compte requis.</p>
+    <p class="hero-sub">Lors de la journée, pour aller à l'événement, se rendre au 80 rue Frontenac (Cégep de Rivière-du-Loup) puis descendre au local B023</p>
   </div>
 
   <div class="content">
@@ -116,7 +118,7 @@
     border-radius: 3px; padding: .4rem .9rem;
     font-family: var(--fm); font-size: .78rem; color: var(--teal);
   }
-  .hero-sub { margin-top: .75rem; color: var(--muted); font-size: .9rem; line-height: 1.6; }
+  .hero-sub { margin-top: .75rem; color: var(--white); font-size: .9rem; line-height: 1.6; }
 
   .content { max-width: 860px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
 

@@ -7,12 +7,15 @@ let { error }: Props = $props()
 let accepted = $state(false)
 
 
-  const liabilityText = `En participant à cet atelier de réparation organisé par le FabLab Fabbulle,
-je reconnais avoir été informé(e) que les bénévoles présents ne sont pas des techniciens
-professionnels certifiés. Je comprends que la réparation de mon objet n'est pas garantie
-et que le FabLab Fabbulle ne pourra être tenu responsable de tout dommage supplémentaire
-survenant pendant ou après l'atelier. Je participe à cet événement volontairement et en
-pleine connaissance de ces conditions.`
+  const liabilityText = `Les ateliers de réparation sont des événements communautaires sans buts lucratifs dont le but est de lutter contre l'obsolescence planifiée et de diminuer l'impact environnemental des biens de consommation courantes en prolongeant leur durée de vie utile. Les bénévoles réparateurs n'interviennent pas en tant que professionnels, mais en tant que bénévoles plus expérimentés que moi pour m'accompagner dans mon processus de réparation. 
+    
+    Assisté par des bénévoles, j'apprendrai à réparer les objets que j'aurai apportés. 
+    Je comprends que : 
+    - « Répare TES trucs » est un événement d'auto-reparation communautaire ; 
+    - participer signifie que j'assume la responsabilité de mon objet; 
+    - les bénévoles réparateurs sont disponibles pour la journée seulement et n'offrent pas de services de réparation en dehors de l'événement; 
+    
+    Je dégage de toute responsabilité en cas d'accident de quelque nature que ce soit ou de dommage, sans aucune exception ni aucune réserve, les organisateurs de l'événement ainsi que toutes les personnes bénévoles œuvrant à l'événement. `
 </script>
 
 <div class="waiver-text" tabindex="0">{liabilityText}</div>
