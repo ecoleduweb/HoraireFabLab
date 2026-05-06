@@ -4,8 +4,8 @@
   import { reservationTemplate, validateReservationForm } from '../../validation/reservation.validation.ts';
   import { postReservation }    from '../../services/ReservationService.ts';
   import { displayTime }        from '../../ts/displayUtils.ts';
-  import { InvalidDataError }   from '../../CustomError/invalidDataError.ts';
-  import { NotFoundError }      from '../../CustomError/NotFoundError.ts';
+  import { InvalidDataError }   from '../../customError/invalidDataError.ts';
+  import { NotFoundError }      from '../../customError/NotFoundError.ts';
   import SlotGrid               from './SlotGrid.svelte';
   import WaiverSection          from './WaiverSection.svelte';
   interface Props {
@@ -137,7 +137,7 @@
             id="phone"
             name="clientPhone"
             type="tel"
-            placeholder="514 555-0000"
+            placeholder="5145552222"
             autocomplete="tel"
             class:invalid={!!$errors.clientPhone}
           />
