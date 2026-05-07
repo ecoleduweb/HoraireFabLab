@@ -1,10 +1,10 @@
 <script lang="ts">
-
+  import { base } from '$app/paths';
   import CreateandModifyForm from '../../../../components/RepairEvent/CreateandModifyForm.svelte';
 </script>
 
 <div class="page-header">
-  <a href="/admin" class="back-link">← Retour</a>
+  <a href={`${base}/admin`} class="back-link">← Retour</a>
   <h1>Créer un événement</h1>
   <p class="page-desc">Remplissez les informations pour créer une nouvelle journée d'événement.</p>
 </div>
