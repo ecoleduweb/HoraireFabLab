@@ -24,13 +24,14 @@ def update_event(request, event_id):
         event = Event(**serializer.validated_data)
         event.id = event_id
         result = service.update_event(event)
-        return Response(result, status=status.HTTP_200_OK)
+        return Response(EventSerializer(result).data, status=status.HTTP_200_OK)  
     except ValidationError as e:
         return Response(e.detail, status=status.HTTP_400_BAD_REQUEST)
+    except Exception as e:
+        return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
    
-
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def create_event(request):
@@ -39,10 +40,11 @@ def create_event(request):
         serializer.is_valid(raise_exception=True)
         event = Event(**serializer.validated_data)
         event = service.create_event(event)
-        return Response(event, status=status.HTTP_201_CREATED)
+        return Response(EventSerializer(event).data, status=status.HTTP_201_CREATED)
     except ValidationError as e:
-        print("ERREUR VALIDATION:", e.detail) 
         return Response(e.detail, status=status.HTTP_400_BAD_REQUEST)
+    except Exception as e:
+        return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])

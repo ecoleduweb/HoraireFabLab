@@ -3,7 +3,7 @@ import type { MockConfig } from "../types.ts";
 export const eventMocks = {
     getByIdSuccess: {
         method: 'GET',
-        url: '/events/1',
+        url: '/api/events/1',
         response: {
             status: 200,
             json: {
@@ -15,7 +15,7 @@ export const eventMocks = {
     },
     createSuccess: {
         method: 'POST',
-        url: '/events',
+        url: '/api/events',
         response: {
             status: 201,
             json: {
@@ -27,7 +27,7 @@ export const eventMocks = {
     },
     createError: {
         method: 'POST',
-        url: '/events',
+        url: '/api/events',
         response: {
             status: 400,
             json: {
@@ -37,7 +37,7 @@ export const eventMocks = {
     },
     updateSuccess: {
         method: 'PUT',
-        url: '/events/1/update_date',
+        url: '/api/events/1/update_date',
         response: {
             status: 200,
             json: {
@@ -49,7 +49,7 @@ export const eventMocks = {
     },
     updateError: {
         method: 'PUT',
-        url: '/events/1/update_date',
+        url: '/api/events/1/update_date',
         response: {
             status: 400,
             json: {
