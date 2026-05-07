@@ -6,9 +6,14 @@
     import type { Event } from '../../models/Event.ts';
 
     let events = $state<Event[]>([]);
+    let loadError = $state<string | null>(null);
 
     onMount(async () => {
-        events = await EventService.getEvents();
+        try {
+            events = await EventService.getEvents();
+        } catch (error) {
+            loadError = "Erreur lors du chargement des événements.";
+        }
     });
 </script>
 
@@ -18,7 +23,7 @@
 </div>
 
 <div class="sections-grid">
-    <a href="{base}/admin/events/create" class="section-card">
+    <a href="/admin/events/create" class="section-card">
         <div class="card-icon">{@html icons.calendarAdd}</div>
         <div class="card-content">
             <h2>Créer un événement</h2>
@@ -28,7 +33,7 @@
     </a>
 
     {#each events as event}
-      <a href="{base}/admin/events/modify?id={event.id}" class="section-card">
+      <a href="/admin/events/{event.id}" class="section-card">
             <div class="card-icon">{@html icons.calendar}</div>
             <div class="card-content">
                 <h2>{event.name}</h2>

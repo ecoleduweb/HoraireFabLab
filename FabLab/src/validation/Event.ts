@@ -1,6 +1,6 @@
 import * as yup from 'yup';
 import { createForm } from 'felte';
-import type { EventFormValues } from '../forms/event.ts';
+import type { Event } from '../models/Event.ts';
 
 export const eventSchema = yup.object().shape({
 	name: yup
@@ -13,10 +13,10 @@ export const eventSchema = yup.object().shape({
 		.matches(/^\d{4}-\d{2}-\d{2}$/, 'Le format de la date doit être AAAA-MM-JJ.')
 });
 
-export const validateEventForm = (handleSubmit: (values: EventFormValues) => void) => {
-	return createForm<EventFormValues>({
-		initialValues: { name: '', eventDate: '' },
-		validate: async (values: EventFormValues) => {
+export const validateEventForm = (handleSubmit: (values: Event) => void, event: Event) => {
+	return createForm({
+		initialValues: { ...event },
+		validate: async (values: Event) => {
 			try {
 				await eventSchema.validate(values, { abortEarly: false });
 				return {};

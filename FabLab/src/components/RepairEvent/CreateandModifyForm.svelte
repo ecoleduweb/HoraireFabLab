@@ -1,22 +1,41 @@
 <script lang="ts">
     import { base } from '$app/paths';
     import { goto } from '$app/navigation';
-    import { validateEventForm } from '../../../../validation/Event.ts';
- import { EventService } from '../../../../services/EventService.ts';
-	import { page } from '$app/stores';
- import type { Event } from '../../../../models/Event.ts';
- import { onMount } from 'svelte';
+    import { onMount } from 'svelte';
+    import { validateEventForm } from '../../validation/Event.ts';
+    import { EventService } from '../../services/EventService.ts';
+    import { eventTemplate } from '../../forms/event.ts';
+    import type { Event } from '../../models/Event.ts';
 
 	
-
+type Props = {
+    eventToEdit: Event|null;
+    onClose: () => void;
+    onSuccess: () => void;
+}
+    let { eventToEdit, onClose, onSuccess }: Props = $props();
+    
     let loading = $state(false);
-   const eventId = Number($page.url.searchParams.get('id'));
-    let event = $state<Event | null>(null);
-    const handleSubmit = async (values: { name: string; eventDate: string }) => {
+
+let event = $derived<Event>(eventToEdit ? { ...eventToEdit } : eventTemplate.generate());
+ 
+        
+    const editEvent =$derived(eventToEdit!==null)
+$effect(() => {
+  console.log('eventToEdit:', eventToEdit, 'editEvent:', editEvent);
+});
+    const handleSubmit = async () => {
         loading = true;
         try {
-            await EventService.updateEvent(eventId, values.name, values.eventDate);
-            await goto(`${base}/admin`);
+            if (editEvent) {
+                await EventService.updateEvent(event.id, event.name, event.eventDate);
+            }
+            else {
+                await EventService.createEvent(event.name, event.eventDate);
+            }
+            onSuccess();
+            onClose();
+            await goto(`/admin`);
         } catch (e: unknown) {
             if (e instanceof Error) {
                 alert(e.message);
@@ -26,24 +45,11 @@
         }
     };
 
-    const { form, errors, isValid, setFields } = validateEventForm(handleSubmit);
-      onMount(async () => {
-        event = await EventService.getEventById(eventId);
-        if (event) {
-            setFields({
-                name: event.name,
-                eventDate: event.eventDate,
-            });
-        }
-    });
+    const { form, errors } = validateEventForm(handleSubmit,event);
+
+  
 </script>
-<div class="page-header">
-    <a href="{base}/admin" class="back-link">
-        ← Retour
-    </a>
-    <h1>Modifier un événement</h1>
-    <p class="page-desc">Remplissez les informations pour modifier la journée d'événement.</p>
-</div>
+
 
 <form use:form>
     <div class="form-card">
@@ -56,6 +62,7 @@
                 placeholder="ex: Journée portes ouvertes FabLab"
                 class:input-error={$errors.name}
                 disabled={loading}
+                bind:value={event.name}
              
             />
             {#if $errors.name}
@@ -71,7 +78,7 @@
                 name="eventDate"
                 class:input-error={$errors.eventDate}
                 disabled={loading}
-            
+                bind:value={event.eventDate}
             />
             {#if $errors.eventDate}
                 <span class="error-msg">{$errors.eventDate}</span>
@@ -80,52 +87,19 @@
 
         <div class="form-actions">
             <a href="{base}/admin" class="btn-cancel">Annuler</a>
-            <button 
-                type="submit" 
-                class="btn-submit" 
-                disabled={loading || !$isValid}
-            >
-                {loading ? 'Modification...' : 'Modifier l\'événement'}
-            </button>
+            <button type="submit" class="btn-submit" disabled={loading}>
+  {loading
+    ? (editEvent ? 'Modification...' : 'Création...')
+    : (editEvent ? "Modifier l'événement" : "Créer l'événement")}
+</button>
         </div>
     </div>
 </form>
 
 <style>
-    /* ── En-tête ── */
-    .back-link {
-        display: inline-block;
-        font-family: var(--fb);
-        font-size: 13px;
-        color: #888;
-        text-decoration: none;
-        margin-bottom: 0.75rem;
-        transition: color 0.15s;
-    }
 
-    .back-link:hover {
-        color: #00ad9a;
-    }
 
-    .page-header {
-        margin-bottom: 2rem;
-    }
-
-    .page-header h1 {
-        font-family: var(--fh); font-weight: 900;
-        font-size: 28px;
-        color: #333;
-        margin: 0 0 6px;
-    }
-
-    .page-desc {
-        font-family: var(--fb);
-        font-size: 15px;
-        color: #888;
-        margin: 0;
-    }
-
-    /* ── Card formulaire ── */
+  
     .form-card {
         background-color: #fff;
         border: 1px solid #e0e0e0;
@@ -135,7 +109,7 @@
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
     }
 
-    /* ── Champs ── */
+  
     .form-group {
         display: flex;
         flex-direction: column;
@@ -180,19 +154,8 @@
         color: #e74c3c;
     }
 
-    /* ── Erreur générale ── */
-    .error-banner {
-        background-color: #fff5f5;
-        border: 1px solid #f5c6c6;
-        border-radius: 8px;
-        padding: 10px 14px;
-        font-family: var(--fb);
-        font-size: 13px;
-        color: #c0392b;
-        margin-bottom: 1.25rem;
-    }
+    
 
-    /* ── Actions ── */
     .form-actions {
         display: flex;
         gap: 12px;
