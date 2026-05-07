@@ -1,6 +1,4 @@
 <script lang="ts">
-    import { base } from '$app/paths';
-    import { goto } from '$app/navigation';
     import { page } from '$app/state';
     import { onMount } from 'svelte';
     import { EventService } from '../../../../services/EventService.ts';
@@ -28,7 +26,7 @@
 
 
 {#if repairEvent}
-    <CreateandModifyForm repairEventToEdit={repairEvent} onSuccess={() => goto('/admin')} onClose={() => goto('/admin')} />
+    <CreateandModifyForm repairEventToEdit={repairEvent}  />
 {:else}
     <p>Chargement...</p>
 {/if}

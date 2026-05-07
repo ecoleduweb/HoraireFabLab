@@ -1,6 +1,5 @@
 <script lang="ts">
-  import { base } from '$app/paths';
-  import { goto } from '$app/navigation';
+
   import CreateandModifyForm from '../../../../components/RepairEvent/CreateandModifyForm.svelte';
 </script>
 
@@ -10,7 +9,7 @@
   <p class="page-desc">Remplissez les informations pour créer une nouvelle journée d'événement.</p>
 </div>
 
-<CreateandModifyForm repairEventToEdit={null} onSuccess={() => goto('/admin')} onClose={() => goto('/admin')} />
+<CreateandModifyForm repairEventToEdit={null}  />
 
 <style>
   .back-link {

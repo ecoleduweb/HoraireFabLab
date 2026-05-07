@@ -10,10 +10,8 @@
 	
 type Props = {
     repairEventToEdit: RepairEvent|null;
-    onClose: () => void;
-    onSuccess: () => void;
 }
-    let { repairEventToEdit, onClose, onSuccess }: Props = $props();
+    let { repairEventToEdit }: Props = $props();
     
     let loading = $state(false);
 
@@ -30,8 +28,6 @@ let event = $derived<RepairEvent>(repairEventToEdit ? { ...repairEventToEdit } :
             else {
                 await EventService.createEvent(event.name, event.eventDate);
             }
-            onSuccess();
-            onClose();
             await goto(`/admin`);
         } catch (e: unknown) {
             if (e instanceof Error) {
