@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { base } from '$app/paths';
     import { page } from '$app/state';
     import { onMount } from 'svelte';
     import { EventService } from '../../../../services/EventService.ts';
@@ -17,7 +18,7 @@
     });
 </script>
 <div class="page-header">
-    <a href="/admin" class="back-link">
+    <a href={`${base}/admin`} class="back-link">
         ← Retour
     </a>
     <h1>Modifier un événement</h1>

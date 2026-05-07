@@ -28,7 +28,7 @@ let event = $derived<RepairEvent>(repairEventToEdit ? { ...repairEventToEdit } :
             else {
                 await EventService.createEvent(event.name, event.eventDate);
             }
-            await goto(`/admin`);
+            await goto(`${base}/admin`);
         } catch (e: unknown) {
             if (e instanceof Error) {
                 alert(e.message);
