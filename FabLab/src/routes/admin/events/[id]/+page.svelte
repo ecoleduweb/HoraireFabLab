@@ -4,15 +4,15 @@
     import { page } from '$app/state';
     import { onMount } from 'svelte';
     import { EventService } from '../../../../services/EventService.ts';
-    import type { Event } from '../../../../models/Event.ts';
+    import type { RepairEvent } from '../../../../models/RepairEvent.ts';
     import CreateandModifyForm from '../../../../components/RepairEvent/CreateandModifyForm.svelte';
 
-    const eventId = $derived(Number(page.params.id));
-    let event = $state<Event | null>(null);
+    const repairEventId = $derived(Number(page.params.id));
+    let repairEvent = $state<RepairEvent | null>(null);
 
     onMount(async () => {
         try {
-            event = await EventService.getEventById(eventId);
+            repairEvent = await EventService.getEventById(repairEventId);
         } catch (error) {
             console.error('Erreur chargement événement', error);
         }
@@ -27,8 +27,8 @@
 </div>
 
 
-{#if event}
-    <CreateandModifyForm eventToEdit={event} onSuccess={() => goto('/admin')} onClose={() => goto('/admin')} />
+{#if repairEvent}
+    <CreateandModifyForm repairEventToEdit={repairEvent} onSuccess={() => goto('/admin')} onClose={() => goto('/admin')} />
 {:else}
     <p>Chargement...</p>
 {/if}

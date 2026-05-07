@@ -1,33 +1,30 @@
 <script lang="ts">
     import { base } from '$app/paths';
     import { goto } from '$app/navigation';
-    import { onMount } from 'svelte';
+    import { untrack } from 'svelte';
     import { validateEventForm } from '../../validation/Event.ts';
     import { EventService } from '../../services/EventService.ts';
     import { eventTemplate } from '../../forms/event.ts';
-    import type { Event } from '../../models/Event.ts';
+    import type { RepairEvent } from '../../models/RepairEvent.ts';
 
 	
 type Props = {
-    eventToEdit: Event|null;
+    repairEventToEdit: RepairEvent|null;
     onClose: () => void;
     onSuccess: () => void;
 }
-    let { eventToEdit, onClose, onSuccess }: Props = $props();
+    let { repairEventToEdit, onClose, onSuccess }: Props = $props();
     
     let loading = $state(false);
 
-let event = $derived<Event>(eventToEdit ? { ...eventToEdit } : eventTemplate.generate());
+let event = $derived<RepairEvent>(repairEventToEdit ? { ...repairEventToEdit } : eventTemplate.generate());
  
         
-    const editEvent =$derived(eventToEdit!==null)
-$effect(() => {
-  console.log('eventToEdit:', eventToEdit, 'editEvent:', editEvent);
-});
+    const repairEditEvent = $derived(repairEventToEdit !== null);
     const handleSubmit = async () => {
         loading = true;
         try {
-            if (editEvent) {
+            if (repairEditEvent) {
                 await EventService.updateEvent(event.id, event.name, event.eventDate);
             }
             else {
@@ -45,7 +42,7 @@ $effect(() => {
         }
     };
 
-    const { form, errors } = validateEventForm(handleSubmit,event);
+    const { form, errors } = validateEventForm(handleSubmit, untrack(() => event));
 
   
 </script>
@@ -89,8 +86,8 @@ $effect(() => {
             <a href="{base}/admin" class="btn-cancel">Annuler</a>
             <button type="submit" class="btn-submit" disabled={loading}>
   {loading
-    ? (editEvent ? 'Modification...' : 'Création...')
-    : (editEvent ? "Modifier l'événement" : "Créer l'événement")}
+    ? (repairEditEvent ? 'Modification...' : 'Création...')
+    : (repairEditEvent ? "Modifier l'événement" : "Créer l'événement")}
 </button>
         </div>
     </div>

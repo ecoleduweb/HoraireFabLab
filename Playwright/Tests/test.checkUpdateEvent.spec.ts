@@ -9,9 +9,10 @@ test.describe('events', () => {
         await page.clock.install({ time: new Date('2025-03-22T08:00:00') });
         const apiMocker = new ApiMocker(page);
         await apiMocker.addMocks([
-            meMocks.success
+            meMocks.success,
+            eventMocks.getByIdSuccess 
         ]).apply();
-        await page.goto('/admin/events/modify?id=1');
+        await page.goto('/admin/events/1');  
         await page.waitForLoadState('networkidle');
     });
 
@@ -39,6 +40,6 @@ test.describe('events', () => {
         const dialog = await dialogPromise;
         await expect(dialog.message()).toBe('Une erreur est survenue');
         await dialog.accept();
-        await expect(page).toHaveURL('http://localhost:5002/admin/events/modify?id=1');
+        await expect(page).toHaveURL('http://localhost:5002/admin/events/1');  
     });
 });

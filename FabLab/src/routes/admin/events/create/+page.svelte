@@ -10,7 +10,7 @@
   <p class="page-desc">Remplissez les informations pour créer une nouvelle journée d'événement.</p>
 </div>
 
-<CreateandModifyForm eventToEdit={null} onSuccess={() => goto('/admin')} onClose={() => goto('/admin')} />
+<CreateandModifyForm repairEventToEdit={null} onSuccess={() => goto('/admin')} onClose={() => goto('/admin')} />
 
 <style>
   .back-link {

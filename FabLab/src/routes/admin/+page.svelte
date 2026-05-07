@@ -3,14 +3,14 @@
     import { icons } from '../../lib/icon.ts';
     import { EventService } from '../../services/EventService.ts';
     import { onMount } from 'svelte';
-    import type { Event } from '../../models/Event.ts';
+    import type { RepairEvent } from '../../models/RepairEvent.ts';
 
-    let events = $state<Event[]>([]);
+    let repairEvents = $state<RepairEvent[]>([]);
     let loadError = $state<string | null>(null);
 
     onMount(async () => {
         try {
-            events = await EventService.getEvents();
+            repairEvents = await EventService.getEvents();
         } catch (error) {
             loadError = "Erreur lors du chargement des événements.";
         }
@@ -32,12 +32,12 @@
         <div class="card-arrow">{@html icons.chevronRight}</div>
     </a>
 
-    {#each events as event}
-      <a href="/admin/events/{event.id}" class="section-card">
+    {#each repairEvents as repairEvent}
+      <a href="/admin/events/{repairEvent.id}" class="section-card">
             <div class="card-icon">{@html icons.calendar}</div>
             <div class="card-content">
-                <h2>{event.name}</h2>
-                <p>{event.eventDate}</p>
+                <h2>{repairEvent.name}</h2>
+                <p>{repairEvent.eventDate}</p>
             </div>
             <div class="card-arrow">{@html icons.chevronRight}</div>
         </a>

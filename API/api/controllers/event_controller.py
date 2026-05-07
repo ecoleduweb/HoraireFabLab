@@ -41,6 +41,7 @@ def create_event(request):
         event = service.create_event(event)
         return Response(event, status=status.HTTP_201_CREATED)
     except ValidationError as e:
+        print("ERREUR VALIDATION:", e.detail) 
         return Response(e.detail, status=status.HTTP_400_BAD_REQUEST)
     
 @api_view(["GET"])
