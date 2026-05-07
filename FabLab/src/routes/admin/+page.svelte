@@ -23,7 +23,7 @@
 </div>
 
 <div class="sections-grid">
-    <a href=`${base}/admin/events/create` class="section-card">
+    <a href={`${base}/admin/events/create`} class="section-card">
         <div class="card-icon">{@html icons.calendarAdd}</div>
         <div class="card-content">
             <h2>Créer un événement</h2>
@@ -33,7 +33,7 @@
     </a>
 
     {#each repairEvents as repairEvent}
-      <a href=`${base}/admin/events/{repairEvent.id}` class="section-card">
+    <a href={`${base}/admin/events/${repairEvent.id}`} class="section-card">
             <div class="card-icon">{@html icons.calendar}</div>
             <div class="card-content">
                 <h2>{repairEvent.name}</h2>
