@@ -45,7 +45,6 @@ def create_event(request):
     
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
-
 def get_events(request):
     try:
         events = service.get_all_events()

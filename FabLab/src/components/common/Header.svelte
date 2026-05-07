@@ -19,7 +19,7 @@
 <header>
     <div class="logo-img">
         <a href="{base}/admin" class="image">
-            <img src="{base}/logo.png" alt="Logo" />
+            <img src="{base}/logofabule.svg" alt="Logo" />
         </a>
     </div>
 

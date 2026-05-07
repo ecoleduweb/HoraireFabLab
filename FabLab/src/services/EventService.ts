@@ -1,21 +1,28 @@
 import { GET, POST, PUT } from '../ts/server.ts';
-import type { CreateEventPayload, Event, UpdateEventPayload } from '../models/Event.ts';
+import type { EventForm, RepairEvent, UpdateRepairEvent } from '../models/RepairEvent.ts';
 
 export const EventService = {
 	async createEvent(name: string, eventDate: string): Promise<void> {
-		await POST<CreateEventPayload, Event>('/events', { name, eventDate });
+		await POST<EventForm, RepairEvent>('/events', { name, eventDate });
 	},
-	async getEvents(): Promise<Event[]> {
-		return await GET<Event[]>('/events/all_events');
+
+	async getEvents(): Promise<RepairEvent[]> {
+		return await GET<RepairEvent[]>('/events/all_events');
 	},
 	async updateEvent(eventId: number, name: string, eventDate: string): Promise<void> {
-		await PUT<UpdateEventPayload, Event>(`/events/${eventId}/update_date`, {
+		await PUT<UpdateRepairEvent, RepairEvent>(`/events/${eventId}/update_date`, {
 			id: eventId,
 			name,
 			eventDate
 		});
 	},
-	async getEventById(eventId: number): Promise<Event> {
-		return await GET<Event>(`/events/${eventId}`);
+	async getEventById(eventId: number): Promise<RepairEvent> {
+		return await GET<RepairEvent>(`/events/${eventId}`);
 	}
 };
+
+// Retourne le premier événement actif.
+export async function fetchActiveEvent(): Promise<RepairEvent> {
+	const events = await GET<RepairEvent[]>('/events/active', false);
+	return events[0];
+}
