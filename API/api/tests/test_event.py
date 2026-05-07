@@ -128,6 +128,17 @@ class UpdateEventDateTests(BaseAPITestCase):
 
         self.assertEqual(resp.status_code, 404)
 
+    def test_get_events_success_returns_200(self):
+        self.login_and_set_cookies()
+
+        resp = self.client.get(
+            reverse("get_events"),
+            format="json",
+        )
+
+        self.assertEqual(resp.status_code, 200)
+        self.assertIsInstance(resp.json(), list)
+        
     def test_update_event_date_in_past_returns_400(self):
         self.login_and_set_cookies()
 

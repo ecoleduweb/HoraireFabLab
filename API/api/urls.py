@@ -1,7 +1,8 @@
 from django.urls import path
 from api.controllers.auth_controller import login,logout
 from api.controllers.user_controller import me
-from api.controllers.event_controller import create_event,update_event, get_upcoming_events
+from api.controllers.event_controller import create_event,update_event, get_upcoming_events,get_events, get_event_by_id
+
 from api.controllers.slot_controller import get_available_slots
 from api.controllers.slot_controller import book_slot
 
@@ -15,6 +16,8 @@ urlpatterns = [
     path("events", create_event, name='create_event'),
     path("events/active", get_upcoming_events, name='get_upcoming_events'),
     path("events/<int:event_id>/update_date", update_event, name="update_event_date"),
+    path("events/all_events", get_events, name="get_events"),
+    path("events/<int:event_id>", get_event_by_id, name="get_event_by_id"),
 
     path("availableSlots/<int:event_id>", get_available_slots, name="get_available_slots"),
     path("book_slot", book_slot, name='book_slot'),
