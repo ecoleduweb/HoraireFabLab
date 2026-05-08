@@ -12,8 +12,8 @@ async function fillFormOnly(page: Page, data = VALID_FORM) {
 }
 
 async function acceptWaiver(page: Page) {
-  await page.getByTestId('waiver-checkbox').focus();
-  await page.getByTestId('waiver-checkbox').check();
+  await page.getByTestId('liability-checkbox').focus();
+  await page.getByTestId('liability-checkbox').check();
 }
 
 async function fillForm(page: Page, data = VALID_FORM) {
@@ -28,16 +28,21 @@ async function selectFirstSlot(page: Page) {
 test.describe('Gestion des Réservations', () => {
 
   test.beforeEach(async ({ page }) => {
-    await page.clock.install({ time: new Date('2026-07-16T07:55:00') });
+      await page.clock.install({ time: new Date('2026-07-16T07:55:00') });
 
-    const apiMocker = new ApiMocker(page);
-    await apiMocker.addMocks([
-      { url: "/api/events/active", method: "GET", response: { status: 200, json: MOCK_EVENT } },
-      { url: "/api/me",             method: "GET", response: { status: 200, json: {} } },
-    ]).apply();
+      // DEBUG — à enlever après
+      page.on('request', req => console.log('REQUEST:', req.method(), req.url()));
+      page.on('response', res => console.log('RESPONSE:', res.status(), res.url()));
 
-    await page.goto('/');
-    await expect(page.getByText(/8\s?h\s?00/)).toBeVisible();
+      const apiMocker = new ApiMocker(page);
+      await apiMocker.addMocks([
+          { url: "/api/events/active",    method: "GET", response: { status: 200, json: [MOCK_EVENT] } },
+          { url: "/api/availableSlots/1", method: "GET", response: { status: 200, json: MOCK_EVENT.slots } },
+          { url: "/api/me",               method: "GET", response: { status: 200, json: {} } },
+      ]).apply();
+
+      await page.goto('/');
+      await expect(page.getByText(/8\s?h\s?00/)).toBeVisible();
   });
 
 

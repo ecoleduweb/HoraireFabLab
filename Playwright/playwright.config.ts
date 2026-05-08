@@ -65,9 +65,9 @@ export default defineConfig({
   ],
 
   webServer: {
-    command: "cd ../FabLab && npm run playwright",
-    url: "http://localhost:5002/login",
-    reuseExistingServer: false,
-    timeout: 60000,
+      command: "cd ../FabLab && npm run playwright",
+      url: "http://localhost:5002/",  // ← enlève /login
+      reuseExistingServer: true,      // ← change à true
+      timeout: 60000,
   },
 });
