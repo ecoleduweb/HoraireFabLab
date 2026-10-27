@@ -28,16 +28,12 @@ jobs:
             echo 'Moving logs file to logs backup folder'
             DATE=$(date +'%Y-%m-%d_%H-%M')
             #Pas encore de logs dans notre app
-            #[ -f "/var/www/fablab/API/logs.txt" ] && cp /var/www/API/logs.txt /var/www/logs/logs_FabLab_$DATE.txt
+            #[ -f "/var/www/fablab/API/logs.txt" ] && cp /var/www/fablab/API/logs.txt /var/www/logs/logs_FabLab_$DATE.txt
 
             # Suppression et recréation du répertoire GestionnaireHoraire
             echo "Refreshing project directory..."
             mkdir -p /var/www/fablab
             find /var/www/fablab -mindepth 1 -delete
-
-            # Clone du projet (plus propre qu'un pull)
-            echo "Cloning fresh repository..."
-            git clone https://github.com/ecoleduweb/HoraireFabLab.git
 
             #Préparation du VENV
             echo "Cloning fresh repository..."
