@@ -31,7 +31,8 @@ jobs:
 
             # Suppression et recréation du répertoire
             echo "Refreshing project directory..."
-            rm -rf /var/www/fablab/*
+            mkdir -p /var/www/fablab
+            find /var/www/fablab -mindepth 1 -delete
 
             # Clone du projet
             echo "Cloning fresh repository..."
