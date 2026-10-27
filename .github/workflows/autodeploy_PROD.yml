@@ -21,8 +21,8 @@ jobs:
 
             # Arrêt des services
             echo "Stopping services..."
-            sudo systemctl stop fablab-api.service || echo "API service not running"
-            sudo systemctl stop fablab-frontend.service || echo "Frontend service not running"
+            systemctl stop fablab-api.service || echo "API service not running"
+            systemctl stop fablab-frontend.service || echo "Frontend service not running"
 
             # Copie du fichier de logs
             echo 'Moving logs file to logs backup folder'
@@ -42,7 +42,6 @@ jobs:
             source venv/bin/activate
 
             # Dépendances système pour mysqlclient
-            sudo apt-get install -y python3-dev libmysqlclient-dev build-essential pkg-config
             pip install -r requirements.txt
 
             # Configuration API
@@ -79,12 +78,12 @@ jobs:
 
             # Démarrage des services
             echo "Starting services..."
-            sudo systemctl start fablab-api.service || echo "Failed to start API service"
-            sudo systemctl start fablab-frontend.service || echo "Failed to start Frontend service"
+            systemctl start fablab-api.service || echo "Failed to start API service"
+            systemctl start fablab-frontend.service || echo "Failed to start Frontend service"
 
             # Vérification
             echo "Checking services status..."
-            sudo systemctl status fablab-api.service --no-pager
-            sudo systemctl status fablab-frontend.service --no-pager
+            systemctl status fablab-api.service --no-pager
+            systemctl status fablab-frontend.service --no-pager
 
             echo "PROD Deployment completed successfully!"
