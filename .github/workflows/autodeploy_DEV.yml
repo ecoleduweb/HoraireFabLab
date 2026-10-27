@@ -69,10 +69,9 @@ jobs:
             echo "Running migrations..."
             python manage.py migrate --noinput
 
-
             # Configuration Frontend
             echo "Configuring Frontend..."
-            cd /var/www/FabLab
+            cd /var/www/fablab
             cat > .env << EOF
             PUBLIC_BASE_URL=${{ secrets.DEV_BASEURL_API}}
             BASE_PATH=${{secrets.DEV_BASE_PATH}}
