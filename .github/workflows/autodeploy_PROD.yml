@@ -3,6 +3,7 @@ on:
   push:
     tags:
       - '*'
+  workflow_dispatch: 
 
 jobs:
   deploy:
@@ -25,21 +26,18 @@ jobs:
 
             # Copie du fichier de logs
             echo 'Moving logs file to logs backup folder'
-            mkdir -p /home/fablab/FablabLogs
             DATE=$(date +'%Y-%m-%d_%H-%M')
-            #[ -f "/home/fablab/fablab/API/logs.txt" ] && cp /home/fablab/fablab/API/logs.txt /home/fablab/FablabLogs/logs_FabLab_$DATE.txt
+            #[ -f "/var/www/fablab/API/logs.txt" ] && cp /var/www/fablab/API/logs.txt /var/www/logs/logs_FabLab_$DATE.txt
 
             # Suppression et recréation du répertoire
             echo "Refreshing project directory..."
-            cd /home/fablab
-            rm -rf fablab
+            rm -rf /var/www/fablab/*
 
             # Clone du projet
             echo "Cloning fresh repository..."
-            git clone https://github.com/ecoleduweb/HoraireFabLab.git fablab
-
+            git clone --branch ${{ github.ref_name }} --depth 1 https://github.com/ecoleduweb/HoraireFabLab.git fablab
             # Préparation du VENV
-            cd /home/fablab/fablab/API
+            cd /var/www/fablab/API
             python3 -m venv venv
             source venv/bin/activate
 
@@ -67,7 +65,7 @@ jobs:
 
             # Configuration Frontend
             echo "Configuring Frontend..."
-            cd /home/fablab/fablab/FabLab
+            cd /var/www/fablab/FabLab
             cat > .env << EOF
             PUBLIC_BASE_URL=${{ secrets.PROD_BASEURL_API }}
             BASE_PATH=
@@ -76,8 +74,7 @@ jobs:
             EOF
 
             echo "Building Frontend..."
-            npm install --ignore-scripts
-            npm install
+            npm ci
             npm run build
 
             # Démarrage des services
