@@ -36,7 +36,7 @@ jobs:
 
             # Clone du projet
             echo "Cloning fresh repository..."
-            git clone --branch ${{ github.ref_name }} --depth 1 https://github.com/ecoleduweb/HoraireFabLab.git fablab
+            git clone --branch ${{ github.ref_name }} --depth 1 https://github.com/ecoleduweb/HoraireFabLab.git /var/www/fablab
             # Préparation du VENV
             cd /var/www/fablab/API
             python3 -m venv venv
