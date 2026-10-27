@@ -26,7 +26,6 @@ jobs:
 
             # Copie du fichier de logs
             echo 'Moving logs file to logs backup folder'
-            mkdir -p /root/FablabLogs
             DATE=$(date +'%Y-%m-%d_%H-%M')
             #Pas encore de logs dans notre app
             #[ -f "/var/www/fablab/API/logs.txt" ] && cp /var/www/API/logs.txt /var/www/logs/logs_FabLab_$DATE.txt
