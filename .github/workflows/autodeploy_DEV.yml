@@ -67,7 +67,7 @@ jobs:
 
             # Configuration Frontend
             echo "Configuring Frontend..."
-            cd /var/www/fablab
+            cd /var/www/fablab/FabLab
             cat > .env << EOF
             PUBLIC_BASE_URL=${{ secrets.DEV_BASEURL_API}}
             BASE_PATH=${{secrets.DEV_BASE_PATH}}
