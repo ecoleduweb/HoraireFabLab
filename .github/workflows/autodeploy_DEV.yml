@@ -4,6 +4,7 @@ on:
     branches:
       - main
   workflow_dispatch:
+  
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -12,7 +13,7 @@ jobs:
         uses: appleboy/ssh-action@v1.2.5
         with:
           host: ${{ secrets.DEV_SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
+          username: ${{ secrets.DEV_SSH_USERNAME }}
           key: ${{ secrets.DEV_SSH_KEY }}
           script: |
             set -e # Exit immediately if a command exits with a non-zero status.
@@ -20,36 +21,33 @@ jobs:
 
             # Arrêt des services
             echo "Stopping services..."
-            sudo systemctl stop fablab-api.service || echo "API service not running"
-            sudo systemctl stop fablab-frontend.service || echo "Frontend service not running"
+            systemctl stop fablab-api.service || echo "API service not running"
+            systemctl stop fablab-frontend.service || echo "Frontend service not running"
 
             # Copie du fichier de logs
             echo 'Moving logs file to logs backup folder'
-            mkdir -p /root/FablabLogs
             DATE=$(date +'%Y-%m-%d_%H-%M')
             #Pas encore de logs dans notre app
-            #[ -f "/root/ProjetFabLab2026/HoraireFabLab/API/logs.txt" ] && cp /root/ProjetFabLab2026/HoraireFabLab/API/logs.txt /root/FablabLogs/logs_FabLab_$DATE.txt
+            #[ -f "/var/www/fablab/API/logs.txt" ] && cp /var/www/fablab/API/logs.txt /var/www/logs/logs_FabLab_$DATE.txt
 
             # Suppression et recréation du répertoire GestionnaireHoraire
             echo "Refreshing project directory..."
-            cd /root/ProjetFabLab2026
-            rm -rf HoraireFabLab
-
-            # Clone du projet (plus propre qu'un pull)
-            echo "Cloning fresh repository..."
-            git clone https://github.com/ecoleduweb/HoraireFabLab.git
+            mkdir -p /var/www/fablab
+            find /var/www/fablab -mindepth 1 -delete
 
             #Préparation du VENV
-            cd /${{ secrets.SSH_USERNAME}}/ProjetFabLab2026/HoraireFabLab/API/
+            echo "Cloning fresh repository..."
+            git clone --branch ${{ github.ref_name }} --depth 1 https://github.com/ecoleduweb/HoraireFabLab.git /var/www/fablab
+            # Préparation du VENV
+            cd /var/www/fablab/API
             python3 -m venv venv
             source venv/bin/activate
-            # Dépendances système pour mysqlclient
-            apt-get install -y python3-dev libmysqlclient-dev build-essential pkg-config
-            pip install -r requirements.txt
 
+            # Dépendances système pour mysqlclient
+            pip install -r requirements.txt
+            
             # Configuration API
             echo "Configuring API..."
-            cd /${{ secrets.SSH_USERNAME}}/ProjetFabLab2026/HoraireFabLab/API/
             cat > .env << EOF
             DB_USER=${{ secrets.DEV_DB_USERNAME }}
             DB_PASSWORD=${{ secrets.DEV_DB_PASSWORD }}
@@ -67,28 +65,27 @@ jobs:
             echo "Running migrations..."
             python manage.py migrate --noinput
 
-
             # Configuration Frontend
             echo "Configuring Frontend..."
-            cd /root/ProjetFabLab2026/HoraireFabLab/FabLab
+            cd /var/www/fablab/FabLab
             cat > .env << EOF
             PUBLIC_BASE_URL=${{ secrets.DEV_BASEURL_API}}
             BASE_PATH=${{secrets.DEV_BASE_PATH}}
             EOF
 
             echo "Building Frontend..."
-            npm install @sveltejs/adapter-node
-            npm install
+            npm ci
+            npm run build
             npm run build
 
             # Démarrage des services
             echo "Starting services..."
-            sudo systemctl start fablab-api.service || echo "Failed to start API service"
-            sudo systemctl start fablab-frontend.service || echo "Failed to start Frontend service"
+            systemctl start fablab-api.service || echo "Failed to start API service"
+            systemctl start fablab-frontend.service || echo "Failed to start Frontend service"
 
             # Vérification
             echo "Checking services status..."
-            sudo systemctl status fablab-api.service --no-pager
-            sudo systemctl status fablab-frontend.service --no-pager
+            systemctl status fablab-api.service --no-pager
+            systemctl status fablab-frontend.service --no-pager
 
             echo "Deployment completed successfully!"
