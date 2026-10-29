@@ -1,9 +1,9 @@
-name: Deployer FabLab PROD
+name: Deployer Emploi Etudiant PROD
 on:
   push:
     tags:
-      - '*'
-  workflow_dispatch: 
+      - 'v*'
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -13,78 +13,103 @@ jobs:
         uses: appleboy/ssh-action@v1.2.5
         with:
           host: ${{ secrets.PROD_SSH_HOST }}
-          username: ${{ secrets.PROD_SSH_USERNAME}}
+          username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.PROD_SSH_KEY }}
           script: |
             set -e
+            umask 0027
             echo "Starting PROD deployment process..."
+
+            APP_DIR=/var/www/ProjetApplicationH2024
+            APP_GROUP=webapp
+            export UV_PYTHON_INSTALL_DIR=/opt/ProjetApplicationH2024/python
+            export PATH="$HOME/.local/bin:$PATH"
 
             # Arrêt des services
             echo "Stopping services..."
-            systemctl stop fablab-api.service || echo "API service not running"
-            systemctl stop fablab-frontend.service || echo "Frontend service not running"
+            systemctl stop front-end || echo "Front-end service not running"
+            systemctl stop back-end || echo "Back-end service not running"
 
             # Copie du fichier de logs
-            echo 'Moving logs file to logs backup folder'
+            echo "Moving logs file to logs backup folder..."
+            mkdir -p ~/logs
             DATE=$(date +'%Y-%m-%d_%H-%M')
-            #[ -f "/var/www/fablab/API/logs.txt" ] && cp /var/www/fablab/API/logs.txt /var/www/logs/logs_FabLab_$DATE.txt
+            if [ -f "$APP_DIR/back-end/API/logs.txt" ]; then
+              cp "$APP_DIR/back-end/API/logs.txt" ~/logs/logs_$DATE.txt
+            fi
 
             # Suppression et recréation du répertoire
             echo "Refreshing project directory..."
-            mkdir -p /var/www/fablab
-            find /var/www/fablab -mindepth 1 -delete
+            mkdir -p "$APP_DIR"
+            find "$APP_DIR" -mindepth 1 -delete
 
             # Clone du projet
             echo "Cloning fresh repository..."
-            git clone --branch ${{ github.ref_name }} --depth 1 https://github.com/ecoleduweb/HoraireFabLab.git /var/www/fablab
-            # Préparation du VENV
-            cd /var/www/fablab/API
-            python3 -m venv venv
-            source venv/bin/activate
+            git clone --branch ${{ github.ref_name }} --depth 1 https://github.com/${{ github.repository }}.git "$APP_DIR"
 
-            # Dépendances système pour mysqlclient
-            pip install -r requirements.txt
+            # Préparation du VENV (Python 3.15 via uv)
+            echo "Preparing Python environment..."
+            command -v uv >/dev/null || curl -LsSf https://astral.sh/uv/install.sh | sh
+            cd "$APP_DIR/back-end"
+            uv venv --python 3.15 venv
+            uv pip install --python venv -r requirements.txt gunicorn
 
             # Configuration API
             echo "Configuring API..."
-            cat > .env << EOF
-            DB_USER=${{ secrets.PROD_DB_USERNAME }}
-            DB_PASSWORD=${{ secrets.PROD_DB_PASSWORD }}
-            DJANGO_SECRET_KEY=${{ secrets.PROD_DJANGO_SECRET_KEY }}
-            DJANGO_DEBUG=False
-            DJANGO_ALLOWED_HOSTS=${{ secrets.PROD_DJANGO_ALLOWED_HOSTS }}
-            DJANGO_ENV=production
-            DB_NAME=${{ secrets.PROD_DB_NAME }}
-            DB_HOST=${{ secrets.PROD_DB_HOST }}
-            DB_PORT=${{ secrets.PROD_DB_PORT }}
-            JWT_COOKIE_SECURE=${{ secrets.JWT_COOKIE_SECURE }}
+            cd "$APP_DIR/back-end/API"
+            cat > .env << 'EOF'
+            DATABASE_TEST_URL=${{ secrets.DATABASE_TEST_URL }}
+            DATABASE_DEV_URL=${{ secrets.DATABASE_PROD_URL }}
+            CORS=${{ secrets.PROD_CORS_IP }}
+            SECRET_KEY=${{ secrets.SECRET_KEY }}
+            MAIL_ENABLED=True
+            MAIL_CLIENT_ID=${{ secrets.MAIL_CLIENT_ID }}
+            CLIENT_SECRET=${{ secrets.MAIL_CLIENT_SECRET }}
+            TENANT_ID=${{ secrets.MAIL_TENANT_ID }}
+            MAIL_GRAPH_USER_ID=${{ secrets.MAIL_GRAPH_USER_ID }}
+            MAIL_ADMINISTRATOR_ADDRESS=${{ secrets.MAIL_ADMINISTRATOR_ADDRESS }}
+            ENCRYPTION_KEY=${{ secrets.ENCRYPTION_KEY }}
+            RECAPTCHA_KEY=${{ secrets.RECAPTCHA_KEY }}
+            URL=${{ secrets.PROD_URL }}
+            ENABLE_TRACING=True
+            TRACE_URL=https://telemetry.edwrdl.ca/traces
+            APPLICATION_NAME=API_EMPLOI_ETUDIANT_PROD
             EOF
 
             echo "Running migrations..."
-            python manage.py migrate --noinput
+            ../venv/bin/flask db upgrade
 
             # Configuration Frontend
             echo "Configuring Frontend..."
-            cd /var/www/fablab/FabLab
-            cat > .env << EOF
-            PUBLIC_BASE_URL=${{ secrets.PROD_BASEURL_API }}
-            BASE_PATH=
-            PORT=8001
-            HOST=127.0.0.1
+            cd "$APP_DIR/front-end/projet_application"
+            cat > .env << 'EOF'
+            PUBLIC_BASE_URL=${{ secrets.PROD_FRONT_PUBLIC_URL }}
+            PUBLIC_RECAPTCHA_KEY=${{ secrets.PUBLIC_RECAPTCHA_KEY }}
+            PUBLIC_PUBLIC_MEASUREMENT_ID=${{ secrets.PUBLIC_PUBLIC_MEASUREMENT_ID }}
+            PUBLIC_TRACE_URL=https://telemetry.edwrdl.ca/traces
+            PUBLIC_APPLICATION_NAME=EMPLOI_ETUDIANT_PROD
+            PUBLIC_ENABLED_TELEMETRY=TRUE
             EOF
 
             echo "Building Frontend..."
             npm ci
             npm run build
 
+            # Permissions pour l'utilisateur des services (groupe webapp)
+            echo "Setting permissions..."
+            chgrp -R "$APP_GROUP" "$APP_DIR" "$UV_PYTHON_INSTALL_DIR"
+            chmod -R g+rX,o-rwx "$APP_DIR" "$UV_PYTHON_INSTALL_DIR"
+            chmod 640 "$APP_DIR/back-end/API/.env"
+            chmod g+w "$APP_DIR/back-end/API"   # pour que le service puisse écrire logs.txt
+
             # Démarrage des services
             echo "Starting services..."
-            systemctl start fablab-api.service || echo "Failed to start API service"
-            systemctl start fablab-frontend.service || echo "Failed to start Frontend service"
+            systemctl start back-end
+            systemctl start front-end
 
             # Vérification
             echo "Checking services status..."
-            systemctl status fablab-api.service --no-pager
-            systemctl status fablab-frontend.service --no-pager
+            systemctl status back-end --no-pager
+            systemctl status front-end --no-pager
 
             echo "PROD Deployment completed successfully!"
