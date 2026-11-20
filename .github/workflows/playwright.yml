@@ -1,7 +1,4 @@
 name: Playwright Tests
-## Voir si le déclenchement est approprié pour nos besoins,
-## les tests se lancent sur toutes les branches à chaque push et pull requests
-## deploie le rapport sur GitHub Pages
 
 permissions:
   contents: write
@@ -14,18 +11,18 @@ on:
       - "FabLab/**"
       - "Playwright/**"
   workflow_dispatch:
-  
+
 jobs:
   test:
     timeout-minutes: 60
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04   # was ubuntu-latest (now 26.04, unsupported by Playwright < 1.61)
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v5
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v5
         with:
           node-version: 26
 
@@ -38,15 +35,15 @@ jobs:
         working-directory: FabLab
 
       - name: Install front-end dependencies
-        run: npm i
+        run: npm ci
         working-directory: FabLab
 
       - name: Install playwright test dependencies
         run: npm ci
         working-directory: Playwright
 
-      - name: Install Playwright System Dependencies
-        run: npx playwright install
+      - name: Install Playwright browsers and system dependencies
+        run: npx playwright install --with-deps
         working-directory: Playwright
 
       - name: Run Playwright tests
@@ -60,5 +57,3 @@ jobs:
           name: playwright-report
           path: ./Playwright/playwright-report/
           retention-days: 1
-
-      
