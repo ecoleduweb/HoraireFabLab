@@ -45,8 +45,8 @@ jobs:
         run: npm ci
         working-directory: Playwright
 
-      - name: Install Playwright Browsers
-        run: npx playwright install chromium
+      - name: Install Playwright System Dependencies
+        run: npx playwright install-deps chromium
         working-directory: Playwright
 
       - name: Run Playwright tests
