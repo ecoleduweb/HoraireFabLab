@@ -46,7 +46,7 @@ jobs:
         working-directory: Playwright
 
       - name: Install Playwright System Dependencies
-        run: npx playwright install-deps chromium
+        run: npx playwright install
         working-directory: Playwright
 
       - name: Run Playwright tests
